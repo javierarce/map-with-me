@@ -14,7 +14,7 @@
             <div>
               <div class="About__columnTitle">Do you want to map with others? </div>
               <p><a href="https://glitch.com/edit/#!/remix/mapwithme">Remix this project on
-                  Glitch</a> and follow the instructions you'll find in the <code>README.md</code> file.</p>
+                  Glitch</a> and follow the instructions you'll find in the README.md file.</p>
             </div>
 
             <div>

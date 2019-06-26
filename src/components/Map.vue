@@ -130,11 +130,14 @@ export default {
 
       this.popup = this.createPopup(this.coordinates, options)
 
-      let icon = this.getIcon()
+      let emojis = this.extractEmojis(description)
+      let icon = this.getIcon(emojis)
       let marker = L.marker(this.coordinates, { icon, location }).bindPopup(this.popup).addTo(this.map)
 
       window.bus.$emit(config.ACTIONS.ADD_MARKER, marker)
       marker.openPopup()
+
+      this.showSuccess()
 
       setTimeout(() => {
         this.focusOnPopup()
@@ -190,14 +193,7 @@ export default {
 
       this.popup = this.createPopup(latlng, { name, description, user, address, readonly: true })
 
-      let emojis = []
-      const regex = emojiRegex()
-      let match
-
-      while (match = regex.exec(description)) {
-        emojis.push(match[0])
-      }
-
+      let emojis = this.extractEmojis(description)
       let icon = this.getIcon(emojis)
       let marker = L.marker(latlng, { icon, location })
 
@@ -208,6 +204,17 @@ export default {
       marker.bindPopup(this.popup).addTo(this.map)
 
       this.markers.push(marker)
+    },
+    extractEmojis (text) {
+      let emojis = []
+      const regex = emojiRegex()
+      let match
+
+      while (match = regex.exec(text)) {
+        emojis.push(match[0])
+      }
+
+      return emojis
     },
     init () {
       let options = { 
@@ -284,11 +291,10 @@ export default {
 
       }
 
-      let message = L.DomUtil.create('div', 'Popup__message', body)
-
       let comment = L.DomUtil.create('div', 'Popup__comment', body)
       let controls = L.DomUtil.create('div', 'Popup__controls', body)
       let spinner = L.DomUtil.create('div', 'Popup__spinner Spinner', body)
+      let success = L.DomUtil.create('div', 'Popup__success', body)
 
       let description = L.DomUtil.create('div', 'Popup__description js-comment', comment)
 
@@ -360,6 +366,16 @@ export default {
       let zoom = this.map.getZoom()
 
       window.bus.$emit(config.ACTIONS.LOGIN, { coordinates, zoom, name, description, address })
+    },
+    showSuccess () {
+      this.popup.getContent().classList.add('was-successful')
+
+      setTimeout(() => {
+        this.hideSuccess()
+      }, 1500)
+    },
+    hideSuccess () {
+      this.popup.getContent().classList.remove('was-successful')
     },
     startLoading () {
       window.bus.$emit(config.ACTIONS.START_LOADING)
