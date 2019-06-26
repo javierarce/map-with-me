@@ -1,11 +1,9 @@
 # Map with Me
 
+🌍 Create collaborative maps with your friends (and enemies) https://mapwithme.glitch.me
 
-https://mapwithme.glitch.me
 
----
-
-Here's how to create a collaborative map of your own:
+### Here's how to create a collaborative map of your own
 
 1. If you haven't done it yet, remix the project by [clicking here](https://glitch.com/edit/#!/remix/mapwithme).
 2. Open the `.env` file and add your Twitter credentials. Currently, Twitter is use as the identity verification mechanism, so you'll need to <a href="https://developer.twitter.com/en/apps">create a new app</a> first. 
@@ -52,7 +50,9 @@ const TEXTS = {
 }
 ```
 
-Please, open an issue if you:
+---
+
+Please, open an issue in this repo if you:
 
 1) Found a horrible bug :_(
 2) Made a cool map you want to share with me :)
