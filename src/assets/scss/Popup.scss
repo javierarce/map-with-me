@@ -11,20 +11,6 @@
   transition: all ease-in-out 250ms;
 }
 
-.Popup__message {
-  pointer-events: none;
-  opacity: 0;
-  visibility: hidden;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  background: red;
-  transition: all ease-in-out 250ms;
-}
-
 .Popup__body {
   position: relative;
   min-width: 300px;
@@ -87,6 +73,36 @@
   background: #2477BE;
 }
 
+.Popup__body {
+  overflow: hidden;
+}
+
+.was-successful .Popup__success:before {
+  content: 'Thanks! 😊';
+  position: absolute;
+  font-size: 2em;
+}
+
+.was-successful .Popup__success {
+  top: 0;
+  opacity: 1;
+}
+
+.Popup__success {
+  position: absolute;
+  transition: all ease-in-out 250ms;
+  background: #fff;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  top: 200px;
+  transition: top ease-in-out 250ms, opacity ease-in-out 520ms;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+}
 
 .Popup__spinner {
   position: absolute;
@@ -98,10 +114,6 @@
 
 .Popup__content.has-address .Popup__address {
   display: block;
-}
-.Popup__content.is-saved .Popup__message {
-  opacity: 1;
-  visibility: visible;
 }
 .Popup__content.is-loading .Popup__spinner {
   opacity: 1;
