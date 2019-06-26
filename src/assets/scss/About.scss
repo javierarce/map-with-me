@@ -16,6 +16,10 @@
   text-decoration: underline;
 }
 
+.About__inner strong {
+  font-weight: bold;
+}
+
 .About__inner p {
   margin: 0 0 16px;
 }
@@ -31,6 +35,7 @@
 }
 .About__title {
   font-weight: bold;
+  font-size: 1.1em;
   margin: 0 0 16px 0;
 }
 .About__description {
@@ -69,4 +74,27 @@
   transition: opacity 250ms ease-in-out;
 	animation: Gradient 3s ease-in-out infinite;
   cursor: pointer;
+}
+
+.About__columns > div:last-child {
+  margin: 0 0 0 4px;
+}
+.About__columns > div {
+  margin: 0 4px 0 0;
+  flex: 1;
+}
+.About__columns p {
+  font-size: .9em;
+}
+.About__columnTitle {
+  font-weight: bold;
+  display: block;
+  font-size: .9em;
+  margin: 0 0 4px;
+}
+.About__columns {
+  margin: 16px 0 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 }

@@ -4,16 +4,27 @@
     <div class="About__inner" @click="onClickAbout">
       <div class="About__title">About</div>
       <div class="About__content">
-        <div class="About__description"><p>"Map with Me" is a collaborative
-          mapping tool that lets anyone with a Twitter account to add interesting places in your map.</p>
+        <div class="About__description">
+          
+          <p>"Map with Me" is a collaborative mapping tool that lets anyone with a Twitter account to add interesting places in your map.</p>
 
-          <p>Do you want to map with others? <a href="https://glitch.com/edit/#!/remix/mapwithme">Remix this project on
-              Glitch</a> and follow the instructions you'll find in the <code>README.md</code> file.</p>
+          <p>You can follow the development of the tool, suggest improvements, and report bugs in its <a href="https://github.com/javierarce/map-with-me">GitHub repo</a>.</p>
 
-          <p>This website uses data from <a href="https://www.openstreetmap.org/copyright">Nominatim</a>. If you remix this code, please make sure you read its <a href="https://operations.osmfoundation.org/policies/nominatim/">usage policy</a>.</p>
+          <div class="About__columns">
+            <div>
+              <div class="About__columnTitle">Do you want to map with others? </div>
+              <p><a href="https://glitch.com/edit/#!/remix/mapwithme">Remix this project on
+                  Glitch</a> and follow the instructions you'll find in the <code>README.md</code> file.</p>
+            </div>
+
+            <div>
+              <div class="About__columnTitle">Copyright</div>
+              <p>This website uses data from <a href="https://www.openstreetmap.org/copyright">Nominatim</a>. If you remix it, please read its <a href="https://operations.osmfoundation.org/policies/nominatim/">usage policy</a>.</p>
+            </div>
+          </div>
 
         </div>
-        <div class="About__footer">If you need help setting up your map, contact me at Twitter → <a href="https://twitter.com/javier">@javier</a></div>
+        <div class="About__footer">Made by <a href="https://twitter.com/javier">Javier Arce</a></div>
       </div>
     </div>
   </div>
