@@ -113,7 +113,7 @@ export default {
     onStopLoading () {
       document.body.classList.remove('is-loading')
     },
-    onToggleAbout (title, description, extra) {
+    onToggleAbout () {
       this.showAbout = !this.showAbout
     },
     onToggleAlert (title, description, footer) {

@@ -45,8 +45,7 @@ export default {
     onClickAbout () {
       let title =  config.TEXTS.ABOUT_TITLE
       let description = config.TEXTS.ABOUT_DESCRIPTION
-      let extra = config.TEXTS.ABOUT_EXTRA
-      window.bus.$emit(config.ACTIONS.TOGGLE_ABOUT, title, description, extra)
+      window.bus.$emit(config.ACTIONS.TOGGLE_ABOUT, title, description)
     },
     onClickLogin () {
       if (window.bus.isLoggedIn()) {

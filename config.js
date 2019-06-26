@@ -11,10 +11,8 @@ const MAP = {
 }
 const TEXTS = {
   MAIN_TITLE: 'Madrid',
-  DESCRIPTION_: 'This is a map of cool places around Madrid. Add your own recommendations or remix this project to create your own map.',
   ABOUT_TITLE: 'Title',
   ABOUT_DESCRIPTION: 'Do you want to map with others? <a href="https://glitch.com/edit/#!/remix/mapwithme">Remix this project on Glitch</a> and follow the instructions in the README.md file.',
-  ABOUT_EXTRA: 'Test',
   PLACEHOLDER: 'What\'s cool about this place?',
   SEARCH_PLACEHOLDER: 'Search for a cool place / address',
   NO_RESULTS_TITLE:  'Oh, no, we couldn’t find "{q}" :(',
