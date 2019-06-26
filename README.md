@@ -3,6 +3,9 @@
 
 https://mapwithme.glitch.me
 
+
+![Map with Me](screenshot.png "Map with Me")
+
 ---
 
 Here's how to create a collaborative map of your own:
