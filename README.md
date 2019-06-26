@@ -10,7 +10,7 @@
 
 Also, come up with a cool username and password for the database and replace `APP_NAME` with the name of your app on glitch:
 
-```
+```js
 CONSUMER_KEY=
 CONSUMER_SECRET=
 DB_USER=
@@ -27,14 +27,14 @@ refresh
 
 4. Configure your map editing the `config.js` file. Here are the most important configuration blocks: 
 
-```
+```js
 const ADMIN = {
   ADMIN_USERNAME: 'javier', // the twitter username of the map admin
   MODERATED: false // if you set it to `true` the admin will need to approve every location 
 }
 ``` 
 
-``` 
+```js
 const MAP = {
   DEFAULT_SEARCH_LOCATION: 'Madrid, Spain', // this will restrict the geocoding requests to that city and country
   LAT: 40.416775, // default latitude of your map
@@ -43,7 +43,7 @@ const MAP = {
 }
 ```
 
-```
+```js
 const TEXTS = {
   MAIN_TITLE: 'Madrid',
   DESCRIPTION_: 'This is a map of cool places around Madrid.'
