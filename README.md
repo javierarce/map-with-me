@@ -50,9 +50,9 @@ const TEXTS = {
 }
 ```
 
----
+### Everyone has issues
 
-Please, open an issue in this repo if you:
+Yeah, please open an issue in this repo if you: 
 
 1) Found a horrible bug :_(
 2) Made a cool map you want to share with me :)
