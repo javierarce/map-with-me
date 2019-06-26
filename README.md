@@ -43,13 +43,6 @@ const MAP = {
 }
 ```
 
-```js
-const TEXTS = {
-  MAIN_TITLE: 'Madrid',
-  DESCRIPTION_: 'This is a map of cool places around Madrid.'
-}
-```
-
 ### Everyone has issues
 
 Yeah, please open an issue in this repo if you: 
