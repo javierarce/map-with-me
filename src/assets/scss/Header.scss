@@ -1,0 +1,71 @@
+.is-loaded .Header {
+  opacity: 1;
+  visibility: visible;
+}
+
+.Header {
+  position: absolute;
+  padding: 0 30px;
+  top: 20px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  visibility: hidden; 
+  opacity: 0;
+  transition: opacity 250ms ease-in-out;
+  z-index: 1000;
+}
+
+.Header__info {
+  display: flex;
+  align-items: flex-end;
+}
+
+.Header__description {
+  color: #fff;
+  opacity: .6;
+}
+
+.Header__title {
+  font-weight: bold;
+  font-size: 1.4em;
+  color: #fff;
+  margin: 0 8px 0 0;
+}
+.is-expanded .Header__links {
+  opacity: 0;
+}
+
+.Header__links {
+  display: flex;
+  align-items: center;
+  transition: opacity 250ms cubic-bezier(1.000, 0.000, 0.000, 1.000);
+}
+.Header__linksItem.with-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 12px;
+}
+.Header__linksItemUsername {
+  margin: 0 8px 0 0;
+}
+.Header__linksItemAvatar {
+  width: 28px;
+  height: 28px;
+}
+
+.Header__linksItem.with-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 100%;
+}
+
+.Header__linksItem {
+  font-size: 1em;
+  font-weight: bold;
+  color: #fff;
+  margin: 0 0 0 16px;
+}

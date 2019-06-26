@@ -1,0 +1,40 @@
+@keyframes load8 {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes Gradient {
+  0% {
+    background-position: 0% 50%
+  }
+  50% {
+    background-position: 100% 50%
+  }
+  100% {
+    background-position: 0% 50%
+  }
+}
+
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 250ms ease-in-out;
+}
+
+.slide-fade-enter .About__inner, 
+.slide-fade-leave-to .About__inner,
+.slide-fade-enter .Alert__content, 
+.slide-fade-leave-to .Alert__content {
+  transform: translateY(20px);
+  opacity: 0;
+}
+
+.slide-fade-enter .About__backdrop, 
+.slide-fade-leave-to .About__backdrop,
+.slide-fade-enter .Alert__backdrop, 
+.slide-fade-leave-to .Alert__backdrop {
+  opacity: 0;
+}

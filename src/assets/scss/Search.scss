@@ -1,0 +1,99 @@
+.is-loaded .Search {
+  opacity: 1;
+  visibility: visible;
+}
+
+.is-expanded .Search {
+  right: 30px;
+}
+
+.Search {
+  position: absolute;
+  right: 330px;
+  display: flex;
+  visibility: hidden; 
+  opacity: 0;
+  transition: opacity 250ms cubic-bezier(1.000, 0.000, 0.000, 1.000), right 250ms cubic-bezier(1.000, 0.000, 0.000, 1.000);
+}
+
+.Search__content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.Search.is-searching .Spinner {
+  opacity: 1;
+  visibility: visible;
+}
+
+.Search .Spinner {
+  opacity: 0;
+  visibility: hidden;
+  transition: all ease-in-out 250ms;
+}
+
+.Spinner.Search__spinner {
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  bottom: 2px;
+  left: -24px;
+
+  border-top: 2px solid rgba(255, 255, 255, 0.5);
+  border-right: 2px solid rgba(255, 255, 255, 0.5);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+  border-left: 2px solid #fff;
+}
+
+.Search__content {
+  position: relative;
+}
+
+.Search.is-searching .Search__content:before {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.Search__content:before {
+  content: '';
+  transition: all ease-in-out 250ms;
+  position: absolute;
+  background-image: url('/img/magnifier.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  left: -20px;
+  width: 14px;
+  height: 14px;
+}
+
+.Search__content .Search__input {
+  padding: 0;
+  width: 260px;
+  background: transparent;
+  color: #fff;
+  border: none;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 1em;
+  outline: none;
+}
+
+.Search__input::placeholder {
+  opacity: .5;
+  color: #fff;
+}
+
+
+@media only screen and (max-width: 800px) {
+
+.Search {
+  position: relative;
+  right: auto;
+  display: flex;
+  visibility: hidden; 
+  opacity: 0;
+  transition: opacity 250ms cubic-bezier(1.000, 0.000, 0.000, 1.000), right 250ms cubic-bezier(1.000, 0.000, 0.000, 1.000);
+}
+
+}
