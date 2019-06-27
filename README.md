@@ -2,7 +2,6 @@
 
 🌍 Create collaborative maps with your friends (and enemies) https://mapwithme.glitch.me
 
-
 ### Here's how to create a collaborative map of your own
 
 1. If you haven't done it yet, remix the project by [clicking here](https://glitch.com/edit/#!/remix/mapwithme).
@@ -47,5 +46,10 @@ const MAP = {
 
 Yeah, please open an issue in this repo if you: 
 
-1) Found a horrible bug :_(
+1) Found a horrible bug :(
 2) Made a cool map you want to share with me :)
+
+
+### TODO
+
+* [ ] CSV export
