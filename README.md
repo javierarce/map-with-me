@@ -53,3 +53,4 @@ Yeah, please open an issue in this repo if you:
 ### TODO
 
 * [ ] CSV export
+* [ ] Mobile version
