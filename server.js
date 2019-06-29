@@ -165,12 +165,12 @@ const getLocations = (request, response) =>  {
   })
 }
 
-const getRSS = (request, response) => {
-  let domain = request.headers.host
+const onGetRSS = (request, response) => {
+  const domain = request.headers.host
   const URL = `https://${domain}`
 
   let feed = new rss({
-    title: 'Map with Me',
+    title: `Map with Me @ ${config.TEXTS.MAIN_TITLE}`,
     description: config.MAP.DEFAULT_SEARCH_LOCATION,
     feed_url: `${URL}/rss`,
     site_url: URL,
@@ -179,19 +179,13 @@ const getRSS = (request, response) => {
 
   DB.getLocations({ approved: true }).then((locations) => {
     locations.forEach((location) => {
-      let url = `${URL}/l/${location.id}`
-      let description = `${location.description} - ${location.address}`
-      let title = location.name
-      let author = location.user.username
-      let date = location.updatedAt
+      const url = `${URL}/l/${location.id}`
+      const description = `${location.description} - ${location.address}`
+      const title = location.name
+      const author = location.user.username
+      const date = location.updatedAt
 
-      feed.item({
-        title,
-        description,
-        url,
-        author,
-        date
-      })
+      feed.item({ title, description, url, author, date })
     })
 
     response.setHeader('Content-Type', 'application/rss+xml')
@@ -254,7 +248,7 @@ app.post('/api/approve', onApproveLocation)
 app.post('/api/reject', onRejectLocation)
 app.post('/api/save', addSave)
 app.get('/api/locations', getLocations)
-app.get('/rss', getRSS)
+app.get('/rss', onGetRSS)
 app.get('/api/status', onGetStatus)
 app.get('/api/reset', onRemoveSession)
 app.get('/auth/twitter', passport.authenticate('twitter'))
