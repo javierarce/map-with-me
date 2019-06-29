@@ -174,7 +174,7 @@ const onGetCSV = (request, response) => {
 
     locations.forEach((location) => {
 
-      const title = location.name
+      const title = `"${location.name}"`
       const address = `"${location.address}"`
       const lat = location.lat
       const lng = location.lng
