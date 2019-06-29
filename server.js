@@ -185,8 +185,11 @@ const onGetCSV = (request, response) => {
       csv.push([ title, address, lat, lng, description, author, date ].join(', '))
     })
 
-    response.setHeader('Content-Type', 'text/csv');
-    response.setHeader('Content-Disposition', 'attachment; filename=\"' + 'download-' + Date.now() + '.csv\"');
+    let date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '').split(' ').join('_')
+    let filename = `map-with-me-${date}.csv`
+
+    response.setHeader('Content-Type', 'text/csv')
+    response.setHeader('Content-Disposition', `attachment; filename=${filename}`);
     response.status(200).send(csv.join('\n'))
   })
 }
