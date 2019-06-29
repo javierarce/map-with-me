@@ -13,7 +13,6 @@
     "watch": "watchify -vd -p browserify-hmr -e src/main.js -o public/build.js"
   },
   "dependencies": {
-    "axios": "^0.19.0",
     "body-parser": "^1.19.0",
     "css-loader": "^2.1.1",
     "cssify": "^1.0.3",

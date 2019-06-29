@@ -6,7 +6,6 @@ const cmd = require('node-cmd')
 const crypto = require('crypto')
 const bodyParser = require('body-parser')
 const session = require('express-session')
-const axios = require('axios')
 const rss = require('rss')
 const sanitize = require('sanitize-html')
 const helmet = require('helmet')
@@ -21,56 +20,29 @@ const sassMiddleware = require('node-sass-middleware')
 const config = require('./config')
 const app = express()
 
-app.use(express.static('public'))
-app.use(bodyParser.json())
-app.use(helmet())
- 
-app.use(session({ 
-  secret: 'my-voice-is-my-passport-verify-me',
-  resave: true,
-  saveUninitialized: true
-}))
+const onWebhook = (req, res) => {
+  let hmac = crypto.createHmac('sha1', process.env.SECRET)
+  let sig  = `sha1=${hmac.update(JSON.stringify(req.body)).digest('hex')}`
 
-app.use(sassMiddleware({
-  src: path.join(__dirname, 'src/assets/scss'),
-  dest: '/tmp',
-  sourceMap: true,
-  force: true,
-  outputStyle: 'compressed'
-}))
+  if (req.headers['x-github-event'] === 'push' && sig === req.headers['x-hub-signature']) {
+    cmd.run('chmod 777 ./git.sh'); 
 
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(passport.initialize())
-app.use(passport.session())
+    cmd.get('./git.sh', (err, data) => {  
+      if (data) {
+        console.log(data)
+      }
+      if (err) {
+        console.log(err)
+      }
+    })
 
-passport.serializeUser((user, done) => {
-  done(null, user)
-})
+    cmd.run('refresh')
+  }
 
-passport.deserializeUser((user, done) => {
-  done(null, user)
-})
-
-passport.use(new TwitterStrategy({
-  consumerKey: process.env.CONSUMER_KEY,
-  consumerSecret: process.env.CONSUMER_SECRET,
-  callbackURL: process.env.CALLBACK_URL,
-}, (token, tokenSecret, profile, done) => {
-
-  let twitterID = profile.id
-  let username = profile.username
-  let displayName = profile.displayName
-  let profileImage = profile._json.profile_image_url_https.replace('_normal', '')
-
-  DB.findOrCreate({ twitterID, username, displayName, profileImage }).then((user) => {
-    done(null, user)
-  })
-}))
-
-app.use('/leaflet', express.static(__dirname + '/node_modules/leaflet/dist'))
+  return res.sendStatus(200)
+}
 
 const addSave = (request, response) =>  {
-
   let lat = request.body.coordinates.lat
   let lng = request.body.coordinates.lng
   let zoom = request.body.zoom
@@ -111,6 +83,7 @@ const onRejectLocation = (request, response) =>  {
     response.json({ error: e }) 
   })
 }
+
 const onApproveLocation = (request, response) =>  {
   let id = request.body.id 
   let username = request.session.passport.user.username
@@ -227,8 +200,54 @@ const getRSS = (request, response) => {
 }
 
 app.use(express.static('public'))
+app.use(bodyParser.json())
+app.use(helmet())
+ 
+app.use(session({ 
+  secret: 'my-voice-is-my-passport-verify-me',
+  resave: true,
+  saveUninitialized: true
+}))
 
+app.use(sassMiddleware({
+  src: path.join(__dirname, 'src/assets/scss'),
+  dest: '/tmp',
+  sourceMap: true,
+  force: true,
+  outputStyle: 'compressed'
+}))
 
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(passport.initialize())
+app.use(passport.session())
+
+passport.serializeUser((user, done) => {
+  done(null, user)
+})
+passport.deserializeUser((user, done) => {
+  done(null, user)
+})
+
+passport.use(new TwitterStrategy({
+  consumerKey: process.env.CONSUMER_KEY,
+  consumerSecret: process.env.CONSUMER_SECRET,
+  callbackURL: process.env.CALLBACK_URL,
+}, (token, tokenSecret, profile, done) => {
+
+  let twitterID = profile.id
+  let username = profile.username
+  let displayName = profile.displayName
+  let profileImage = profile._json.profile_image_url_https.replace('_normal', '')
+
+  DB.findOrCreate({ twitterID, username, displayName, profileImage }).then((user) => {
+    done(null, user)
+  })
+}))
+
+app.use('/leaflet', express.static(__dirname + '/node_modules/leaflet/dist'))
+app.use(express.static('public'))
+
+app.post('/git', onWebhook)
 app.post('/api/add', onAddLocation)
 app.post('/api/remove', onRemoveLocation)
 app.post('/api/approve', onApproveLocation)
@@ -236,33 +255,8 @@ app.post('/api/reject', onRejectLocation)
 app.post('/api/save', addSave)
 app.get('/api/locations', getLocations)
 app.get('/rss', getRSS)
-
-const onWebhook = (req, res) => {
-  let hmac = crypto.createHmac('sha1', process.env.SECRET)
-  let sig  = `sha1=${hmac.update(JSON.stringify(req.body)).digest('hex')}`
-
-  if (req.headers['x-github-event'] === 'push' && sig === req.headers['x-hub-signature']) {
-    cmd.run('chmod 777 ./git.sh'); 
-
-    cmd.get('./git.sh', (err, data) => {  
-      if (data) {
-        console.log(data)
-      }
-      if (err) {
-        console.log(err)
-      }
-    })
-
-    cmd.run('refresh')
-  }
-
-  return res.sendStatus(200)
-}
-
-app.post('/git', onWebhook)
 app.get('/api/status', onGetStatus)
 app.get('/api/reset', onRemoveSession)
-
 app.get('/auth/twitter', passport.authenticate('twitter'))
 app.get('/auth/twitter/callback', passport.authenticate('twitter', { successRedirect: '/', failureRedirect: '/login' }))
 
