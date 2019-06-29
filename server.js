@@ -42,7 +42,7 @@ const onWebhook = (req, res) => {
   return res.sendStatus(200)
 }
 
-const addSave = (request, response) =>  {
+const onSave = (request, response) =>  {
   let lat = request.body.coordinates.lat
   let lng = request.body.coordinates.lng
   let zoom = request.body.zoom
@@ -148,7 +148,7 @@ const onGetStatus = (request, response) =>  {
   response.json({ user: request.user, coordinates: request.session.coordinates })
 }
 
-const getLocations = (request, response) =>  {
+const onGetLocations = (request, response) =>  {
 
   let username = undefined
 
@@ -162,6 +162,32 @@ const getLocations = (request, response) =>  {
     response.json({ locations })
   }).catch((e) => {
     response.json({ locations: [] })
+  })
+}
+
+const onGetCSV = (request, response) => {
+  DB.getLocations({ approved: true }).then((locations) => {
+
+    let csv = []
+
+    csv.push([ 'title', 'address', 'lat', 'lng', 'description', 'author', 'date' ].join(', '))
+
+    locations.forEach((location) => {
+
+      const title = location.name
+      const address = location.address
+      const lat = location.lat
+      const lng = location.lng
+      const description = location.description
+      const author = location.user.username
+      const date = new Date(location.updatedAt).toISOString()
+
+      csv.push([ title, address, lat, lng, description, author, date ].join(', '))
+    })
+
+    response.setHeader('Content-Type', 'text/csv');
+    response.setHeader('Content-Disposition', 'attachment; filename=\"' + 'download-' + Date.now() + '.csv\"');
+    response.status(200).send(csv.join('\n'))
   })
 }
 
@@ -246,11 +272,15 @@ app.post('/api/add', onAddLocation)
 app.post('/api/remove', onRemoveLocation)
 app.post('/api/approve', onApproveLocation)
 app.post('/api/reject', onRejectLocation)
-app.post('/api/save', addSave)
-app.get('/api/locations', getLocations)
-app.get('/rss', onGetRSS)
+app.post('/api/save', onSave)
+
+app.get('/api/locations', onGetLocations)
 app.get('/api/status', onGetStatus)
 app.get('/api/reset', onRemoveSession)
+
+app.get('/rss', onGetRSS)
+app.get('/csv', onGetCSV)
+
 app.get('/auth/twitter', passport.authenticate('twitter'))
 app.get('/auth/twitter/callback', passport.authenticate('twitter', { successRedirect: '/', failureRedirect: '/login' }))
 
