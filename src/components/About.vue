@@ -24,7 +24,12 @@
           </div>
 
         </div>
-        <div class="About__footer">Made by <a href="https://twitter.com/javier">Javier Arce</a></div>
+        <div class="About__footer">
+          <div class="About__export">
+            <a href="/rss" title="RSS">RSS</a> &middot; <a href="/csv" title="Export locations in CSV format">Download locations</a> (.CSV)
+          </div>
+          <div class="About__copyright">Made by <a href="https://twitter.com/javier">Javier Arce</a></div>
+        </div>
       </div>
     </div>
   </div>
