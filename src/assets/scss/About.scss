@@ -103,3 +103,12 @@
 .About__columns p {
   font-size: 0.9em;
 }
+
+@media only screen and (max-width: 800px) {
+  .About__inner {
+    width: 100%;
+    padding: 24px;
+    margin: 30px;
+    font-size: 0.9em;
+  }
+}
