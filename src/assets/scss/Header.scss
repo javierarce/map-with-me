@@ -70,12 +70,17 @@
   margin: 0 0 0 16px;
 }
 
-
 @media only screen and (max-width: 800px) {
   .Header {
     align-items: flex-end;
+    width: 100%;
+    padding: 0 20px;
   }
   .Header__info {
     justify-content: space-between;
+  }
+  .Button.Header__title,
+  .Header__linksItem {
+    font-size: 1em;
   }
 }
