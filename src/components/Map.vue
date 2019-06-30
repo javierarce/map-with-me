@@ -43,6 +43,17 @@ export default {
   methods: {
     bindEvents () {
       this.bindKeys()
+
+      window.bus.$off(config.ACTIONS.ADD_LOCATIONS)
+      window.bus.$off(config.ACTIONS.REMOVE_MARKER)
+      window.bus.$off(config.ACTIONS.INVALIDATE_MAP_SIZE)
+      window.bus.$off(config.ACTIONS.SET_VIEW)
+      window.bus.$off(config.ACTIONS.SHOW_ADDED_LOCATION)
+      window.bus.$off(config.ACTIONS.SHOW_DEFAULT_POINT)
+      window.bus.$off(config.ACTIONS.SHOW_SAVED_LOCATION)
+      window.bus.$off(config.ACTIONS.VISIT_MARKER)
+
+
       window.bus.$on(config.ACTIONS.ADD_LOCATIONS, this.onAddLocations)
       window.bus.$on(config.ACTIONS.REMOVE_MARKER, this.onRemoveMarker)
       window.bus.$on(config.ACTIONS.INVALIDATE_MAP_SIZE, this.invalidateSize)
@@ -288,7 +299,10 @@ export default {
         let user = L.DomUtil.create('a', 'Popup__user', footer)
         user.href= `https://twitter.com/${options.user.username}`
         user.innerText = options.user.username
-
+      } else {
+        let user = L.DomUtil.create('a', 'Popup__user', footer)
+        user.href= ``
+        user.innerText = '@anonymous'
       }
 
       let comment = L.DomUtil.create('div', 'Popup__comment', body)

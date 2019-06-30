@@ -7,11 +7,18 @@ import config from '../config'
 window.bus = new Vue({
   data () {
     return {
-      user: undefined
+      user: {
+        username: 'anon',
+        name: 'anonymous',
+        profileImage: ''
+      }
     }
   },
   methods: {
     isLoggedIn () {
+      if (!config.ADMIN.LOGIN_REQUIRED) {
+        return true
+      }
       return !!(this.user && this.user.username)
     },
     isAdmin () {

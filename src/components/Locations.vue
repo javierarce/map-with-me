@@ -42,6 +42,10 @@ export default {
   },
   methods: {
     bindEvents () {
+      window.bus.$off(config.ACTIONS.ADD_MARKER)
+      window.bus.$off(config.ACTIONS.ADD_MARKERS)
+      window.bus.$off(config.ACTIONS.SELECT_MARKER)
+
       window.bus.$on(config.ACTIONS.ADD_MARKER, this.onAddMarker)
       window.bus.$on(config.ACTIONS.ADD_MARKERS, this.onAddMarkers)
       window.bus.$on(config.ACTIONS.SELECT_MARKER, this.onSelectMarker)
@@ -120,8 +124,16 @@ export default {
     onAddMarkers (markers) {
       this.markers = markers
     },
+    getMarkerUsername (marker) {
+      let user = marker.options.location.user
+      if (user) {
+        return user && user.username
+      } 
+
+      return 'anonymous'
+    },
     isMyMarker (marker) {
-      return marker.options.location.user.username === window.bus.user.username
+      return this.getMarkerUsername(marker) === window.bus.user.username
     },
     removeMarker (id) {
       window.bus.$emit(config.ACTIONS.REMOVE_MARKER, id)
@@ -139,7 +151,7 @@ export default {
       return this.$el.querySelector(`[data-id='${id}']`)
     },
     username (marker) {
-      return `@${marker.options.location.user.username}`
+      return `@${this.getMarkerUsername(marker)}`
     },
     itemClass (marker) {
       let classes = []

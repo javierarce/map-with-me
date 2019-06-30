@@ -1,6 +1,7 @@
 const ADMIN = {
   ADMIN_USERNAME: 'javier',
-  MODERATED: false
+  MODERATED: true,
+  LOGIN_REQUIRED: false
 }
 
 const MAP = {
@@ -9,6 +10,7 @@ const MAP = {
   LON: -3.703790,
   ZOOM: 14
 }
+
 const TEXTS = {
   MAIN_TITLE: 'Madrid',
   ABOUT_TITLE: 'Title',

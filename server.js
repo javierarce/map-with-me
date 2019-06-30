@@ -121,12 +121,18 @@ const onAddLocation = (request, response) =>  {
   removeSession(request)
 
   let username = undefined
+  let userId = undefined
 
-  if (request.session && request.session.passport) {
-    username = request.session.passport.user.username
+  if (config.ADMIN.LOGIN_REQUIRED) {
+    if (request.session && request.session.passport) {
+      username = request.session.passport.user.username
+    }
+
+    userId = request.user.id 
+  } else {
+    username = 'anon'
   }
 
-  let userId = request.user.id 
   let lat = request.body.coordinates.lat
   let lng = request.body.coordinates.lng
 
@@ -145,7 +151,7 @@ const onAddLocation = (request, response) =>  {
 }
 
 const onGetStatus = (request, response) =>  {
-  response.json({ user: request.user, coordinates: request.session.coordinates })
+  response.json({ user: request.user, isAdmin: request.session.isAdmin, coordinates: request.session.coordinates })
 }
 
 const onGetLocations = (request, response) =>  {
@@ -156,7 +162,11 @@ const onGetLocations = (request, response) =>  {
     username = request.session.passport.user.username
   }
 
-  let approved = config.ADMIN.MODERATED && (config.ADMIN.ADMIN_USERNAME !==  username)
+  let approved = config.ADMIN.MODERATED && (config.ADMIN.ADMIN_USERNAME !== username)
+
+  if (request.session.isAdmin) {
+    approved = undefined
+  }
 
   DB.getLocations({ approved }).then((locations) => {
     response.json({ locations })
@@ -241,31 +251,34 @@ app.use(sassMiddleware({
 }))
 
 app.use(bodyParser.urlencoded({ extended: false }))
-app.use(passport.initialize())
-app.use(passport.session())
 
-passport.serializeUser((user, done) => {
-  done(null, user)
-})
-passport.deserializeUser((user, done) => {
-  done(null, user)
-})
+if (config.ADMIN.LOGIN_REQUIRED) {
+  app.use(passport.initialize())
+  app.use(passport.session())
 
-passport.use(new TwitterStrategy({
-  consumerKey: process.env.CONSUMER_KEY,
-  consumerSecret: process.env.CONSUMER_SECRET,
-  callbackURL: process.env.CALLBACK_URL,
-}, (token, tokenSecret, profile, done) => {
-
-  let twitterID = profile.id
-  let username = profile.username
-  let displayName = profile.displayName
-  let profileImage = profile._json.profile_image_url_https.replace('_normal', '')
-
-  DB.findOrCreate({ twitterID, username, displayName, profileImage }).then((user) => {
+  passport.serializeUser((user, done) => {
     done(null, user)
   })
-}))
+  passport.deserializeUser((user, done) => {
+    done(null, user)
+  })
+
+  passport.use(new TwitterStrategy({
+    consumerKey: process.env.CONSUMER_KEY,
+    consumerSecret: process.env.CONSUMER_SECRET,
+    callbackURL: process.env.CALLBACK_URL,
+  }, (token, tokenSecret, profile, done) => {
+
+    let twitterID = profile.id
+    let username = profile.username
+    let displayName = profile.displayName
+    let profileImage = profile._json.profile_image_url_https.replace('_normal', '')
+
+    DB.findOrCreate({ twitterID, username, displayName, profileImage }).then((user) => {
+      done(null, user)
+    })
+  }))
+}
 
 app.use('/leaflet', express.static(__dirname + '/node_modules/leaflet/dist'))
 app.use(express.static('public'))
@@ -288,6 +301,9 @@ app.get('/auth/twitter', passport.authenticate('twitter'))
 app.get('/auth/twitter/callback', passport.authenticate('twitter', { successRedirect: '/', failureRedirect: '/login' }))
 
 app.get('/', function(request, response) {
+  if (request.query && request.query.secret && request.query.secret === process.env.SECRET) {
+    request.session.isAdmin = true
+  }
   response.sendFile(__dirname + '/views/index.html')
 })
 
