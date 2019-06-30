@@ -37,6 +37,8 @@ export default {
   },
   methods: {
     bindEvents () {
+      window.bus.$off(config.ACTIONS.LOGGED_IN)
+
       window.bus.$on(config.ACTIONS.LOGGED_IN, this.onLoggedIn, this)
     },
     onClickTitle () {

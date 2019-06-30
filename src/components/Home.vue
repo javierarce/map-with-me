@@ -47,6 +47,15 @@ export default {
   },
   methods: {
     bindEvents () {
+      window.bus.$off(config.ACTIONS.ADD_LOCATION)
+      window.bus.$off(config.ACTIONS.LOGIN)
+      window.bus.$off(config.ACTIONS.ON_LOAD)
+      window.bus.$off(config.ACTIONS.START_LOADING)
+      window.bus.$off(config.ACTIONS.STOP_LOADING)
+      window.bus.$off(config.ACTIONS.TOGGLE_ABOUT)
+      window.bus.$off(config.ACTIONS.TOGGLE_ALERT)
+      window.bus.$off(config.ACTIONS.TOGGLE_MAP_SIZE)
+
       window.bus.$on(config.ACTIONS.ADD_LOCATION, this.onAddLocation)
       window.bus.$on(config.ACTIONS.LOGIN, this.onLogin)
       window.bus.$on(config.ACTIONS.ON_LOAD, this.onLoad)

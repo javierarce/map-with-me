@@ -42,6 +42,10 @@ export default {
   },
   methods: {
     bindEvents () {
+      window.bus.$off(config.ACTIONS.ADD_MARKER)
+      window.bus.$off(config.ACTIONS.ADD_MARKERS)
+      window.bus.$off(config.ACTIONS.SELECT_MARKER)
+
       window.bus.$on(config.ACTIONS.ADD_MARKER, this.onAddMarker)
       window.bus.$on(config.ACTIONS.ADD_MARKERS, this.onAddMarkers)
       window.bus.$on(config.ACTIONS.SELECT_MARKER, this.onSelectMarker)
