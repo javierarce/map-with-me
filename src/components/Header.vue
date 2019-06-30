@@ -45,9 +45,7 @@ export default {
       window.bus.$emit(config.ACTIONS.SHOW_DEFAULT_POINT)
     },
     onClickAbout () {
-      let title =  config.TEXTS.ABOUT_TITLE
-      let description = config.TEXTS.ABOUT_DESCRIPTION
-      window.bus.$emit(config.ACTIONS.TOGGLE_ABOUT, title, description)
+      window.bus.$emit(config.ACTIONS.TOGGLE_ABOUT)
     },
     onClickLogin () {
       if (window.bus.isLoggedIn()) {
