@@ -70,13 +70,7 @@
 
 @media only screen and (max-width: 800px) {
   .Sidebar {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    top: inherit;
-    bottom: inherit;
-    right: inherit;
-    padding: 0 30px;
+    display: none;
   }
   .Sidebar__footer {
     position: relative;

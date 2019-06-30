@@ -13,13 +13,14 @@
 import Locations from './Locations.vue'
 import config from '../../config'
 
+const MARGIN_BOTTOM = 20
+
 export default {
   components: {
     Locations
   }, 
   data () {
     return {
-      description: config.TEXTS.DESCRIPTION,
       height: undefined
     }
   },
@@ -29,19 +30,11 @@ export default {
     })
   },
   methods: {
-    onClickLearn () {
-      let title =  config.TEXTS.ABOUT_TITLE
-      let description = config.TEXTS.ABOUT_DESCRIPTION
-      window.bus.$emit(config.ACTIONS.TOGGLE_ABOUT, title, description)
-    },
     getHeight () {
       let documentHeight = this.$el.getBoundingClientRect().height
       let footerHeight = this.$refs.footer.getBoundingClientRect().height 
-      let descriptionHeight = 0
-      let marginBottom = 20
-      //let descriptionHeight = this.$refs.description.getBoundingClientRect().height
 
-      this.height = documentHeight - (footerHeight + descriptionHeight + marginBottom)
+      this.height = documentHeight - (footerHeight + MARGIN_BOTTOM)
     }
   }
 }

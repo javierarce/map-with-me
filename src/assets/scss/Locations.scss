@@ -89,7 +89,6 @@
 
 @media only screen and (max-width: 800px) {
   .Locations {
-    height: auto;
-    overflow: visible;
+    display: none;
   }
 }

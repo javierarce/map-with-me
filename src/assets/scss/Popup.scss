@@ -1,10 +1,16 @@
 @import 'helpers/transitions';
 
+
 .Popup__description {
   display: none;
   padding: 16px;
   font-size: 1.1em;
   line-height: 135%;
+}
+
+.Popup__content .Popup__input {
+  min-width: auto;
+  font-size: .9em;
 }
 
 .Popup__comment {
@@ -138,7 +144,7 @@
 .Popup__content.is-readonly .Popup__description {
   display: block;
 }
-.Popup__content.is-readonly textarea {
+.Popup__content.is-readonly .Popup__input {
   display: none;
 }
 .Popup__content.is-readonly .Popup__controls {
@@ -247,4 +253,24 @@
   box-shadow: 0 2px 4px rgba(#000, 0.2);
   border-radius: 100%;
   //transition: border 150ms ease-in-out, transform 250ms;
+}
+
+@media only screen and (max-width: 800px) {
+  .Popup__header {
+    font-size: 1em;
+  }
+  .Popup__description {
+    font-size: 1.1em;
+  }
+  .Popup__body {
+    min-width: 200px;
+  }
+  .Popup__button {
+    font-size: 1em;
+  }
+  .Popup__address {
+    max-height: 40px;
+    overflow: hidden;
+    overflow-y: scroll;
+  }
 }

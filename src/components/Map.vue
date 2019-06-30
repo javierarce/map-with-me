@@ -15,6 +15,8 @@ const emojiRegex = require('emoji-regex')
 
 import * as L from 'leaflet';
 
+const MAX_TITLE_LENGTH = 80
+
 export default {
   mixins: [mixins],
   data() {
@@ -43,7 +45,6 @@ export default {
   methods: {
     bindEvents () {
       this.bindKeys()
-
       window.bus.$off(config.ACTIONS.ADD_LOCATIONS)
       window.bus.$off(config.ACTIONS.REMOVE_MARKER)
       window.bus.$off(config.ACTIONS.INVALIDATE_MAP_SIZE)
@@ -52,7 +53,6 @@ export default {
       window.bus.$off(config.ACTIONS.SHOW_DEFAULT_POINT)
       window.bus.$off(config.ACTIONS.SHOW_SAVED_LOCATION)
       window.bus.$off(config.ACTIONS.VISIT_MARKER)
-
 
       window.bus.$on(config.ACTIONS.ADD_LOCATIONS, this.onAddLocations)
       window.bus.$on(config.ACTIONS.REMOVE_MARKER, this.onRemoveMarker)
@@ -97,7 +97,7 @@ export default {
       this.popup = this.createPopup(latlng, { name, address })
       let icon = this.getIcon()
 
-      this.marker = L.marker(latlng, { icon }).bindPopup(this.popup).addTo(this.map)
+      this.marker = L.marker(latlng, { icon }).bindPopup(this.popup, { maxWidth: 'auto' }).addTo(this.map)
       this.marker.openPopup()
       this.map.setView(latlng, result.zoom)
     },
@@ -143,7 +143,7 @@ export default {
 
       let emojis = this.extractEmojis(description)
       let icon = this.getIcon(emojis)
-      let marker = L.marker(this.coordinates, { icon, location }).bindPopup(this.popup).addTo(this.map)
+      let marker = L.marker(this.coordinates, { icon, location }).bindPopup(this.popup, { maxWidth: 'auto' }).addTo(this.map)
 
       window.bus.$emit(config.ACTIONS.ADD_MARKER, marker)
       marker.openPopup()
@@ -165,7 +165,7 @@ export default {
       this.popup = this.createPopup(latlng, { name, description, address })
       let icon = this.getIcon()
 
-      this.marker = L.marker(latlng, { icon }).bindPopup(this.popup).addTo(this.map)
+      this.marker = L.marker(latlng, { icon }).bindPopup(this.popup, { maxWidth: 'auto' }).addTo(this.map)
       this.marker.openPopup()
       this.map.setView(latlng, data.zoom)
     },
@@ -212,7 +212,7 @@ export default {
         window.bus.$emit(config.ACTIONS.SELECT_MARKER, marker)
       })
 
-      marker.bindPopup(this.popup).addTo(this.map)
+      marker.bindPopup(this.popup, { maxWidth: 'auto' }).addTo(this.map)
 
       this.markers.push(marker)
     },
@@ -316,7 +316,7 @@ export default {
         description.innerText = options.description
       }
 
-      let textarea = L.DomUtil.create('textarea', 'js-description', comment)
+      let textarea = L.DomUtil.create('textarea', 'Popup__input js-description', comment)
       textarea.setAttribute('placeholder', config.TEXTS.PLACEHOLDER)
 
       textarea.onkeyup = (e) => {
@@ -450,8 +450,12 @@ export default {
 
         address = address.join(', ')
 
-        this.setName(result.namedetails.name || address || result.display_name)
-        this.setAddress(address || result.display_name)
+        let name = result.namedetails.name || address || result.display_name
+        address = address || result.display_name
+
+        name = this.truncate(name, MAX_TITLE_LENGTH)
+        this.setName(name)
+        this.setAddress(address)
       })
     },
     geocode () {
@@ -499,7 +503,7 @@ export default {
       this.popup = this.createPopup(this.coordinates, options)
 
       let icon = this.getIcon()
-      this.marker = L.marker(this.coordinates, { icon }).bindPopup(this.popup).addTo(this.map)
+      this.marker = L.marker(this.coordinates, { icon }).bindPopup(this.popup, { maxWidth: 'auto' }).addTo(this.map)
       this.marker.openPopup()
 
       this.map.setView(this.coordinates)
@@ -507,8 +511,10 @@ export default {
       setTimeout(() => {
         this.focusOnPopup()
       }, 500)
+    },
+    truncate (text, length = 100) {
+      return text.length > length ? `${text.substring(0, length)}...` : text;
     }
   }
 }
 </script>
-

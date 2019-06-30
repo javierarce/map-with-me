@@ -39,20 +39,6 @@
 import config from '../../config'
 
 export default {
-  data () {
-    return {
-      description: undefined,
-      extra: undefined,
-      title: undefined
-    }
-  },
-  mounted () {
-    this.$nextTick(() => {
-      this.title = config.TEXTS.ABOUT_TITLE
-      this.description = config.TEXTS.ABOUT_DESCRIPTION
-      this.extra = config.TEXTS.ABOUT_EXTRA
-    })
-  },
   methods: {
     onClickOutside () {
       window.bus.$emit(config.ACTIONS.TOGGLE_ABOUT)

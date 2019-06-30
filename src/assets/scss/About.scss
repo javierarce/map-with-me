@@ -21,7 +21,7 @@
 }
 
 .About__inner p {
-  margin: 0 0 16px;
+  margin: 0 0 16px 0;
 }
 
 .About__inner {
@@ -102,4 +102,32 @@
 }
 .About__columns p {
   font-size: 0.9em;
+}
+
+@media only screen and (max-width: 800px) {
+  .About__inner {
+    width: 100%;
+    padding: 16px;
+    margin: 24px 16px;
+    font-size: 0.8em;
+  }
+  .About__inner p {
+    margin: 0 0 4px 0;
+  }
+  .About__columns {
+    margin: 16px 0 0 0;
+  }
+  .About__title {
+    margin: 0 0 4px 0;
+  }
+  .About__description {
+    margin: 0 0 4px 0;
+  }
+  .About__sidebar {
+    margin: 0 0 0 8px;
+  }
+  .About__footer {
+    padding: 8px 0 0 0;
+    margin: 8px 0 0 0;
+  }
 }
