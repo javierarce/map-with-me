@@ -182,8 +182,10 @@ export default {
     onAddLocations (locations) {
       locations.forEach(this.addMarker.bind(this)) 
 
-      if (this.markers.length && config.MAP.FIT_BOUNDS) {
-        this.fitBounds()
+      if (this.markers.length) {
+        if (config.MAP.FIT_BOUNDS) {
+          this.fitBounds()
+        }
         window.bus.$emit(config.ACTIONS.ADD_MARKERS, this.markers)
       } else {
         window.bus.$emit(config.ACTIONS.ON_LOAD)
