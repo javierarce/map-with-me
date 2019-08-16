@@ -185,6 +185,8 @@ export default {
       if (this.markers.length) {
         if (config.MAP.FIT_BOUNDS) {
           this.fitBounds()
+        }  else {
+          window.bus.$emit(config.ACTIONS.ON_LOAD)
         }
         window.bus.$emit(config.ACTIONS.ADD_MARKERS, this.markers)
       } else {
