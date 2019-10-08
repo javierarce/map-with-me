@@ -338,9 +338,14 @@ export default {
 
       let btn = L.DomUtil.create('button', 'Button Popup__button', controls)
       btn.setAttribute('type', 'button')
-      btn.innerHTML = window.bus.isLoggedIn() ? 'Add location' : 'Log in with Twitter'
 
-      btn.onclick = window.bus.isLoggedIn() ? this.addLocation : this.login
+      if (!config.ADMIN.LOGIN_REQUIRED) {
+        btn.innerHTML = 'Add location'
+        btn.onclick = this.addLocation
+      } else {
+        btn.innerHTML = window.bus.isLoggedIn() ? 'Add location' : 'Log in with Twitter'
+        btn.onclick = window.bus.isLoggedIn() ? this.addLocation : this.login
+      }
 
       let address = L.DomUtil.create('div', 'Popup__address js-address', body)
 
