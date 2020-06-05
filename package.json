@@ -1,15 +1,12 @@
 {
-  "//1": "describes your app and its dependencies",
-  "//2": "https://docs.npmjs.com/files/package.json",
-  "//3": "updating this file will download and update your packages",
   "name": "MapWithMe",
-  "version": "0.0.1",
-  "description": "App template for the guide https://github.com/javierarce/glitchub",
+  "version": "1.0.0",
+  "description": "Create collaborative maps with your friends (and enemies)",
   "main": "server.js",
   "scripts": {
     "start": "npm run-script build && node server.js",
     "test": "mocha",
-    "build": "cross-env browserify -g envify src/main.js | uglifyjs -c warnings=false -m > public/build.js",
+    "build": "cross-env browserify -g envify src/main.js | uglifyjs -m > public/build.js",
     "watch": "watchify -vd -p browserify-hmr -e src/main.js -o public/build.js"
   },
   "dependencies": {
@@ -17,7 +14,7 @@
     "css-loader": "^3.2.0",
     "cssify": "^1.0.3",
     "dotenv": "^8.0.0",
-    "emoji-regex": "^8.0.0",
+    "emoji-regex": "^9.0.0",
     "express": "^4.16.4",
     "express-session": "^1.16.1",
     "helmet": "^3.20.0",
@@ -28,12 +25,12 @@
     "node-sass-middleware": "^0.11.0",
     "passport": "^0.4.0",
     "passport-twitter": "^1.0.4",
-    "pg": "^7.12.1",
+    "pg": "^8.2.1",
     "pg-hstore": "^2.3.2",
     "rss": "^1.2.2",
     "sanitize-html": "^1.20.1",
-    "sass-loader": "^7.2.0",
-    "sequelize": "^6.0.0",
+    "sass-loader": "^8.0.2",
+    "sequelize": "^5.21.12",
     "sequelize-cli": "^5.4.0",
     "sqlite3": "^4.0.8",
     "style-loader": "^1.0.0",
@@ -47,11 +44,11 @@
     "babelify": "^7.2.0",
     "browserify": "^13.0.1",
     "browserify-hmr": "^0.3.1",
-    "cross-env": "^1.0.6",
-    "envify": "^3.4.1",
-    "mocha": "^6.1.1",
-    "npm-run-all": "^2.1.2",
-    "uglify-js": "^2.5.0",
+    "cross-env": "^7.0.2",
+    "envify": "^4.1.0",
+    "mocha": "^7.2.0",
+    "npm-run-all": "^4.1.5",
+    "uglify-js": "^3.9.4",
     "vue": "^2.0.1",
     "vue-router": "^3.0.6",
     "vue-template-compiler": "^2.6.10",
@@ -59,10 +56,10 @@
     "watchify": "^3.4.0"
   },
   "engines": {
-    "node": "8.x"
+    "node": "10.14.x"
   },
   "repository": {
-    "url": "https://glitch.com/edit/#!/glitchub"
+    "url": "https://github.com/javierarce/map-with-me"
   },
   "browserify": {
     "transform": [
@@ -78,7 +75,9 @@
   "license": "MIT",
   "keywords": [
     "node",
-    "glitch",
-    "express"
+    "express",
+    "mapping",
+    "places",
+    "collaborative"
   ]
 }
