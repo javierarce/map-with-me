@@ -11,13 +11,9 @@
   margin: 0;
 }
 
-.Alert__content a {
+.Alert__description a {
   color: #000;
   text-decoration: underline;
-}
-
-.Alert__content p {
-  margin: 0 0 16px;
 }
 
 .Alert__content {
@@ -29,6 +25,11 @@
   transition: all 250ms ease-in-out;
   z-index: 1000;
 }
+
+.Alert__content p {
+  margin: 0 0 16px;
+}
+
 .Alert__title {
   font-weight: bold;
   margin: 0 0 16px 0;
@@ -47,5 +48,32 @@
   position: absolute;
   transition: opacity 250ms ease-in-out;
 	animation: Gradient 3s ease-in-out infinite;
+  cursor: pointer;
+}
+
+.Alert__footer {
+  margin-top: 16px;
+}
+
+.Alert__button {
+  display: inline-block;
+  border-radius: 4px;
+  width: 100%;
+  margin: auto;
+  font-size: 1.2em;
+  padding: 16px 0;
+  border: none;
+  outline: none;
+  background: #2A84D2;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: none;
+  transition: background 250ms ease-in-out;
+}
+
+.Alert__button:hover {
+  background: #1c598e;
   cursor: pointer;
 }
