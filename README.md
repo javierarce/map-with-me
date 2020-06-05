@@ -1,6 +1,6 @@
 # Map with Me
 
-🌍 Create collaborative maps with your friends (and enemies) https://mapwithme.glitch.me
+🌍 Create collaborative maps with your friends (and enemies).
 
 ### Here's how to create a collaborative map of your own
 
