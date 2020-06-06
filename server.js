@@ -3,7 +3,6 @@ require('dotenv').config()
 const path = require('path')
 const express = require('express')
 const cmd = require('node-cmd')
-const crypto = require('crypto')
 const bodyParser = require('body-parser')
 const session = require('express-session')
 const rss = require('rss')
@@ -22,12 +21,20 @@ const app = express()
 const multer = require('multer')
 const multipart = multer()
 
+const sassMiddleware = require('node-sass-middleware')
+
 const webpack = require('webpack')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
 const webpackConfig = require('./webpack.config.js')
-const history = require('connect-history-api-fallback')
 
+app.use(sassMiddleware({
+  src: path.join(__dirname, 'src/assets/scss'),
+  dest: '/public',
+  sourceMap: true,
+  force: true,
+  outputStyle: 'compressed'
+}))
 
 const devServerEnabled = true
 
@@ -48,28 +55,6 @@ if (devServerEnabled) {
 
   //Enable "webpack-hot-middleware"
   app.use(webpackHotMiddleware(compiler))
-}
-
-const onWebhook = (req, res) => {
-  let hmac = crypto.createHmac('sha1', process.env.SECRET)
-  let sig  = `sha1=${hmac.update(JSON.stringify(req.body)).digest('hex')}`
-
-  if (req.headers['x-github-event'] === 'push' && sig === req.headers['x-hub-signature']) {
-    cmd.run('chmod 777 ./git.sh'); 
-
-    cmd.get('./git.sh', (err, data) => {  
-      if (data) {
-        console.log(data)
-      }
-      if (err) {
-        console.log(err)
-      }
-    })
-
-    cmd.run('refresh')
-  }
-
-  return res.sendStatus(200)
 }
 
 const onSave = (request, response) =>  {
@@ -252,7 +237,6 @@ const onGetRSS = (request, response) => {
   })
 }
 
-// app.use(history())
 app.use(express.static('public'))
 app.use(bodyParser.json())
 app.use(helmet())
@@ -292,7 +276,6 @@ passport.use(new TwitterStrategy({
 
 app.use('/leaflet', express.static(__dirname + '/node_modules/leaflet/dist'))
 
-app.post('/git', onWebhook)
 app.post('/api/add', onAddLocation)
 app.post('/api/remove', onRemoveLocation)
 app.post('/api/approve', onApproveLocation)
@@ -316,5 +299,3 @@ app.get('/', function(request, response) {
 const listener = app.listen(process.env.PORT, function() {
   console.log('Your app is listening on port ' + listener.address().port)
 })
-
-

@@ -2,7 +2,7 @@ const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader')
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
   entry: {
     app: [
       './src/main.js'
@@ -24,15 +24,23 @@ module.exports = {
       test: /\.vue$/,
       loader: 'vue-loader'
     }, {
-      test: /\.s[ac]ss$/i,
+      test: /\.scss$/,
       use: [
-        // Creates `style` nodes from JS strings
-        'style-loader',
-        // Translates CSS into CommonJS
-        'css-loader',
-        // Compiles Sass to CSS
-        'sass-loader',
-      ],
+        {
+          loader: 'file-loader',
+          options: {
+            name: 'css/[name].css',
+          }
+        }, {
+          loader: 'extract-loader'
+        }, {
+          loader: 'css-loader?-url'
+        }, {
+          loader: 'postcss-loader'
+        }, {
+          loader: 'sass-loader'
+        }
+      ]
     }, {
       test: /\.js$/,
       exclude: /(node_modules|bower_components)/,
