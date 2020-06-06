@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Create collaborative maps with your friends (and enemies)",
   "main": "server.js",
+  "engines": { "node": "10.15.3" },
   "scripts": {
     "start": "npm run-script build && node server.js",
     "test": "mocha",
@@ -54,9 +55,6 @@
     "vue-template-compiler": "^2.6.10",
     "vueify": "^9.1.0",
     "watchify": "^3.4.0"
-  },
-  "engines": {
-    "node": "10.14.x"
   },
   "repository": {
     "url": "https://github.com/javierarce/map-with-me"
