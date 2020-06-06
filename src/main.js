@@ -1,8 +1,24 @@
-var Vue = require('vue')
-var App = require('./app.vue')
+"use strict";
 
-import { router } from './router'
+import Vue from 'vue/dist/vue';
+import VueRouter from 'vue-router'
+
+const Home = require('./components/Home.vue').default
+const Test = require('./components/Home.vue').default
+const App = require('./app.vue').default
+
 import config from '../config'
+import styles from './assets/scss/style.scss'
+
+Vue.use(VueRouter)
+
+const router = new VueRouter({
+  mode: 'history',
+  routes: [
+    { path: '/', component: Home, name: 'Home' },
+    { path: '/test', component: Test, name: 'Test' }
+  ]
+})
 
 window.bus = new Vue({
   data () {
@@ -23,7 +39,5 @@ window.bus = new Vue({
 new Vue({
   el: '#app',
   router,
-  render: function (createElement) {
-    return createElement(App)
-  }
+  render: h => h(App)
 })

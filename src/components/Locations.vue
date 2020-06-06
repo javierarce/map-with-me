@@ -14,7 +14,7 @@
         </div>
       </button>
     </div>
-    <div class="Locations__none" v-else>Add the first location!</div>
+    <div class="Locations__none" v-else>Click on the map to add the first location.</div>
   </div>
 </template>
 

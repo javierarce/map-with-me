@@ -15,10 +15,40 @@ const DB = new Storage()
 
 const passport = require('passport')
 const TwitterStrategy = require('passport-twitter').Strategy
-const sassMiddleware = require('node-sass-middleware')
 
 const config = require('./config')
 const app = express()
+
+const multer = require('multer')
+const multipart = multer()
+
+const webpack = require('webpack')
+const webpackDevMiddleware = require('webpack-dev-middleware')
+const webpackHotMiddleware = require('webpack-hot-middleware')
+const webpackConfig = require('./webpack.config.js')
+const history = require('connect-history-api-fallback')
+
+
+const devServerEnabled = true
+
+if (devServerEnabled) {
+  //reload=true:Enable auto reloading when changing JS files or content
+  //timeout=1000:Time from disconnecting from server to reconnecting
+  webpackConfig.entry.app.unshift('webpack-hot-middleware/client?reload=true&timeout=1000')
+
+  //Add HMR plugin
+  webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin())
+
+  const compiler = webpack(webpackConfig)
+
+  //Enable "webpack-dev-middleware"
+  app.use(webpackDevMiddleware(compiler, {
+    publicPath: webpackConfig.output.publicPath
+  }))
+
+  //Enable "webpack-hot-middleware"
+  app.use(webpackHotMiddleware(compiler))
+}
 
 const onWebhook = (req, res) => {
   let hmac = crypto.createHmac('sha1', process.env.SECRET)
@@ -222,6 +252,7 @@ const onGetRSS = (request, response) => {
   })
 }
 
+// app.use(history())
 app.use(express.static('public'))
 app.use(bodyParser.json())
 app.use(helmet())
@@ -230,14 +261,6 @@ app.use(session({
   secret: 'my-voice-is-my-passport-verify-me',
   resave: true,
   saveUninitialized: true
-}))
-
-app.use(sassMiddleware({
-  src: path.join(__dirname, 'src/assets/scss'),
-  dest: '/tmp',
-  sourceMap: true,
-  force: true,
-  outputStyle: 'compressed'
 }))
 
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -268,7 +291,6 @@ passport.use(new TwitterStrategy({
 }))
 
 app.use('/leaflet', express.static(__dirname + '/node_modules/leaflet/dist'))
-app.use(express.static('public'))
 
 app.post('/git', onWebhook)
 app.post('/api/add', onAddLocation)
@@ -294,3 +316,5 @@ app.get('/', function(request, response) {
 const listener = app.listen(process.env.PORT, function() {
   console.log('Your app is listening on port ' + listener.address().port)
 })
+
+
