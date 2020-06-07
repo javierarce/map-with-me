@@ -4,6 +4,7 @@
     <div class="Config__backdrop"></div>
 
     <div class="Config__content" @click="onClickInside">
+        <div class="Config__spinner Spinner is-small" v-if="isSaving"></div>
 
       <div class="Config__form">
         <h3 class="Config__sectionTitle">Configure your map</h3>
@@ -51,7 +52,7 @@
     </div>
 
     <div class="Config__content is-dangerous" @click="onClickInside">
-
+      <div class="Config__spinner Spinner is-small" v-if="isDestroying"></div>
       <div class="Config__footer">
         <h3 class="Config__sectionTitle">Destroy DB</h3>
         <p>Amet eveniet iste explicabo dignissimos dolore.</p>
@@ -93,6 +94,8 @@ export default {
   },
   data () {
     return {
+      isDestroying: false,
+      isSaving: false,
       sendButtonIsEnabled: false,
       destroyButtonIsEnabled: false,
       default_search_location: mapConfig.DEFAULT_SEARCH_LOCATION,
@@ -135,6 +138,7 @@ export default {
     onRecreateDB (response) {
       response.json().then((result) => {
         window.bus.$emit(config.ACTIONS.STOP_LOADING)
+        this.isDestroying = false
       })
     },
 
@@ -144,6 +148,7 @@ export default {
       }
 
       window.bus.$emit(config.ACTIONS.START_LOADING)
+      this.isDestroying = true
 
       this.post(config.ENDPOINTS.RECREATE_DB, { secret: this.secretDestroy })
         .then(this.onRecreateDB.bind(this))
@@ -164,6 +169,7 @@ export default {
     onSaveConfig (response) {
       response.json().then((result) => {
       window.bus.$emit(config.ACTIONS.STOP_LOADING)
+        this.isSaving = false
         console.log(result);
       })
     },
@@ -174,6 +180,7 @@ export default {
       }
 
       window.bus.$emit(config.ACTIONS.START_LOADING)
+      this.isSaving = true
 
       this.post(config.ENDPOINTS.CONFIG, { secret: this.secret, lat: this.lat, lon: this.lon, zoom: this.zoom, default_search_location: this.default_search_location })
         .then(this.onSaveConfig.bind(this))

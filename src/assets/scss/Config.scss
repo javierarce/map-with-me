@@ -23,6 +23,7 @@
 }
 
 .Config__content {
+  position: relative;
   background: #fff;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -136,3 +137,12 @@
   cursor: pointer;
 }
 
+
+
+.Spinner.Config__spinner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  right: 16px;
+  top: 16px;
+}
