@@ -8,7 +8,7 @@
 
       <div class="Config__form">
         <h3 class="Config__sectionTitle">Configure your map</h3>
-        <p>Amet eveniet iste explicabo dignissimos dolore.</p>
+        <p class="Config__sectionDescription">Change this configuration to center the map.</p>
         <label for="default_search_location">
           <strong class="Input__label">Search location</strong>
           <div class="Input__field Config__field">
@@ -55,7 +55,7 @@
       <div class="Config__spinner Spinner is-small" v-if="isDestroying"></div>
       <div class="Config__footer">
         <h3 class="Config__sectionTitle">Destroy DB</h3>
-        <p>Amet eveniet iste explicabo dignissimos dolore.</p>
+        <p class="Config__sectionDescription">Enter your secret to destroy the database. This action cannot be undone.</p>
         <div class="Config__sectionContent">
           <div class="Input__field Config__field">
             <input type="text" class="Input" placeholder="Secret" v-model="secretDestroy">

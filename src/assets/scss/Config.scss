@@ -119,9 +119,14 @@
 }
 
 .Config__sectionTitle {
-  margin: 0 0 16px; 
+  margin: 0 0 8px; 
   font-weight: bold;
   font-size: 1.1em;
+}
+
+.Config__sectionDescription {
+  font-size: 0.9em;
+  margin: 0 0 16px; 
 }
 
 .Config__backdrop {
@@ -139,10 +144,8 @@
 
 
 
-.Spinner.Config__spinner {
+.Config__spinner {
   position: absolute;
-  width: 20px;
-  height: 20px;
   right: 16px;
   top: 16px;
 }
