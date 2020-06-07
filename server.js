@@ -19,6 +19,7 @@ const passport = require('passport')
 const TwitterStrategy = require('passport-twitter').Strategy
 
 const config = require('./config')
+
 const app = express()
 
 const multer = require('multer')
@@ -97,11 +98,16 @@ passport.use(new TwitterStrategy({
 
 app.use('/leaflet', express.static(__dirname + '/node_modules/leaflet/dist'))
 
+app.post('/api/recreate', (request, response) => { Map.onRecreateDB(request, response)})
+
 app.post('/api/add', (request, response) => { Map.onAddLocation(request, response)})
 app.post('/api/remove', (request, response) => { Map.onRemoveLocation(request, response)})
 app.post('/api/approve', (request, response) => { Map.onApproveLocation(request, response)})
 app.post('/api/reject', (request, response) => { Map.onRejectLocation(request, response)})
 app.post('/api/save', (request, response) => { Map.onSave(request, response)})
+
+app.get('/api/config', (request, response) => { Map.onGetConfig(request, response)})
+app.post('/api/config', (request, response) => { Map.onSaveConfig(request, response)})
 
 app.get('/api/locations', (request, response) => { Map.onGetLocations(request, response)})
 app.get('/api/status', (request, response) => { Map.onGetStatus(request, response)})

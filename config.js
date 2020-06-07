@@ -3,13 +3,6 @@ const ADMIN = {
   MODERATED: false
 }
 
-const MAP = {
-  DEFAULT_SEARCH_LOCATION: 'Madrid, Spain',
-  LAT: 40.416775,
-  LON: -3.703790,
-  ZOOM: 14,
-  FIT_BOUNDS: false
-}
 const TEXTS = {
   MAIN_TITLE: 'Madrid',
   PLACEHOLDER: 'What\'s cool about this place?',
@@ -53,6 +46,8 @@ const ENDPOINTS = {
   LOCATIONS: '/api/locations',
   SAVE: '/api/save',
   STATUS: '/api/status',
+  CONFIG: '/api/config',
+  RECREATE_DB: '/api/recreate',
   NOMINATIM: 'https://nominatim.openstreetmap.org',
   LOGIN_PATH: '/auth/twitter',
   GEOCODE_URL: '/reverse.php',
@@ -64,6 +59,5 @@ module.exports = {
   ACTIONS,
   ADMIN,
   ENDPOINTS,
-  MAP,
   TEXTS
 }

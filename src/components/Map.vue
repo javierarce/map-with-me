@@ -10,6 +10,7 @@
 <script>
 import mixins from '../mixins'
 import config from '../../config'
+import mapConfig from '../../map.yaml'
 
 const emojiRegex = require('emoji-regex')
 
@@ -33,6 +34,7 @@ export default {
   },
   mounted () {
     this.$nextTick(() => {
+      config.MAP = mapConfig
       this.bindEvents()
       this.init()
     })

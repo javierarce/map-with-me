@@ -10,8 +10,8 @@
   },
   "author": "",
   "devDependencies": {
-    "@babel/core": "^7.9.6",
-    "@babel/preset-env": "^7.9.6",
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.10.2",
     "babel-loader": "^8.1.0",
     "babel-watch": "^7.0.0",
     "core-js": "^3.6.5",
@@ -50,6 +50,8 @@
     "vue": "^2.6.11",
     "vue-loader": "^15.9.2",
     "vue-router": "^3.3.2",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.11",
+    "yaml": "^1.10.0",
+    "yaml-loader": "^0.6.0"
   }
 }

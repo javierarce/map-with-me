@@ -1,0 +1,18 @@
+.Input__field {
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.2);
+  border: 1px solid #ccc;
+  padding: 16px;
+  transition: all 250ms ease-in-out;
+  z-index: 1000;
+}
+
+.Input {
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 0;
+  font-size: 1em;
+}
+

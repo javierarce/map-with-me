@@ -4,7 +4,7 @@ import Vue from 'vue/dist/vue';
 import VueRouter from 'vue-router'
 
 const Home = require('./components/Home.vue').default
-const Test = require('./components/Home.vue').default
+const Config = require('./components/Config.vue').default
 const App = require('./app.vue').default
 
 import config from '../config'
@@ -16,7 +16,7 @@ const router = new VueRouter({
   mode: 'history',
   routes: [
     { path: '/', component: Home, name: 'Home' },
-    { path: '/test', component: Test, name: 'Test' }
+    { path: '/config', component: Config, name: 'Config' }
   ]
 })
 

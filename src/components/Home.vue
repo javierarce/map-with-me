@@ -1,5 +1,6 @@
 <template>
   <div class="App">
+    <Config v-if="false"/>
     <transition name="slide-fade">
     <Alert v-if="showAlert" :title="alertTitle" :description="alertDescription" :footer="alertFooter" />
     <About v-if="showAbout" />
@@ -14,6 +15,7 @@
 import mixins from '../mixins'
 import config from '../../config'
 
+import Config from './Config.vue'
 import Sidebar from './Sidebar.vue'
 import About from './About.vue'
 import Alert from './Alert.vue'
@@ -25,6 +27,7 @@ export default {
   components: {
     About,
     Alert,
+    Config,
     Header,
     Map,
     Sidebar

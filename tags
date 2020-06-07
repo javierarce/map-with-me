@@ -30,6 +30,8 @@ $item	src/components/Locations.vue	/^      let $item = this.getItemById(marker.o
 .slide-fade-leave-to	src/assets/scss/helpers/transitions.scss	/^.slide-fade-leave-to .Alert__content {$/;"	c
 .was-successful	src/assets/scss/Popup.scss	/^.was-successful .Popup__success {$/;"	c
 .was-successful	src/assets/scss/Popup.scss	/^.was-successful .Popup__success:before {$/;"	c
+MAP	src/components/Map.vue	/^      config.MAP = mapConfig$/;"	r
+MAP	src/components/Search.vue	/^      config.MAP = mapConfig$/;"	r
 MARGIN_BOTTOM	src/components/Sidebar.vue	/^const MARGIN_BOTTOM = 20$/;"	n
 MAX_TITLE_LENGTH	src/components/Map.vue	/^const MAX_TITLE_LENGTH = 80$/;"	n
 Regex	src/components/Map.vue	/^const emojiRegex = require('emoji-regex')$/;"	c
@@ -77,12 +79,14 @@ coordinates	src/components/Map.vue	/^      this.coordinates = e.latlng$/;"	r
 coordinates	src/components/Map.vue	/^      this.coordinates = { lat: latlng[0], lng: latlng[1] }$/;"	o
 coordinates	src/components/Map.vue	/^      this.coordinates = { lat: latlng[0], lng: latlng[1] }$/;"	r
 createPopup	src/components/Map.vue	/^    createPopup (coordinates, options = {}) {$/;"	f
+data	src/components/Config.vue	/^  data () {$/;"	f
 data	src/components/Header.vue	/^  data() {$/;"	f
 data	src/components/Home.vue	/^  data () {$/;"	f
 data	src/components/Locations.vue	/^  data () {$/;"	f
 data	src/components/Map.vue	/^  data() {$/;"	f
 data	src/components/Search.vue	/^  data () {$/;"	f
 data	src/components/Sidebar.vue	/^  data () {$/;"	f
+default_search_location	src/components/Config.vue	/^        this.default_search_location = result.default_search_location$/;"	r
 description	src/components/Map.vue	/^        let description = this.getDescription()$/;"	r
 description	src/components/Map.vue	/^      let description = L.DomUtil.create('div', 'Popup__description js-comment', comment)$/;"	r
 description	src/components/Map.vue	/^      let description = data.description$/;"	r
@@ -109,6 +113,7 @@ footerHeight	src/components/Sidebar.vue	/^      let footerHeight = this.$refs.fo
 geocode	src/components/Map.vue	/^    geocode () {$/;"	f
 getAddress	src/components/Map.vue	/^    getAddress () {$/;"	f
 getApproveLabel	src/components/Locations.vue	/^    getApproveLabel (marker) {$/;"	f
+getConfig	src/components/Config.vue	/^    getConfig () {$/;"	f
 getDescription	src/components/Map.vue	/^    getDescription () {$/;"	f
 getHeight	src/components/Sidebar.vue	/^    getHeight () {$/;"	f
 getIcon	src/components/Map.vue	/^    getIcon (emojis) {$/;"	f
@@ -133,6 +138,7 @@ icon	src/components/Map.vue	/^      let icon = this.getIcon(emojis)$/;"	r
 id	src/components/Locations.vue	/^      let id = marker.options.location.id$/;"	r
 if	src/components/About.vue	/^      if (e.target && e.target.tagName !== 'A') {$/;"	f
 if	src/components/Alert.vue	/^      if (e.target && e.target.tagName !== 'A') {$/;"	f
+if	src/components/Config.vue	/^      if (!this.secret) {$/;"	f
 if	src/components/Header.vue	/^      if (this.loggedIn) {$/;"	f
 if	src/components/Home.vue	/^        if (!result && !result.user) {$/;"	f
 if	src/components/Home.vue	/^        if (result.coordinates) {$/;"	f
@@ -174,6 +180,7 @@ isMarkerActive	src/components/Locations.vue	/^    isMarkerActive (marker) {$/;"	
 isMarkerRejected	src/components/Locations.vue	/^    isMarkerRejected (marker) {$/;"	f
 isMyMarker	src/components/Locations.vue	/^    isMyMarker (marker) {$/;"	f
 itemClass	src/components/Locations.vue	/^    itemClass (marker) {$/;"	f
+lat	src/components/Config.vue	/^        this.lat = result.lat$/;"	r
 lat	src/components/Map.vue	/^      let lat = this.coordinates.lat$/;"	r
 latlng	src/components/Map.vue	/^      let latlng = [data.lat, data.lng]$/;"	r
 latlng	src/components/Map.vue	/^      let latlng = [location.lat, location.lng]$/;"	r
@@ -183,6 +190,7 @@ lng	src/components/Map.vue	/^      let lng = this.coordinates.lng$/;"	r
 location	src/components/Locations.vue	/^        let location = marker.options.location$/;"	r
 loggedIn	src/components/Header.vue	/^      this.loggedIn = window.bus.isLoggedIn()$/;"	r
 login	src/components/Map.vue	/^    login () {$/;"	f
+lon	src/components/Config.vue	/^        this.lon = result.lon$/;"	r
 map	src/components/Map.vue	/^      map: {},$/;"	o
 map	src/components/Map.vue	/^      this.map = L.map('map', options).setView([config.MAP.LAT, config.MAP.LON], config.MAP.ZOOM)$/;"	r
 marker	src/components/Locations.vue	/^          let marker = this.markers.find(marker => marker.options.location.id === result.id)$/;"	r
@@ -194,16 +202,19 @@ marker	src/components/Map.vue	/^      this.marker = L.marker(this.coordinates, {
 markers	src/components/Locations.vue	/^      this.markers = markers$/;"	r
 methods	src/components/About.vue	/^  methods: {$/;"	o
 methods	src/components/Alert.vue	/^  methods: {$/;"	o
+methods	src/components/Config.vue	/^  methods: {$/;"	o
 methods	src/components/Header.vue	/^  methods: {$/;"	o
 methods	src/components/Home.vue	/^  methods: {$/;"	o
 methods	src/components/Locations.vue	/^  methods: {$/;"	o
 methods	src/components/Map.vue	/^  methods: {$/;"	o
 methods	src/components/Search.vue	/^  methods: {$/;"	o
 methods	src/components/Sidebar.vue	/^  methods: {$/;"	o
+mounted	src/components/Config.vue	/^  mounted () {$/;"	f
 mounted	src/components/Header.vue	/^  mounted () {$/;"	f
 mounted	src/components/Home.vue	/^  mounted () {$/;"	f
 mounted	src/components/Locations.vue	/^  mounted () {$/;"	f
 mounted	src/components/Map.vue	/^  mounted () {$/;"	f
+mounted	src/components/Search.vue	/^  mounted () {$/;"	f
 mounted	src/components/Sidebar.vue	/^  mounted () {$/;"	f
 name	src/components/Map.vue	/^        let name = result.namedetails.name || address || result.display_name$/;"	r
 name	src/components/Map.vue	/^        name = this.truncate(name, MAX_TITLE_LENGTH)$/;"	r
@@ -218,14 +229,17 @@ onAddMarkers	src/components/Locations.vue	/^    onAddMarkers (markers) {$/;"	f
 onClickAbout	src/components/About.vue	/^    onClickAbout (e) {$/;"	f
 onClickAbout	src/components/Header.vue	/^    onClickAbout () {$/;"	f
 onClickAlert	src/components/Alert.vue	/^    onClickAlert (e) {$/;"	f
+onClickDestroy	src/components/Config.vue	/^    onClickDestroy () {$/;"	f
 onClickLogin	src/components/Header.vue	/^    onClickLogin () {$/;"	f
 onClickMarker	src/components/Locations.vue	/^    onClickMarker (marker) {$/;"	f
 onClickOutside	src/components/About.vue	/^    onClickOutside () {$/;"	f
 onClickOutside	src/components/Alert.vue	/^    onClickOutside () {$/;"	f
 onClickRemove	src/components/Locations.vue	/^    onClickRemove (e, marker) {$/;"	f
+onClickSaveConfig	src/components/Config.vue	/^    onClickSaveConfig () {$/;"	f
 onClickTitle	src/components/Header.vue	/^    onClickTitle () {$/;"	f
 onClickToggleApprove	src/components/Locations.vue	/^    onClickToggleApprove (e, marker) {$/;"	f
 onGetAddedLocation	src/components/Home.vue	/^    onGetAddedLocation (response) {$/;"	f
+onGetConfig	src/components/Config.vue	/^    onGetConfig (response) {$/;"	f
 onGetGeocoding	src/components/Map.vue	/^    onGetGeocoding (response) {$/;"	f
 onGetLocations	src/components/Home.vue	/^    onGetLocations (response) {$/;"	f
 onGetResult	src/components/Search.vue	/^    onGetResult (response) {$/;"	f
@@ -236,8 +250,10 @@ onLoad	src/components/Home.vue	/^    onLoad () {$/;"	f
 onLoggedIn	src/components/Header.vue	/^    onLoggedIn () {$/;"	f
 onLogin	src/components/Home.vue	/^    onLogin ({ coordinates, zoom, name, description, address }) {$/;"	f
 onMapClick	src/components/Map.vue	/^    onMapClick (e) {$/;"	f
+onRecreateDB	src/components/Config.vue	/^    onRecreateDB (response) {$/;"	f
 onRemoveLocation	src/components/Locations.vue	/^    onRemoveLocation (response) {$/;"	f
 onRemoveMarker	src/components/Map.vue	/^    onRemoveMarker (id) {$/;"	f
+onSaveConfig	src/components/Config.vue	/^    onSaveConfig (response) {$/;"	f
 onSelectMarker	src/components/Locations.vue	/^    onSelectMarker (marker) {$/;"	f
 onSetView	src/components/Map.vue	/^    onSetView (result) {$/;"	f
 onShowAddedLocation	src/components/Map.vue	/^    onShowAddedLocation (location) {$/;"	f
@@ -301,4 +317,5 @@ user	src/components/Map.vue	/^      let user = location.user$/;"	r
 username	src/components/Header.vue	/^        this.username = `@${window.bus.user.username}`$/;"	r
 username	src/components/Locations.vue	/^    username (marker) {$/;"	f
 watch	src/components/Locations.vue	/^  watch: {$/;"	o
+zoom	src/components/Config.vue	/^        this.zoom = result.zoom$/;"	r
 zoom	src/components/Map.vue	/^      let zoom = this.map.getZoom()$/;"	r

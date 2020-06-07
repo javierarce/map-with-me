@@ -11,6 +11,7 @@
 
 import mixins from '../mixins'
 import config from '../../config'
+import mapConfig from '../../map.yaml'
 
 export default {
   mixins: [mixins],
@@ -19,6 +20,11 @@ export default {
       placeholder: config.TEXTS.SEARCH_PLACEHOLDER,
       q: undefined
     }
+  },
+  mounted () {
+    this.$nextTick(() => {
+      config.MAP = mapConfig
+    })
   },
   methods: {
     onKeyUp (e) {

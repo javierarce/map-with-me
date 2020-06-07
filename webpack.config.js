@@ -2,7 +2,7 @@ const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader')
 
 module.exports = {
-  mode: 'production',
+  mode: 'development',
   entry: {
     app: [
       './src/main.js'
@@ -24,6 +24,10 @@ module.exports = {
       test: /\.vue$/,
       loader: 'vue-loader'
     }, {
+        test: /\.ya?ml$/,
+        type: 'json', // Required by Webpack v4
+        use: 'yaml-loader'
+      }, {
       test: /\.scss$/,
       use: [
         {
