@@ -7,4 +7,4 @@ map:
 admin:
   ADMIN_USERNAME: javier
   MODERATED: false
-  PROTECTED: true
+  PROTECTED: false
