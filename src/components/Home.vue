@@ -80,6 +80,7 @@ export default {
       if (e.keyCode === 27) {
         this.showAlert = false
         this.showAbout = false
+        this.showConfig = false
       }
     },
     onLoad () {

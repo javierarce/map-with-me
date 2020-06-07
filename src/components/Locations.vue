@@ -21,6 +21,7 @@
 <script>
 import mixins from '../mixins'
 import config from '../../config'
+import mapConfig from '../../map.yaml'
 
 export default {
   props: ['height'],
@@ -38,7 +39,10 @@ export default {
     }
   },
   mounted () {
-    this.bindEvents()
+    this.$nextTick(() => {
+      this.bindEvents()
+      config.ADMIN = mapConfig.admin
+    })
   },
   methods: {
     bindEvents () {

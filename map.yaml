@@ -1,5 +1,10 @@
-DEFAULT_SEARCH_LOCATION: Barcelona, Spain
-LAT: "40.712"
-LON: "-74"
-ZOOM: "3"
-FIT_BOUNDS: false
+map:
+  DEFAULT_SEARCH_LOCATION: Barcelona, Spain
+  LAT: "40.712"
+  LON: "-74"
+  ZOOM: "3"
+  FIT_BOUNDS: false
+admin:
+  ADMIN_USERNAME: javier
+  MODERATED: false
+  PROTECTED: true

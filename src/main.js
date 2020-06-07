@@ -8,6 +8,10 @@ const Config = require('./components/Config.vue').default
 const App = require('./app.vue').default
 
 import config from '../config'
+import mapConfig from '../map.yaml'
+
+config.ADMIN = mapConfig.admin
+
 import styles from './assets/scss/style.scss'
 
 Vue.use(VueRouter)

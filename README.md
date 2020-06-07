@@ -17,30 +17,17 @@ DB_PASS=
 CALLBACK_URL=https://APP_NAME.glitch.me/auth/twitter/callback
 ```
 
-3. Now open the glitch console and create a `recreate.txt` file (this will destroy and recreate the DB, but since there's no content yet this is totally fine). Finally and to restart everything, execute the `refresh` command:
+3. Visit your website and click 'Config'. A configuration form will appear so you can change the default map settings (longitude, latitude, default search location, and zoom level)
 
-```
-touch recreate.txt
-refresh
-```
-
-4. Configure your map editing the `config.js` file. Here are the most important configuration blocks: 
+4. Configure your map editing the `config.js` file. 
 
 ```js
 const ADMIN = {
   ADMIN_USERNAME: 'javier', // the Twitter username of the map admin without the @ symbol
-  MODERATED: false // if you set it to `true` the admin will need to approve every location manually 
+  MODERATED: false // if you set it to `true` the admin will need to approve every place manually 
+  PROTECTED: false // if you set it to `true` users won't be able to submit places
 }
 ``` 
-
-```js
-const MAP = {
-  DEFAULT_SEARCH_LOCATION: 'Madrid, Spain', // this will restrict the geocoding requests to that city and country
-  LAT: 40.416775, // default latitude of your map
-  LON: -3.703790, // default longitude of your map
-  ZOOM: 14 // default zoom level
-}
-```
 
 ### Everyone has issues
 

@@ -23,7 +23,7 @@ export default {
   },
   mounted () {
     this.$nextTick(() => {
-      config.MAP = mapConfig
+      config.MAP = mapConfig.map
     })
   },
   methods: {

@@ -40,6 +40,34 @@
 
         </div>
 
+
+        <div class="Config__sectionContent">
+          <label for="admin">
+            <strong class="Input__label">Admin</strong>
+            <div class="Input__field Config__field">
+              <input id="admin" type="text" class="Input" placeholder="Admin" v-model="admin">
+            </div>
+          </label>
+
+
+
+          <label for="moderated">
+            <strong class="Input__label">Moderated</strong>
+            <div class="Input__field Input__checkbox Config__fiel">
+              <input id="moderated" type="checkbox" v-model="moderated"> <p>The admin will need to accept or reject the submissions.</p>
+            </div>
+          </label>
+
+          <label for="protected">
+            <strong class="Input__label">Protected</strong>
+            <div class="Input__field Input__checkbox Config__fiel">
+              <input id="protected" type="checkbox" v-model="protected"> <p>Users won't able to submit places.</p>
+            </div>
+          </label>
+        </div>
+
+
+
         <div class="Config__footer">
           <div class="Config__sectionContent">
             <div class="Input__field Config__field">
@@ -98,10 +126,13 @@ export default {
       isSaving: false,
       sendButtonIsEnabled: false,
       destroyButtonIsEnabled: false,
-      default_search_location: mapConfig.DEFAULT_SEARCH_LOCATION,
-      lat: mapConfig.LAT,
-      lon: mapConfig.LON,
-      zoom: mapConfig.ZOOM,
+      default_search_location: mapConfig.map.DEFAULT_SEARCH_LOCATION,
+      lat: mapConfig.map.LAT,
+      lon: mapConfig.map.LON,
+      zoom: mapConfig.map.ZOOM,
+      moderated: mapConfig.admin.MODERATED,
+      protected: mapConfig.admin.PROTECTED,
+      admin: mapConfig.admin.ADMIN_USERNAME,
       secret: undefined,
       secretDestroy: undefined
     }
@@ -118,11 +149,6 @@ export default {
       }
     }
   },
-  mounted () {
-    this.$nextTick(() => {
-      // this.getConfig()
-    })
-  },
   methods: {
     onClickOutside () {
       window.bus.$emit(config.ACTIONS.TOGGLE_CONFIG)
@@ -131,7 +157,6 @@ export default {
     onClickInside (e) {
       if (e.target && e.target.tagName !== 'A') {
         e.stopPropagation()
-        e.preventDefault()
       }
     },
 
@@ -180,9 +205,22 @@ export default {
       }
 
       window.bus.$emit(config.ACTIONS.START_LOADING)
+
       this.isSaving = true
 
-      this.post(config.ENDPOINTS.CONFIG, { secret: this.secret, lat: this.lat, lon: this.lon, zoom: this.zoom, default_search_location: this.default_search_location })
+      let configuration = {
+        secret: this.secret,
+        admin: {
+          moderated: this.moderated,
+          protected: this.protected,
+          admin_username: this.admin
+        },
+        map: {
+          lat: this.lat, lon: this.lon, zoom: this.zoom, default_search_location: this.default_search_location 
+        }
+      }
+
+      this.post(config.ENDPOINTS.CONFIG, configuration )
         .then(this.onSaveConfig.bind(this))
         .catch((error) => {
           console.log(error)

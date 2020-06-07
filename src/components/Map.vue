@@ -34,7 +34,8 @@ export default {
   },
   mounted () {
     this.$nextTick(() => {
-      config.MAP = mapConfig
+      config.MAP = mapConfig.map
+      config.ADMIN = mapConfig.admin
       this.bindEvents()
       this.init()
     })
@@ -486,6 +487,10 @@ export default {
     },
     onMapClick (e) {
       if (this.removeMarker()) {
+        return
+      }
+
+      if (config.ADMIN.PROTECTED) {
         return
       }
 

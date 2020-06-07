@@ -32,8 +32,10 @@ $item	src/components/Locations.vue	/^      let $item = this.getItemById(marker.o
 .slide-fade-leave-to	src/assets/scss/helpers/transitions.scss	/^.slide-fade-leave-to .Config__content,$/;"	c
 .was-successful	src/assets/scss/Popup.scss	/^.was-successful .Popup__success {$/;"	c
 .was-successful	src/assets/scss/Popup.scss	/^.was-successful .Popup__success:before {$/;"	c
-MAP	src/components/Map.vue	/^      config.MAP = mapConfig$/;"	r
-MAP	src/components/Search.vue	/^      config.MAP = mapConfig$/;"	r
+ADMIN	src/components/Locations.vue	/^      config.ADMIN = mapConfig.admin$/;"	r
+ADMIN	src/components/Map.vue	/^      config.ADMIN = mapConfig.admin$/;"	r
+MAP	src/components/Map.vue	/^      config.MAP = mapConfig.map$/;"	r
+MAP	src/components/Search.vue	/^      config.MAP = mapConfig.map$/;"	r
 MARGIN_BOTTOM	src/components/Sidebar.vue	/^const MARGIN_BOTTOM = 20$/;"	n
 MAX_TITLE_LENGTH	src/components/Map.vue	/^const MAX_TITLE_LENGTH = 80$/;"	n
 Regex	src/components/Map.vue	/^const emojiRegex = require('emoji-regex')$/;"	c
@@ -50,6 +52,7 @@ address	src/components/Map.vue	/^      let address = []$/;"	r
 address	src/components/Map.vue	/^      let address = data.address$/;"	r
 address	src/components/Map.vue	/^      let address = location.address$/;"	r
 address	src/components/Map.vue	/^      let address = this.getAddress()$/;"	r
+admin	src/components/Config.vue	/^        admin: {$/;"	o
 alertDescription	src/components/Home.vue	/^      this.alertDescription = description$/;"	r
 alertFooter	src/components/Home.vue	/^      this.alertFooter = footer$/;"	r
 alertTitle	src/components/Home.vue	/^      this.alertTitle = title$/;"	r
@@ -74,6 +77,7 @@ components	src/components/Home.vue	/^  components: {$/;"	o
 components	src/components/Sidebar.vue	/^  components: {$/;"	o
 computed	src/components/Config.vue	/^  computed: {$/;"	o
 computed	src/components/Map.vue	/^  computed: {$/;"	o
+configuration	src/components/Config.vue	/^      let configuration = {$/;"	r
 confirmation	src/components/Locations.vue	/^      let confirmation = confirm('Are you sure you want to delete this location?')$/;"	r
 content	src/components/Map.vue	/^      let content = L.DomUtil.create('div', `Popup__content ${classNames.join(' ')}`)$/;"	r
 controls	src/components/Map.vue	/^      let controls = L.DomUtil.create('div', 'Popup__controls', body)$/;"	r
@@ -164,6 +168,7 @@ if	src/components/Map.vue	/^        if (e.keyCode === 27) {$/;"	f
 if	src/components/Map.vue	/^        if (result.address.house_number) {$/;"	f
 if	src/components/Map.vue	/^        if (result.address.road) {$/;"	f
 if	src/components/Map.vue	/^      if (!this.enableSend) {$/;"	f
+if	src/components/Map.vue	/^      if (config.ADMIN.PROTECTED) {$/;"	f
 if	src/components/Map.vue	/^      if (emojis && emojis.length) {$/;"	f
 if	src/components/Map.vue	/^      if (index !== undefined) {$/;"	f
 if	src/components/Map.vue	/^      if (options.address) {$/;"	f
@@ -206,6 +211,7 @@ location	src/components/Locations.vue	/^        let location = marker.options.lo
 loggedIn	src/components/Header.vue	/^      this.loggedIn = window.bus.isLoggedIn()$/;"	r
 login	src/components/Map.vue	/^    login () {$/;"	f
 lon	src/components/Config.vue	/^        this.lon = result.lon$/;"	r
+map	src/components/Config.vue	/^        map: {$/;"	o
 map	src/components/Map.vue	/^      map: {},$/;"	o
 map	src/components/Map.vue	/^      this.map = L.map('map', options).setView([config.MAP.LAT, config.MAP.LON], config.MAP.ZOOM)$/;"	r
 marker	src/components/Locations.vue	/^          let marker = this.markers.find(marker => marker.options.location.id === result.id)$/;"	r
@@ -224,7 +230,6 @@ methods	src/components/Locations.vue	/^  methods: {$/;"	o
 methods	src/components/Map.vue	/^  methods: {$/;"	o
 methods	src/components/Search.vue	/^  methods: {$/;"	o
 methods	src/components/Sidebar.vue	/^  methods: {$/;"	o
-mounted	src/components/Config.vue	/^  mounted () {$/;"	f
 mounted	src/components/Header.vue	/^  mounted () {$/;"	f
 mounted	src/components/Home.vue	/^  mounted () {$/;"	f
 mounted	src/components/Locations.vue	/^  mounted () {$/;"	f
@@ -318,6 +323,7 @@ showAbout	src/components/Home.vue	/^      this.showAbout = !this.showAbout$/;"	r
 showAlert	src/components/Home.vue	/^        this.showAlert = false$/;"	r
 showAlert	src/components/Home.vue	/^      this.showAlert = !this.showAlert$/;"	r
 showApproveItem	src/components/Locations.vue	/^    showApproveItem (marker) {$/;"	f
+showConfig	src/components/Home.vue	/^        this.showConfig = false$/;"	r
 showConfig	src/components/Home.vue	/^      this.showConfig = !this.showConfig$/;"	r
 showDefaultPoint	src/components/Map.vue	/^    showDefaultPoint () {$/;"	f
 showRemoveItem	src/components/Locations.vue	/^    showRemoveItem (marker) {$/;"	f

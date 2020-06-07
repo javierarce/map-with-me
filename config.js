@@ -1,8 +1,3 @@
-const ADMIN = {
-  ADMIN_USERNAME: 'javier',
-  MODERATED: false
-}
-
 const TEXTS = {
   MAIN_TITLE: 'Madrid',
   PLACEHOLDER: 'What\'s cool about this place?',
@@ -58,7 +53,6 @@ const ENDPOINTS = {
 
 module.exports = { 
   ACTIONS,
-  ADMIN,
   ENDPOINTS,
   TEXTS
 }
