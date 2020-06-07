@@ -141,6 +141,7 @@ id	src/components/Locations.vue	/^      let id = marker.options.location.id$/;"	
 if	src/components/About.vue	/^      if (e.target && e.target.tagName !== 'A') {$/;"	f
 if	src/components/Alert.vue	/^      if (e.target && e.target.tagName !== 'A') {$/;"	f
 if	src/components/Config.vue	/^      if (!this.secret) {$/;"	f
+if	src/components/Config.vue	/^      if (!this.secretDestroy) {$/;"	f
 if	src/components/Config.vue	/^      if (e.target && e.target.tagName !== 'A') {$/;"	f
 if	src/components/Header.vue	/^      if (this.loggedIn) {$/;"	f
 if	src/components/Home.vue	/^        if (!result && !result.user) {$/;"	f

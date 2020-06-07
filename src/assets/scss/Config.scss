@@ -5,6 +5,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   z-index: 10000;
 }
 
@@ -17,14 +18,24 @@
   text-decoration: underline;
 }
 
+.Config__form {
+  margin: 0 8px 0 0;
+}
+
 .Config__content {
   background: #fff;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   padding: 32px;
-  width: 500px;
+  width: 800px;
   transition: all 250ms ease-in-out;
   z-index: 1000;
+  margin: 0 0 18px;
+
+  /* align-items: flex-start; */
+  /* justify-content: center; */
+  /* display: flex; */
+  /* flex-direction: row; */
 }
 
 .Config__content p {
@@ -53,7 +64,6 @@
 }
 
 .Config__footer {
-  margin-top: 16px;
 }
 
 .Config__button {
@@ -79,21 +89,18 @@
   cursor: pointer;
 }
 
-.Config__destroy {
-  margin: 24px 0 0 0;
-  padding: 16px 0 0 0;
-  border-top: 1px solid #ccc;
-}
-
-.Config__destroy .Config__sectionContent {
-  background: rgba(255, 0, 0, .1);
-  padding: 16px;
-  border-radius: 4px;
+.Config__sectionContent:last-child {
+  margin: 0;
 }
 
 .Config__sectionContent {
   display: flex;
   flex-direction: row;
+  margin: 0 0 16px;
+}
+
+.Config__sectionContent > * {
+  flex: 1;
 }
 .Config__sectionContent > *:first-child {
   margin: 0 4px 0 0;
@@ -102,11 +109,11 @@
   margin: 0 0 0 4px;
 }
 
-.Config__destroy .Button {
+.Config__footer .Button {
   flex: 2;
 }
 
-.Config__destroy .Input__field {
+.Config__footer .Input__field {
   flex: 3;
 }
 

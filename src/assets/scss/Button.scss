@@ -55,15 +55,29 @@
   text-align: center;
   text-decoration: none;
   box-shadow: none;
-  transition: background 250ms ease-in-out;
+  transition: all 250ms ease-in-out;
 }
 
 .Button.is-destructive {
   background: red;
 }
 
-
 .Button.is-destructive:hover {
   background: #c50000;
 }
 
+.Button.is-disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.Button.is-disabled:hover {
+  cursor: default;
+  opacity: 0.5;
+  background: #2A84D2;
+}
+
+.Button.is-disabled.is-destructive:hover {
+  opacity: 0.5;
+  background: #c50000;
+}
