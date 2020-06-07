@@ -1,5 +1,5 @@
 DEFAULT_SEARCH_LOCATION: Madrid, Spain
 LAT: "40.712"
 LON: "-74"
-ZOOM: "18"
+ZOOM: "3"
 FIT_BOUNDS: false

@@ -24,6 +24,8 @@
   transition: all 250ms ease-in-out;
 }
 
+.slide-fade-enter .Config__content, 
+.slide-fade-leave-to .Config__content,
 .slide-fade-enter .About__inner, 
 .slide-fade-leave-to .About__inner,
 .slide-fade-enter .Alert__content, 

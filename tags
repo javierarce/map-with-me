@@ -23,11 +23,13 @@ $item	src/components/Locations.vue	/^      let $item = this.getItemById(marker.o
 .slide-fade-enter	src/assets/scss/helpers/transitions.scss	/^.slide-fade-enter .About__inner, $/;"	c
 .slide-fade-enter	src/assets/scss/helpers/transitions.scss	/^.slide-fade-enter .Alert__backdrop, $/;"	c
 .slide-fade-enter	src/assets/scss/helpers/transitions.scss	/^.slide-fade-enter .Alert__content, $/;"	c
+.slide-fade-enter	src/assets/scss/helpers/transitions.scss	/^.slide-fade-enter .Config__content, $/;"	c
 .slide-fade-leave-active	src/assets/scss/helpers/transitions.scss	/^.slide-fade-leave-active {$/;"	c
 .slide-fade-leave-to	src/assets/scss/helpers/transitions.scss	/^.slide-fade-leave-to .About__backdrop,$/;"	c
 .slide-fade-leave-to	src/assets/scss/helpers/transitions.scss	/^.slide-fade-leave-to .About__inner,$/;"	c
 .slide-fade-leave-to	src/assets/scss/helpers/transitions.scss	/^.slide-fade-leave-to .Alert__backdrop {$/;"	c
 .slide-fade-leave-to	src/assets/scss/helpers/transitions.scss	/^.slide-fade-leave-to .Alert__content {$/;"	c
+.slide-fade-leave-to	src/assets/scss/helpers/transitions.scss	/^.slide-fade-leave-to .Config__content,$/;"	c
 .was-successful	src/assets/scss/Popup.scss	/^.was-successful .Popup__success {$/;"	c
 .was-successful	src/assets/scss/Popup.scss	/^.was-successful .Popup__success:before {$/;"	c
 MAP	src/components/Map.vue	/^      config.MAP = mapConfig$/;"	r
@@ -139,6 +141,7 @@ id	src/components/Locations.vue	/^      let id = marker.options.location.id$/;"	
 if	src/components/About.vue	/^      if (e.target && e.target.tagName !== 'A') {$/;"	f
 if	src/components/Alert.vue	/^      if (e.target && e.target.tagName !== 'A') {$/;"	f
 if	src/components/Config.vue	/^      if (!this.secret) {$/;"	f
+if	src/components/Config.vue	/^      if (e.target && e.target.tagName !== 'A') {$/;"	f
 if	src/components/Header.vue	/^      if (this.loggedIn) {$/;"	f
 if	src/components/Home.vue	/^        if (!result && !result.user) {$/;"	f
 if	src/components/Home.vue	/^        if (result.coordinates) {$/;"	f
@@ -229,11 +232,14 @@ onAddMarkers	src/components/Locations.vue	/^    onAddMarkers (markers) {$/;"	f
 onClickAbout	src/components/About.vue	/^    onClickAbout (e) {$/;"	f
 onClickAbout	src/components/Header.vue	/^    onClickAbout () {$/;"	f
 onClickAlert	src/components/Alert.vue	/^    onClickAlert (e) {$/;"	f
+onClickConfig	src/components/Header.vue	/^    onClickConfig () {$/;"	f
 onClickDestroy	src/components/Config.vue	/^    onClickDestroy () {$/;"	f
+onClickInside	src/components/Config.vue	/^    onClickInside (e) {$/;"	f
 onClickLogin	src/components/Header.vue	/^    onClickLogin () {$/;"	f
 onClickMarker	src/components/Locations.vue	/^    onClickMarker (marker) {$/;"	f
 onClickOutside	src/components/About.vue	/^    onClickOutside () {$/;"	f
 onClickOutside	src/components/Alert.vue	/^    onClickOutside () {$/;"	f
+onClickOutside	src/components/Config.vue	/^    onClickOutside () {$/;"	f
 onClickRemove	src/components/Locations.vue	/^    onClickRemove (e, marker) {$/;"	f
 onClickSaveConfig	src/components/Config.vue	/^    onClickSaveConfig () {$/;"	f
 onClickTitle	src/components/Header.vue	/^    onClickTitle () {$/;"	f
@@ -263,6 +269,7 @@ onSubmit	src/components/Search.vue	/^    onSubmit (e) {$/;"	f
 onToggleAbout	src/components/Home.vue	/^    onToggleAbout () {$/;"	f
 onToggleAlert	src/components/Home.vue	/^    onToggleAlert (title, description, footer) {$/;"	f
 onToggleApprove	src/components/Locations.vue	/^    onToggleApprove (response) {$/;"	f
+onToggleConfig	src/components/Home.vue	/^    onToggleConfig () {$/;"	f
 onToggleMapSize	src/components/Home.vue	/^    onToggleMapSize (value) {$/;"	f
 onVisitMarker	src/components/Map.vue	/^    onVisitMarker (marker) {$/;"	f
 onclick	src/components/Map.vue	/^      btn.onclick = window.bus.isLoggedIn() ? this.addLocation : this.login$/;"	r
@@ -294,6 +301,7 @@ showAbout	src/components/Home.vue	/^      this.showAbout = !this.showAbout$/;"	r
 showAlert	src/components/Home.vue	/^        this.showAlert = false$/;"	r
 showAlert	src/components/Home.vue	/^      this.showAlert = !this.showAlert$/;"	r
 showApproveItem	src/components/Locations.vue	/^    showApproveItem (marker) {$/;"	f
+showConfig	src/components/Home.vue	/^      this.showConfig = !this.showConfig$/;"	r
 showDefaultPoint	src/components/Map.vue	/^    showDefaultPoint () {$/;"	f
 showRemoveItem	src/components/Locations.vue	/^    showRemoveItem (marker) {$/;"	f
 showSavedLocation	src/components/Map.vue	/^    showSavedLocation (data) {$/;"	f

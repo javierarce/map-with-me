@@ -1,9 +1,9 @@
 <template>
   <div class="App">
-    <Config v-if="false"/>
     <transition name="slide-fade">
     <Alert v-if="showAlert" :title="alertTitle" :description="alertDescription" :footer="alertFooter" />
     <About v-if="showAbout" />
+    <Config v-if="showConfig" />
     </transition>
     <Header />
     <Map />
@@ -39,6 +39,7 @@ export default {
       alertTitle: undefined,
       locations: [],
       showAbout: false,
+      showConfig: false,
       showAlert: false
     }
   },
@@ -56,6 +57,7 @@ export default {
       window.bus.$off(config.ACTIONS.START_LOADING)
       window.bus.$off(config.ACTIONS.STOP_LOADING)
       window.bus.$off(config.ACTIONS.TOGGLE_ABOUT)
+      window.bus.$off(config.ACTIONS.TOGGLE_CONFIG)
       window.bus.$off(config.ACTIONS.TOGGLE_ALERT)
       window.bus.$off(config.ACTIONS.TOGGLE_MAP_SIZE)
 
@@ -65,6 +67,7 @@ export default {
       window.bus.$on(config.ACTIONS.START_LOADING, this.onStartLoading)
       window.bus.$on(config.ACTIONS.STOP_LOADING, this.onStopLoading)
       window.bus.$on(config.ACTIONS.TOGGLE_ABOUT, this.onToggleAbout)
+      window.bus.$on(config.ACTIONS.TOGGLE_CONFIG, this.onToggleConfig)
       window.bus.$on(config.ACTIONS.TOGGLE_ALERT, this.onToggleAlert)
       window.bus.$on(config.ACTIONS.TOGGLE_MAP_SIZE, this.onToggleMapSize)
 
@@ -124,6 +127,9 @@ export default {
     },
     onStopLoading () {
       document.body.classList.remove('is-loading')
+    },
+    onToggleConfig () {
+      this.showConfig = !this.showConfig
     },
     onToggleAbout () {
       this.showAbout = !this.showAbout

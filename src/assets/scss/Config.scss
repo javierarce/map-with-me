@@ -84,6 +84,7 @@
   padding: 16px 0 0 0;
   border-top: 1px solid #ccc;
 }
+
 .Config__destroy .Config__sectionContent {
   background: rgba(255, 0, 0, .1);
   padding: 16px;
@@ -94,6 +95,12 @@
   display: flex;
   flex-direction: row;
 }
+.Config__sectionContent > *:first-child {
+  margin: 0 4px 0 0;
+}
+.Config__sectionContent > *:last-child {
+  margin: 0 0 0 4px;
+}
 
 .Config__destroy .Button {
   flex: 2;
@@ -103,12 +110,22 @@
   flex: 3;
 }
 
-.Config__destroy .Config__field {
-  margin: 0 8px 0 0;
-}
-
-
 .Config__sectionTitle {
   margin: 0 0 16px; 
   font-weight: bold;
+  font-size: 1.1em;
 }
+
+.Config__backdrop {
+	background: linear-gradient(-45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB);
+	opacity: 0.5;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transition: opacity 250ms ease-in-out;
+	animation: Gradient 3s ease-in-out infinite;
+  cursor: pointer;
+}
+

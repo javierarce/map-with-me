@@ -1,24 +1,41 @@
 <template>
-  <div class="Config">
-    <div class="Config__content">
+  <div class="Config" @click="onClickOutside"> 
+    <div class="Config__backdrop"></div>
+    <div class="Config__content" @click="onClickInside">
 
       <h3 class="Config__sectionTitle">Configuration</h3>
 
-      <div class="Input__field Config__field">
-        <input type="text" class="Input" placeholder="Longitude" v-model="lon">
+      <label for="default_search_location">
+        <strong class="Input__label">Search location</strong>
+        <div class="Input__field Config__field">
+          <input id="default_search_location" type="text" class="Input" placeholder="Default location" v-model="default_search_location">
+        </div>
+      </label>
+
+      <div class="Config__sectionContent">
+        <label for="lon">
+          <strong class="Input__label">Longitude</strong>
+          <div class="Input__field Config__field">
+            <input id="lon" type="text" class="Input" placeholder="Longitude" v-model="lon">
+          </div>
+        </label>
+
+        <label for="lat">
+          <strong class="Input__label">Latitude</strong>
+          <div class="Input__field Config__field">
+            <input id="lat" type="text" class="Input" placeholder="Latitude" v-model="lat">
+          </div>
+        </label>
       </div>
 
-      <div class="Input__field Config__field">
-        <input type="text" class="Input" placeholder="Latitude" v-model="lat">
-      </div>
+      <label for="zoom">
+        <strong class="Input__label">Zoom level</strong>
+        <div class="Input__field Config__field">
+          <input id="zoom" type="text" class="Input" placeholder="Zoom" v-model="zoom">
+        </div>
+      </label>
 
-      <div class="Input__field Config__field">
-        <input type="text" class="Input" placeholder="Zoom" v-model="zoom">
-      </div>
 
-      <div class="Input__field Config__field">
-        <input type="text" class="Input" placeholder="Default location" v-model="default_search_location">
-      </div>
 
       <button class="Button is-bold" @click="onClickSaveConfig">Save configuration</button>
 
@@ -59,11 +76,23 @@ export default {
     })
   },
   methods: {
+    onClickOutside () {
+      window.bus.$emit(config.ACTIONS.TOGGLE_CONFIG)
+    },
+
+    onClickInside (e) {
+      if (e.target && e.target.tagName !== 'A') {
+        e.stopPropagation()
+        e.preventDefault()
+      }
+    },
+
     onRecreateDB (response) {
       response.json().then((result) => {
         alert(result.ok)
       })
     },
+
     onClickDestroy () {
       if (!this.secret) {
         return

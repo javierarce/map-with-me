@@ -2,14 +2,14 @@
   display: flex;
   width: 100%;
   border: none;
-  padding: 16px;
+  padding: 16px 32px;
   align-items: center;
   justify-content: center;
   border-radius: 4px;
   color: rgba(255, 255, 255, 0.5);
   border: 1px solid rgba(255, 255,255, 0.2);
   transition: background 150ms ease-in-out, visibility 250ms ease-in-out, opacity 250ms ease-in-out;
-  text-align: left;
+  text-align: center;
   height: 100%;
 }
 .Locations {

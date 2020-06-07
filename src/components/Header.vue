@@ -6,6 +6,7 @@
     </div>
     <div class="Header__links">
       <button class="Button Header__linksItem" @click="onClickAbout">About</button>
+      <button class="Button Header__linksItem" @click="onClickConfig">Config</button>
       <button class="Button Header__linksItem with-image" @click="onClickLogin" v-if="loggedIn">
         <div class="Header__linksItemAvatar"><img :src="avatarURL" /></div>
       </button>
@@ -43,6 +44,9 @@ export default {
     },
     onClickTitle () {
       window.bus.$emit(config.ACTIONS.SHOW_DEFAULT_POINT)
+    },
+    onClickConfig () {
+      window.bus.$emit(config.ACTIONS.TOGGLE_CONFIG)
     },
     onClickAbout () {
       window.bus.$emit(config.ACTIONS.TOGGLE_ABOUT)

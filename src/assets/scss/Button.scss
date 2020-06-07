@@ -30,10 +30,15 @@
   width: 24px;
   height: 24px;
 }
+
 .Button__toggle.is-expanded::before {
   background-image: url(/img/contract.svg);
 }
 
+
+.Button.is-bold:hover {
+  background: #1c598e;
+}
 
 .Button.is-bold {
   display: inline-block;
@@ -55,5 +60,10 @@
 
 .Button.is-destructive {
   background: red;
+}
+
+
+.Button.is-destructive:hover {
+  background: #c50000;
 }
 
