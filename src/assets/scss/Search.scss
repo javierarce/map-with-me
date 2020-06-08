@@ -32,7 +32,7 @@
   height: 16px;
   position: absolute;
   bottom: 2px;
-  right: 0px;
+  right: 2px;
 
   border-top: 2px solid rgba(255, 255, 255, 0.5);
   border-right: 2px solid rgba(255, 255, 255, 0.5);
@@ -59,7 +59,8 @@
   background-image: url('/img/magnifier.svg');
   background-repeat: no-repeat;
   background-size: contain;
-  right: 0px;
+  top: 5px;
+  right: 2px;
   width: 14px;
   height: 14px;
 }
