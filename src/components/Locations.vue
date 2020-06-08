@@ -156,7 +156,7 @@ export default {
       return this.$el.querySelector(`[data-id='${id}']`)
     },
     username (marker) {
-      return marker.options.location.user ? `@${marker.options.location.user.username}` : 'Nobody'
+      return marker.options.location.user ? `@${marker.options.location.user.username}` : 'Anonymous'
     },
     itemClass (marker) {
       let classes = []

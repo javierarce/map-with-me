@@ -319,8 +319,9 @@ export default {
 
       let comment = L.DomUtil.create('div', 'Popup__comment', body)
       let controls = L.DomUtil.create('div', 'Popup__controls', body)
-      let spinner = L.DomUtil.create('div', 'Popup__spinner Spinner', body)
-      let success = L.DomUtil.create('div', 'Popup__success', body)
+
+      L.DomUtil.create('div', 'Popup__spinner Spinner', body)
+      L.DomUtil.create('div', 'Popup__success', body)
 
       let description = L.DomUtil.create('div', 'Popup__description js-comment', comment)
 
