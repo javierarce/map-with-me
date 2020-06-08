@@ -11,6 +11,7 @@ module.exports = {
       './src/main.js'
     ]
   },
+  performance: { hints: false } ,
   devServer: {
     contentBase: path.join(__dirname, 'public'),
     port: 8080,
