@@ -3,12 +3,15 @@
   "version": "2.0.0",
   "description": "Create collaborative maps with your friends (and enemies)",
   "main": "server.js",
-  "license": "ISC",
+  "license": "MIT",
   "scripts": {
     "start:client": "webpack-dev-server --config webpack.config.js",
     "start": "babel-watch ./server.js"
   },
-  "author": "",
+  "author": "Javier Arce",
+  "bugs": {
+    "url": "https://github.com/javierarce/map-with-me/issues"
+  },
   "devDependencies": {
     "@babel/core": "^7.10.2",
     "@babel/preset-env": "^7.10.2",
