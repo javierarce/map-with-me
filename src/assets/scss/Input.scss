@@ -19,10 +19,16 @@
   border: 1px solid #aaa;
 }
 
+.Input__title {
+  display: block;
+  font-weight: bold;
+  margin: 0 0 4px;
+}
+
 .Input__label {
   display: block;
   font-weight: bold;
-  margin: 0 0 8px;
+  margin: 0 0 12px;
   opacity: 0.4;
 }
 
@@ -100,7 +106,7 @@
     }
     & + p {
       flex: 1;
-      font-size: 0.8em;
+      font-size: 0.9em;
       cursor: pointer;
       line-height: 125%;
       user-select: none;

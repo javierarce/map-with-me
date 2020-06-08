@@ -18,7 +18,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   z-index: 1000;
   background: #fff;
-  max-width: 800px;
+  max-width: 850px;
   position: relative;
 }
 
@@ -37,13 +37,9 @@
   text-decoration: underline;
 }
 
-.Config__form {
-  margin: 0 8px 0 0;
-}
 .Config__field {
   margin: 0 0 16px;
 }
-
 
 .Config__content p {
   margin: 0 0 16px;
@@ -71,8 +67,8 @@
 }
 
 .Config__footer {
-  margin: 24px 0 0;
-  font-size: 0.8em;
+  margin: 8px 0 0;
+  font-size: 0.7em;
   line-height: 125%;
   opacity: 0.5;
   display: flex;
@@ -81,7 +77,7 @@
 }
 
 .Config__dangerZone {
-  margin: 24px 0 0;
+  margin: 16px 0 0;
   font-size: 0.7em;
   line-height: 125%;
   width: 100%;

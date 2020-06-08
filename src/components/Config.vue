@@ -64,19 +64,19 @@
             <label for="anonymous">
               
               <div class="Input__field Input__checkbox Config__field">
-                <input id="anonymous" type="checkbox" v-model="anonymous"> <p><strong>Anonymous</strong> Login is not required.</p>
+                <input id="anonymous" type="checkbox" v-model="anonymous"> <p><strong class="Input__title">Anonymous</strong> Login is not required</p>
               </div>
             </label>
 
             <label for="moderated">
               <div class="Input__field Input__checkbox Config__field">
-                <input id="moderated" type="checkbox" v-model="moderated"> <p><strong>Moderated</strong> Submissions require approval.</p>
+                <input id="moderated" type="checkbox" v-model="moderated"> <p><strong class="Input__title">Moderated</strong> Submissions require approval</p>
               </div>
             </label>
 
             <label for="protected">
               <div class="Input__field Input__checkbox Config__field">
-                <input id="protected" type="checkbox" v-model="protected"> <p><strong>Protected</strong> Map is read-only.</p>
+                <input id="protected" type="checkbox" v-model="protected"> <p><strong class="Input__title">Protected</strong> Map is read-only</p>
               </div>
             </label>
           </div>
