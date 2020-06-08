@@ -6,17 +6,19 @@
       <div class="About__content">
         <div class="About__description">
           
-          <p>"Map with Me" is a collaborative mapping tool that lets anyone with a Twitter account to add interesting places in your map.</p>
+          <p><strong>Map with Me</strong> is a collaborative mapping tool for you and your friends.</p>
 
-          <p>You can follow the development of the tool, suggest improvements, and report bugs in its <a href="https://github.com/javierarce/map-with-me">GitHub repo</a>.</p>
 
           <div class="About__columns">
             <div>
-              <div class="About__columnTitle">Do you want to map with others? </div>
-              <p>Remix this project on Glitch and follow the instructions you'll find in the README.md file.</p>
-              <a class="Button is-bold" href="https://glitch.com/edit/#!/remix/mapwithme">Remix project</a>
+              <div class="About__columnTitle">Map with others</div>
+              <p><a href="https://glitch.com/edit/#!/remix/mapwithme">Remix this project on Glitch</a> and follow the instructions you'll find in the README.md file.</p>
             </div>
 
+            <div>
+              <div class="About__columnTitle">Improve the tool</div>
+          <p>Follow the development of the tool, suggest improvements, and report bugs in the <a href="https://github.com/javierarce/map-with-me">GitHub repo</a>.</p>
+            </div>
             <div>
               <div class="About__columnTitle">Copyright</div>
               <p>This website uses data from <a href="https://www.openstreetmap.org/copyright">Nominatim</a>. If you remix it, please read its <a href="https://operations.osmfoundation.org/policies/nominatim/">usage policy</a>.</p>
