@@ -3,9 +3,6 @@
     <div class="Sidebar__content">
       <Locations :height="height" />
     </div>
-    <div class="Sidebar__footer" ref="footer">
-      This website uses data from <a href="https://www.openstreetmap.org/copyright">Nominatim</a> ✨
-    </div>
   </div>
 </template>
 
