@@ -8,7 +8,11 @@
     "start:client": "webpack-dev-server --config webpack.config.js",
     "start": "babel-watch ./server.js"
   },
-  "author": "Javier Arce",
+    "author": { 
+      "name" : "Javier Arce", 
+      "email" : "javierarce@gmail.com", 
+      "url" : "https://twitter.com/javier"
+  },
   "bugs": {
     "url": "https://github.com/javierarce/map-with-me/issues"
   },
