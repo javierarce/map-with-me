@@ -76,25 +76,28 @@ app.use(passport.session())
 passport.serializeUser((user, done) => {
   done(null, user)
 })
+
 passport.deserializeUser((user, done) => {
   done(null, user)
 })
 
-passport.use(new TwitterStrategy({
-  consumerKey: process.env.CONSUMER_KEY,
-  consumerSecret: process.env.CONSUMER_SECRET,
-  callbackURL: process.env.CALLBACK_URL,
-}, (token, tokenSecret, profile, done) => {
+if (process.env.CONSUMER_KEY && process.env.CONSUMER_SECRET) {
+  passport.use(new TwitterStrategy({
+    consumerKey: process.env.CONSUMER_KEY,
+    consumerSecret: process.env.CONSUMER_SECRET,
+    callbackURL: process.env.CALLBACK_URL,
+  }, (token, tokenSecret, profile, done) => {
 
-  let twitterID = profile.id
-  let username = profile.username
-  let displayName = profile.displayName
-  let profileImage = profile._json.profile_image_url_https.replace('_normal', '')
+    let twitterID = profile.id
+    let username = profile.username
+    let displayName = profile.displayName
+    let profileImage = profile._json.profile_image_url_https.replace('_normal', '')
 
-  DB.findOrCreate({ twitterID, username, displayName, profileImage }).then((user) => {
-    done(null, user)
-  })
-}))
+    DB.findOrCreate({ twitterID, username, displayName, profileImage }).then((user) => {
+      done(null, user)
+    })
+  }))
+}
 
 app.use('/leaflet', express.static(__dirname + '/node_modules/leaflet/dist'))
 
