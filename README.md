@@ -5,29 +5,21 @@
 ### Here's how to create a collaborative map of your own
 
 1. If you haven't done it yet, remix the project by [clicking here](https://glitch.com/edit/#!/remix/mapwithme).
-2. Open the `.env` file and add your Twitter credentials (currently, Twitter is used as the identity verification mechanism, so you'll need to <a href="https://developer.twitter.com/en/apps">create a new app</a> first).
-
-Also, come up with a cool username and password for the database and replace `APP_NAME` with the name of your app on glitch:
+2. Open the `.env` file out the variables:
 
 ```js
-CONSUMER_KEY=
-CONSUMER_SECRET=
-DB_USER=
-DB_PASS=
-CALLBACK_URL=https://APP_NAME.glitch.me/auth/twitter/callback
+CONSUMER_KEY=     // If you want to use Twitter as an authentication mechanism
+CONSUMER_SECRET=  // you'll need to create an app and add the credentials here (optional)
+
+CALLBACK_URL=https://APP_NAME.glitch.me/auth/twitter/callback 
+
+DB_USER= // Username for your database
+DB_PASS= // Password for your database
+
+SECRET= // You'll need this to update your  map configuration or recreate the database
 ```
 
-3. Visit your website and click 'Config'. A configuration form will appear so you can change the default map settings (longitude, latitude, default search location, and zoom level)
-
-4. Configure your map editing the `config.js` file. 
-
-```js
-const ADMIN = {
-  ADMIN_USERNAME: 'javier', // the Twitter username of the map admin without the @ symbol
-  MODERATED: false // if you set it to `true` the admin will need to approve every place manually 
-  PROTECTED: false // if you set it to `true` users won't be able to submit places
-}
-``` 
+3. Visit your website and click 'Config'. A configuration form will appear so you can change the default map and publishing settings.
 
 ### Everyone has issues
 
