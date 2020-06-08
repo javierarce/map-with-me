@@ -6,6 +6,8 @@
 
 recreate.txt
 
+tags
+
 # Ignore bundler config
 .env
 /.bundle
