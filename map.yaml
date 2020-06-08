@@ -5,7 +5,7 @@ map:
   ZOOM: "3"
   FIT_BOUNDS: false
 admin:
-  TITLE: Nice!
+  TITLE: This is my great map
   ADMIN_USERNAME: javier
   MODERATED: true
   PROTECTED: false

@@ -3,8 +3,8 @@
 
     <div class="Config__backdrop"></div>
 
-    <div class="Config__inner has-transition">
-      <div class="Config__content" @click="onClickInside">
+    <div class="Config__inner has-transition" @click="onClickInside">
+      <div class="Config__content no-bottom-padding">
         <div class="Config__spinner Spinner is-small" v-if="isSaving"></div>
 
         <div class="Config__form">
@@ -16,6 +16,8 @@
               <input id="title" type="text" class="Input" placeholder="Title" v-model="title">
             </div>
           </label>
+          <div class="Config__section">
+          <div class="Config__sectionContent">
 
           <label for="default_search_location">
             <strong class="Input__label">Search location</strong>
@@ -24,59 +26,60 @@
             </div>
           </label>
 
-          <div class="Config__sectionContent">
             <label for="lon">
               <strong class="Input__label">Longitude</strong>
-              <div class="Input__field Config__field">
+              <div class="Input__field Config__field is-small">
                 <input id="lon" type="text" class="Input" placeholder="Longitude" v-model="lon">
               </div>
             </label>
 
             <label for="lat">
               <strong class="Input__label">Latitude</strong>
-              <div class="Input__field Config__field">
+              <div class="Input__field Config__field is-small">
                 <input id="lat" type="text" class="Input" placeholder="Latitude" v-model="lat">
               </div>
             </label>
 
             <label for="zoom">
               <strong class="Input__label">Zoom level</strong>
-              <div class="Input__field Config__field is-small">
+              <div class="Input__field Config__field is-small is-small">
                 <input id="zoom" type="text" class="Input" placeholder="Zoom" v-model="zoom">
               </div>
             </label>
 
           </div>
+          </div>
 
           <label for="admin">
             <strong class="Input__label">Admin username</strong>
-            <div class="Input__field Config__field">
+            <div class="Input__field Config__field is-medium">
               <input id="admin" type="text" class="Input" placeholder="Admin" v-model="admin">
             </div>
           </label>
 
-          <div class="Config__sectionContent">
+          <div class="Config__section">
+            <strong class="Input__label">Publication settings</strong>
 
+          <div class="Config__sectionContent">
             <label for="anonymous">
-              <strong class="Input__label">Anonymous</strong>
+              
               <div class="Input__field Input__checkbox Config__field">
-                <input id="anonymous" type="checkbox" v-model="anonymous"> <p>Login is not required.</p>
+                <input id="anonymous" type="checkbox" v-model="anonymous"> <p><strong>Anonymous</strong> Login is not required.</p>
               </div>
             </label>
 
             <label for="moderated">
-              <strong class="Input__label">Moderated</strong>
               <div class="Input__field Input__checkbox Config__field">
-                <input id="moderated" type="checkbox" v-model="moderated"> <p>Submissions require approval.</p>
+                <input id="moderated" type="checkbox" v-model="moderated"> <p><strong>Moderated</strong> Submissions require approval.</p>
               </div>
             </label>
 
             <label for="protected">
-              <strong class="Input__label">Protected</strong>
               <div class="Input__field Input__checkbox Config__field">
-                <input id="protected" type="checkbox" v-model="protected"> <p>Map is read-only.</p>
+                <input id="protected" type="checkbox" v-model="protected"> <p><strong>Protected</strong> Map is read-only.</p>
               </div>
             </label>
+          </div>
           </div>
 
 
@@ -92,10 +95,12 @@
         </div>
 
         <div class="Config__footer">
-          <button class="Button is-link" @click="onClickDestroy">Destroy database</button>
           <div>After changing this configuration, please restart the server.</div> 
         </div>
       </div>
+        <div class="Config__dangerZone">
+          <button class="Button is-link" @click="onClickDestroy">Destroy database</button>
+        </div>
     </div>
   </div>
 </template>

@@ -13,7 +13,6 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  padding: 32px;
   transition: all 250ms ease-in-out;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -26,6 +25,11 @@
 .Config__content {
   width: 100%;
   position: relative;
+  padding: 32px;
+}
+
+.Config__content.no-bottom-padding {
+  padding-bottom: 0;
 }
 
 .Config__description a {
@@ -75,8 +79,15 @@
   justify-content: space-between;
   width: 100%;
 }
-.Config__footer > .is-link {
-  flex: 1;
+
+.Config__dangerZone {
+  margin: 24px 0 0;
+  font-size: 0.7em;
+  line-height: 125%;
+  width: 100%;
+  background: #ffe2e2;
+  padding: 16px 32px;
+  border-radius: 0 0 4px 4px;
 }
 
 .Config__button {
@@ -106,20 +117,26 @@
   margin: 0;
 }
 
+.Config__section {
+  margin: 0 0 24px;
+  width: 100%;
+}
+
+.Config__sectionContent .Config__field {
+  margin-bottom: 0;
+}
+
 .Config__sectionContent {
   display: flex;
+  justify-content: space-between;
   flex-direction: row;
-  margin: 0 0 16px;
 }
 
 .Config__sectionContent > * {
-  flex: 1;
-}
-.Config__sectionContent > *:first-child {
   margin: 0 8px 0 0;
 }
 .Config__sectionContent > *:last-child {
-  margin: 0 0 0 8px;
+  margin-right: 0;
 }
 
 .Config__buttons .Button {
@@ -131,7 +148,7 @@
 }
 
 .Config__sectionTitle {
-  margin: 0 0 8px; 
+  margin: 0 0 24px; 
   font-weight: bold;
   font-size: 1.1em;
 }
@@ -153,7 +170,6 @@
 	animation: Gradient 3s ease-in-out infinite;
   cursor: pointer;
 }
-
 
 
 .Config__spinner {

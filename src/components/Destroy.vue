@@ -4,7 +4,7 @@
     <div class="Config__backdrop"></div>
 
     <div class="Config__inner has-transition">
-      <div class="Config__content is-dangerous" @click="onClickInside">
+      <div class="Config__content" @click="onClickInside">
         <div class="Config__spinner Spinner is-small" v-if="isDestroying"></div>
         <div class="Config__buttons">
           <h3 class="Config__sectionTitle">Destroy DB</h3>

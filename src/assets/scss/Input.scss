@@ -105,6 +105,7 @@
       line-height: 125%;
       user-select: none;
       margin: 0 0 0 8px;
+      max-width: 160px;
     }
   }
 
@@ -128,3 +129,9 @@
   }
 }
 
+.is-medium {
+  width: 200px;
+}
+.is-small {
+  width: 100px;
+}

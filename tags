@@ -17,6 +17,8 @@ $item	src/components/Locations.vue	/^      let $item = this.getItemById(marker.o
 .is-loaded	src/assets/scss/Search.scss	/^.is-loaded .Search {$/;"	c
 .is-loaded	src/assets/scss/Sidebar.scss	/^.is-loaded .Sidebar {$/;"	c
 .is-loading	src/assets/scss/Popup.scss	/^.is-loading .Popup__header {$/;"	c
+.is-medium	src/assets/scss/Input.scss	/^.is-medium {$/;"	c
+.is-small	src/assets/scss/Input.scss	/^.is-small {$/;"	c
 .leaflet-container	src/assets/scss/Map.scss	/^.leaflet-container a {$/;"	c
 .leaflet-container	src/assets/scss/Map.scss	/^.leaflet-container a.leaflet-popup-close-button {$/;"	c
 .slide-fade-enter	src/assets/scss/helpers/transitions.scss	/^.slide-fade-enter .About__backdrop, $/;"	c
