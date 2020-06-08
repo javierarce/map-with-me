@@ -34,8 +34,6 @@ export default {
   },
   mounted () {
     this.$nextTick(() => {
-      config.MAP = mapConfig.map
-      config.ADMIN = mapConfig.admin
       this.bindEvents()
       this.init()
     })
@@ -75,7 +73,7 @@ export default {
         }
       }
     },
-    onVisitMarker (marker) {
+    onVisitMarker (marker, approved) {
       marker.fire('click')
     },
     onSetView (result) {
@@ -104,15 +102,22 @@ export default {
       this.marker.openPopup()
       this.map.setView(latlng, result.zoom)
     },
-    getIcon (emojis) {
+
+    getIcon (emojis, location) {
       let html = ''
 
-      let className = 'icon'
+      let classNames = [ 'icon' ]
+
+      if (location && !location.approved && window.bus.isModerated()) {
+        classNames.push('is-disabled')
+      }
 
       if (emojis && emojis.length) {
         html = emojis[0]
-        className += ' has-emoji'
+        classNames.push('has-emoji')
       }
+
+      let className = classNames.join(' ')
 
       return new L.divIcon({
         className,
@@ -212,7 +217,7 @@ export default {
       this.popup = this.createPopup(latlng, { name, description, user, address, readonly: true })
 
       let emojis = this.extractEmojis(description)
-      let icon = this.getIcon(emojis)
+      let icon = this.getIcon(emojis, location)
       let marker = L.marker(latlng, { icon, location })
 
       marker.on('click', () => {
@@ -261,6 +266,7 @@ export default {
         minZoom: 0
       }).addTo(this.map)
     },
+
     createPopup (coordinates, options = {}) {
       let classNames = []
 
@@ -294,14 +300,17 @@ export default {
       header.innerHTML = options.name
 
       let body = L.DomUtil.create('div', 'Popup__body', content)
-      let footer = L.DomUtil.create('div', 'Popup__footer', content)
 
-      if (options.user) {
-        let avatar = L.DomUtil.create('a', 'Popup__userAvatar', footer)
-        avatar.href= `https://twitter.com/${options.user.username}`
+      if (!window.bus.isAnonymous() && options.user) {
+        let footer = L.DomUtil.create('div', 'Popup__footer', content)
 
-        let avatarImage = L.DomUtil.create('img', 'Popup__userAvatarImage', avatar)
-        avatarImage.src= options.user.profileImage
+        if (options.user.profileImage) {
+          let avatar = L.DomUtil.create('a', 'Popup__userAvatar', footer)
+          avatar.href= `https://twitter.com/${options.user.username}`
+
+          let avatarImage = L.DomUtil.create('img', 'Popup__userAvatarImage', avatar)
+          avatarImage.src= options.user.profileImage
+        }
 
         let user = L.DomUtil.create('a', 'Popup__user', footer)
         user.href= `https://twitter.com/${options.user.username}`
@@ -341,9 +350,11 @@ export default {
 
       let btn = L.DomUtil.create('button', 'Button Popup__button', controls)
       btn.setAttribute('type', 'button')
-      btn.innerHTML = window.bus.isLoggedIn() ? 'Add location' : 'Log in with Twitter'
 
-      btn.onclick = window.bus.isLoggedIn() ? this.addLocation : this.login
+      let showAddLocation = (window.bus.isLoggedIn() || window.bus.isAnonymous())
+
+      btn.innerHTML = showAddLocation ? 'Add location' : 'Log in with Twitter'
+      btn.onclick =  showAddLocation ? this.addLocation : this.login
 
       let address = L.DomUtil.create('div', 'Popup__address js-address', body)
 
@@ -490,7 +501,7 @@ export default {
         return
       }
 
-      if (config.ADMIN.PROTECTED) {
+      if (window.bus.isProtected()) {
         return
       }
 

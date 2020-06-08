@@ -24,16 +24,14 @@
   transition: all 250ms ease-in-out;
 }
 
-.slide-fade-enter .Config__content, 
-.slide-fade-leave-to .Config__content,
-.slide-fade-enter .About__inner, 
-.slide-fade-leave-to .About__inner,
-.slide-fade-enter .Alert__content, 
-.slide-fade-leave-to .Alert__content {
+.slide-fade-enter .has-transition, 
+.slide-fade-leave-to .has-transition {
   transform: translateY(20px);
   opacity: 0;
 }
 
+.slide-fade-enter .Config__backdrop, 
+.slide-fade-leave-to .Config__backdrop,
 .slide-fade-enter .About__backdrop, 
 .slide-fade-leave-to .About__backdrop,
 .slide-fade-enter .Alert__backdrop, 

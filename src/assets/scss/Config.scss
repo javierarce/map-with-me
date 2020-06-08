@@ -2,15 +2,30 @@
   position: absolute;
   width: 100%;
   height: 100%;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Config__inner {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  z-index: 10000;
+  padding: 32px;
+  transition: all 250ms ease-in-out;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  background: #fff;
+  max-width: 800px;
+  position: relative;
 }
 
-.Config__field {
-  margin: 0 0 16px;
+.Config__content {
+  width: 100%;
+  position: relative;
 }
 
 .Config__description a {
@@ -21,23 +36,10 @@
 .Config__form {
   margin: 0 8px 0 0;
 }
-
-.Config__content {
-  position: relative;
-  background: #fff;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  padding: 32px;
-  width: 800px;
-  transition: all 250ms ease-in-out;
-  z-index: 1000;
-  margin: 0 0 18px;
-
-  /* align-items: flex-start; */
-  /* justify-content: center; */
-  /* display: flex; */
-  /* flex-direction: row; */
+.Config__field {
+  margin: 0 0 16px;
 }
+
 
 .Config__content p {
   margin: 0 0 16px;
@@ -65,6 +67,10 @@
 }
 
 .Config__footer {
+  margin: 12px 0 0;
+  font-size: .8em;
+  line-height: 125%;
+  opacity: 0.5;
 }
 
 .Config__button {
@@ -110,11 +116,11 @@
   margin: 0 0 0 8px;
 }
 
-.Config__footer .Button {
+.Config__buttons .Button {
   flex: 2;
 }
 
-.Config__footer .Input__field {
+.Config__buttons .Input__field {
   flex: 3;
 }
 

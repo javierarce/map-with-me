@@ -11,6 +11,7 @@ import config from '../config'
 import mapConfig from '../map.yaml'
 
 config.ADMIN = mapConfig.admin
+config.MAP = mapConfig.map
 
 import styles from './assets/scss/style.scss'
 
@@ -20,6 +21,7 @@ const router = new VueRouter({
   mode: 'history',
   routes: [
     { path: '/', component: Home, name: 'Home' },
+    { path: '/admin/:secret', component: Home, name: 'Admin' },
     { path: '/config', component: Config, name: 'Config' }
   ]
 })
@@ -36,6 +38,21 @@ window.bus = new Vue({
     },
     isAdmin () {
       return !!(this.user && this.user.username && config.ADMIN.ADMIN_USERNAME === this.user.username)
+    },
+    getTitle () {
+      return config.ADMIN.TITLE
+    },
+    getAdminUsername () {
+      return config.ADMIN.ADMIN_USERNAME
+    },
+    isModerated () {
+      return config.ADMIN.MODERATED
+    },
+    isAnonymous () {
+      return config.ADMIN.ANONYMOUS
+    },
+    isProtected () {
+      return config.ADMIN.PROTECTED
     }
   }
 })

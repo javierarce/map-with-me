@@ -7,18 +7,23 @@
     <div class="Header__links">
       <button class="Button Header__linksItem" @click="onClickAbout">About</button>
       <button class="Button Header__linksItem" @click="onClickConfig">Config</button>
-      <button class="Button Header__linksItem with-image" @click="onClickLogin" v-if="loggedIn">
+
+
+      <button class="Button Header__linksItem with-image" @click="onClickLogin" v-if="canLogin && loggedIn">
         <div class="Header__linksItemAvatar"><img :src="avatarURL" /></div>
       </button>
-      <button class="Button Header__linksItem" @click="onClickLogin" v-else>Log in</button>
+      <button class="Button Header__linksItem" @click="onClickLogin" v-else-if="canLogin">Log in</button>
+
     </div>
   </div>
 </template>
 
 <script>
 import Search from './Search.vue'
-import config from '../../config'
+
 import mixins from '../mixins'
+import config from '../../config'
+import mapConfig from '../../map.yaml'
 
 export default {
   mixins: [mixins],
@@ -27,14 +32,20 @@ export default {
   },
   data() {
     return {
-      title: config.TEXTS.MAIN_TITLE,
+      canLogin: false,
+      title: window.bus.getTitle(),
       loggedIn: false,
       username: undefined,
       avatarURL: undefined
     }
   },
   mounted () {
-    this.bindEvents()
+    this.$nextTick(() => {
+      config.MAP = mapConfig.map
+      this.canLogin = !window.bus.isAnonymous()
+
+      this.bindEvents()
+    })
   },
   methods: {
     bindEvents () {

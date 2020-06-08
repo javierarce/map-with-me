@@ -119,6 +119,19 @@ app.get('/csv', (request, response) => { Map.onGetCSV(request, response)})
 app.get('/auth/twitter', passport.authenticate('twitter'))
 app.get('/auth/twitter/callback', passport.authenticate('twitter', { successRedirect: '/', failureRedirect: '/login' }))
 
+app.get('/admin/:secret', function(request, response) {
+  let secret = request.params.secret
+
+  if (secret === process.env.SECRET) {
+    request.session.passport = {
+      user: {
+        username: config.ADMIN.ADMIN_USERNAME
+      }
+    }
+  }
+  response.redirect('/')
+})
+
 app.get('/', function(request, response) {
   response.sendFile(__dirname + '/public/index.html')
 })

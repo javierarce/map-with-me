@@ -3,12 +3,20 @@
 
     <div class="Config__backdrop"></div>
 
+    <div class="Config__inner has-transition">
     <div class="Config__content" @click="onClickInside">
         <div class="Config__spinner Spinner is-small" v-if="isSaving"></div>
 
       <div class="Config__form">
         <h3 class="Config__sectionTitle">Configure your map</h3>
-        <p class="Config__sectionDescription">Change this configuration to center the map.</p>
+
+        <label for="title">
+          <strong class="Input__label">Title</strong>
+          <div class="Input__field Config__field">
+            <input id="title" type="text" class="Input" placeholder="Title" v-model="title">
+          </div>
+        </label>
+
         <label for="default_search_location">
           <strong class="Input__label">Search location</strong>
           <div class="Input__field Config__field">
@@ -40,35 +48,40 @@
 
         </div>
 
-
-        <div class="Config__sectionContent">
           <label for="admin">
-            <strong class="Input__label">Admin</strong>
+            <strong class="Input__label">Admin username</strong>
             <div class="Input__field Config__field">
               <input id="admin" type="text" class="Input" placeholder="Admin" v-model="admin">
             </div>
           </label>
 
+        <div class="Config__sectionContent">
 
+          <label for="anonymous">
+            <strong class="Input__label">Anonymous</strong>
+            <div class="Input__field Input__checkbox Config__field">
+              <input id="anonymous" type="checkbox" v-model="anonymous"> <p>Login is not required.</p>
+            </div>
+          </label>
 
           <label for="moderated">
             <strong class="Input__label">Moderated</strong>
-            <div class="Input__field Input__checkbox Config__fiel">
-              <input id="moderated" type="checkbox" v-model="moderated"> <p>The admin will need to accept or reject the submissions.</p>
+            <div class="Input__field Input__checkbox Config__field">
+              <input id="moderated" type="checkbox" v-model="moderated"> <p>Submissions require approval.</p>
             </div>
           </label>
 
           <label for="protected">
             <strong class="Input__label">Protected</strong>
-            <div class="Input__field Input__checkbox Config__fiel">
-              <input id="protected" type="checkbox" v-model="protected"> <p>Users won't able to submit places.</p>
+            <div class="Input__field Input__checkbox Config__field">
+              <input id="protected" type="checkbox" v-model="protected"> <p>Map is read-only.</p>
             </div>
           </label>
         </div>
 
 
 
-        <div class="Config__footer">
+        <div class="Config__buttons">
           <div class="Config__sectionContent">
             <div class="Input__field Config__field">
               <input type="text" class="Input" placeholder="Secret" v-model="secret">
@@ -77,11 +90,15 @@
           </div>
         </div>
       </div>
+
+      <div class="Config__footer">
+        After changing this configuration, please restart the server.
+      </div>
     </div>
 
-    <div class="Config__content is-dangerous" @click="onClickInside">
+    <div class="Config__content is-dangerous" @click="onClickInside" v-if="false">
       <div class="Config__spinner Spinner is-small" v-if="isDestroying"></div>
-      <div class="Config__footer">
+      <div class="Config__buttons">
         <h3 class="Config__sectionTitle">Destroy DB</h3>
         <p class="Config__sectionDescription">Enter your secret to destroy the database. This action cannot be undone.</p>
         <div class="Config__sectionContent">
@@ -93,6 +110,7 @@
         </div>
       </div>
 
+    </div>
     </div>
   </div>
 </template>
@@ -127,9 +145,11 @@ export default {
       sendButtonIsEnabled: false,
       destroyButtonIsEnabled: false,
       default_search_location: mapConfig.map.DEFAULT_SEARCH_LOCATION,
+      title: mapConfig.admin.TITLE,
       lat: mapConfig.map.LAT,
       lon: mapConfig.map.LON,
       zoom: mapConfig.map.ZOOM,
+      anonymous: mapConfig.admin.ANONYMOUS,
       moderated: mapConfig.admin.MODERATED,
       protected: mapConfig.admin.PROTECTED,
       admin: mapConfig.admin.ADMIN_USERNAME,
@@ -211,7 +231,9 @@ export default {
       let configuration = {
         secret: this.secret,
         admin: {
+          title: this.title,
           moderated: this.moderated,
+          anonymous: this.anonymous,
           protected: this.protected,
           admin_username: this.admin
         },

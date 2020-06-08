@@ -20,6 +20,7 @@
 
 <script>
 import mixins from '../mixins'
+
 import config from '../../config'
 import mapConfig from '../../map.yaml'
 
@@ -41,7 +42,6 @@ export default {
   mounted () {
     this.$nextTick(() => {
       this.bindEvents()
-      config.ADMIN = mapConfig.admin
     })
   },
   methods: {
@@ -89,6 +89,12 @@ export default {
         if (result) {
           let marker = this.markers.find(marker => marker.options.location.id === result.id)
           marker.options.location.approved = result.approved
+
+          if (result.approved) {
+            marker.getElement().classList.remove('is-disabled')
+          } else {
+            marker.getElement().classList.add('is-disabled')
+          }
         }
       })
     },
@@ -129,13 +135,13 @@ export default {
       this.markers = markers
     },
     isMyMarker (marker) {
-      return marker.options.location.user.username === window.bus.user.username
+      return marker.options.location.user ? (marker.options.location.user.username === window.bus.user.username) : false
     },
     removeMarker (id) {
       window.bus.$emit(config.ACTIONS.REMOVE_MARKER, id)
     },
     showApproveItem (marker) {
-      return config.ADMIN.MODERATED && (window.bus.isLoggedIn() && window.bus.user.username === config.ADMIN.ADMIN_USERNAME && !this.isMyMarker(marker))
+      return window.bus.isModerated() && (window.bus.isLoggedIn() && window.bus.user.username === window.bus.getAdminUsername() && !this.isMyMarker(marker))
     },
     showRemoveItem (marker) {
       return window.bus.isLoggedIn() && (this.isMyMarker(marker) || window.bus.isAdmin())
@@ -147,7 +153,7 @@ export default {
       return this.$el.querySelector(`[data-id='${id}']`)
     },
     username (marker) {
-      return `@${marker.options.location.user.username}`
+      return marker.options.location.user ? `@${marker.options.location.user.username}` : 'Nobody'
     },
     itemClass (marker) {
       let classes = []

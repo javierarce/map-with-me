@@ -5,6 +5,8 @@ map:
   ZOOM: "3"
   FIT_BOUNDS: false
 admin:
+  TITLE: Nice!
   ADMIN_USERNAME: javier
-  MODERATED: false
+  MODERATED: true
   PROTECTED: false
+  ANONYMOUS: true

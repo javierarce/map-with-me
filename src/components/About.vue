@@ -1,7 +1,7 @@
 <template>
   <div class="About" @click="onClickOutside"> 
     <div class="About__backdrop"></div>
-    <div class="About__inner" @click="onClickAbout">
+    <div class="About__inner has-transition" @click="onClickInside">
       <div class="About__title">About</div>
       <div class="About__content">
         <div class="About__description">
@@ -13,8 +13,8 @@
           <div class="About__columns">
             <div>
               <div class="About__columnTitle">Do you want to map with others? </div>
-              <p><a href="https://glitch.com/edit/#!/remix/mapwithme">Remix this project on
-                  Glitch</a> and follow the instructions you'll find in the README.md file.</p>
+              <p>Remix this project on Glitch and follow the instructions you'll find in the README.md file.</p>
+              <a class="Button is-bold" href="https://glitch.com/edit/#!/remix/mapwithme">Remix project</a>
             </div>
 
             <div>
@@ -26,7 +26,7 @@
         </div>
         <div class="About__footer">
           <div class="About__export">
-            <a href="/rss" title="RSS">RSS</a> &middot; <a href="/csv" title="Export locations in CSV format">Download locations</a> (.CSV)
+            <a href="/rss" title="RSS" target="_blank">RSS</a> &middot; <a href="/csv" title="Export locations in CSV format" target="_blank">Download locations</a> (.CSV)
           </div>
           <div class="About__copyright">Made by <a href="https://twitter.com/javier">Javier Arce</a></div>
         </div>
@@ -43,7 +43,7 @@ export default {
     onClickOutside () {
       window.bus.$emit(config.ACTIONS.TOGGLE_ABOUT)
     },
-    onClickAbout (e) {
+    onClickInside (e) {
       if (e.target && e.target.tagName !== 'A') {
         e.stopPropagation()
         e.preventDefault()

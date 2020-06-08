@@ -1,7 +1,7 @@
 <template>
   <div class="Alert" @click="onClickOutside"> 
     <div class="Alert__backdrop"></div>
-    <div class="Alert__content" @click="onClickAlert">
+    <div class="Alert__content has-transition" @click="onClickAlert">
       <div class="Alert__title" v-html="title"></div>
       <div class="Alert__description" v-html="description"></div>
       <div class="Alert__footer" v-html="footer" v-if="footer"></div>

@@ -1,5 +1,4 @@
 const TEXTS = {
-  MAIN_TITLE: 'Madrid',
   PLACEHOLDER: 'What\'s cool about this place?',
   SEARCH_PLACEHOLDER: 'Search for a cool place / address',
   NO_RESULTS_TITLE:  'Oh, no, we couldn’t find "{q}" :(',

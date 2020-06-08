@@ -244,7 +244,12 @@
   background: transparent;
   box-shadow: none;
 }
-.leaflet-marker-icon.icon.leaflet-zoom-animated.leaflet-interactive {
+
+.leaflet-marker-icon.icon.is-disabled {
+	background: #ccc;
+}
+
+.leaflet-marker-icon.icon {
   width: 32px;
   height: 32px;
 	background: #2477BE;
@@ -252,7 +257,7 @@
 	border: 5px solid #fff;
   box-shadow: 0 2px 4px rgba(#000, 0.2);
   border-radius: 100%;
-  //transition: border 150ms ease-in-out, transform 250ms;
+  transition: border 150ms ease-in-out, background 150ms ease-in-out;
 }
 
 @media only screen and (max-width: 800px) {

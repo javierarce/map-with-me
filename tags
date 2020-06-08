@@ -20,21 +20,18 @@ $item	src/components/Locations.vue	/^      let $item = this.getItemById(marker.o
 .leaflet-container	src/assets/scss/Map.scss	/^.leaflet-container a {$/;"	c
 .leaflet-container	src/assets/scss/Map.scss	/^.leaflet-container a.leaflet-popup-close-button {$/;"	c
 .slide-fade-enter	src/assets/scss/helpers/transitions.scss	/^.slide-fade-enter .About__backdrop, $/;"	c
-.slide-fade-enter	src/assets/scss/helpers/transitions.scss	/^.slide-fade-enter .About__inner, $/;"	c
 .slide-fade-enter	src/assets/scss/helpers/transitions.scss	/^.slide-fade-enter .Alert__backdrop, $/;"	c
-.slide-fade-enter	src/assets/scss/helpers/transitions.scss	/^.slide-fade-enter .Alert__content, $/;"	c
-.slide-fade-enter	src/assets/scss/helpers/transitions.scss	/^.slide-fade-enter .Config__content, $/;"	c
+.slide-fade-enter	src/assets/scss/helpers/transitions.scss	/^.slide-fade-enter .Config__backdrop, $/;"	c
+.slide-fade-enter	src/assets/scss/helpers/transitions.scss	/^.slide-fade-enter .has-transition, $/;"	c
 .slide-fade-leave-active	src/assets/scss/helpers/transitions.scss	/^.slide-fade-leave-active {$/;"	c
 .slide-fade-leave-to	src/assets/scss/helpers/transitions.scss	/^.slide-fade-leave-to .About__backdrop,$/;"	c
-.slide-fade-leave-to	src/assets/scss/helpers/transitions.scss	/^.slide-fade-leave-to .About__inner,$/;"	c
 .slide-fade-leave-to	src/assets/scss/helpers/transitions.scss	/^.slide-fade-leave-to .Alert__backdrop {$/;"	c
-.slide-fade-leave-to	src/assets/scss/helpers/transitions.scss	/^.slide-fade-leave-to .Alert__content {$/;"	c
-.slide-fade-leave-to	src/assets/scss/helpers/transitions.scss	/^.slide-fade-leave-to .Config__content,$/;"	c
+.slide-fade-leave-to	src/assets/scss/helpers/transitions.scss	/^.slide-fade-leave-to .Config__backdrop,$/;"	c
+.slide-fade-leave-to	src/assets/scss/helpers/transitions.scss	/^.slide-fade-leave-to .has-transition {$/;"	c
 .was-successful	src/assets/scss/Popup.scss	/^.was-successful .Popup__success {$/;"	c
 .was-successful	src/assets/scss/Popup.scss	/^.was-successful .Popup__success:before {$/;"	c
-ADMIN	src/components/Locations.vue	/^      config.ADMIN = mapConfig.admin$/;"	r
-ADMIN	src/components/Map.vue	/^      config.ADMIN = mapConfig.admin$/;"	r
-MAP	src/components/Map.vue	/^      config.MAP = mapConfig.map$/;"	r
+AddLocation	src/components/Map.vue	/^      let showAddLocation = (window.bus.isLoggedIn() || window.bus.isAnonymous())$/;"	c
+MAP	src/components/Header.vue	/^      config.MAP = mapConfig.map$/;"	r
 MAP	src/components/Search.vue	/^      config.MAP = mapConfig.map$/;"	r
 MARGIN_BOTTOM	src/components/Sidebar.vue	/^const MARGIN_BOTTOM = 20$/;"	n
 MAX_TITLE_LENGTH	src/components/Map.vue	/^const MAX_TITLE_LENGTH = 80$/;"	n
@@ -57,8 +54,8 @@ alertDescription	src/components/Home.vue	/^      this.alertDescription = descrip
 alertFooter	src/components/Home.vue	/^      this.alertFooter = footer$/;"	r
 alertTitle	src/components/Home.vue	/^      this.alertTitle = title$/;"	r
 approved	src/components/Locations.vue	/^          marker.options.location.approved = result.approved$/;"	r
-avatar	src/components/Map.vue	/^        let avatar = L.DomUtil.create('a', 'Popup__userAvatar', footer)$/;"	r
-avatarImage	src/components/Map.vue	/^        let avatarImage = L.DomUtil.create('img', 'Popup__userAvatarImage', avatar)$/;"	r
+avatar	src/components/Map.vue	/^          let avatar = L.DomUtil.create('a', 'Popup__userAvatar', footer)$/;"	r
+avatarImage	src/components/Map.vue	/^          let avatarImage = L.DomUtil.create('img', 'Popup__userAvatarImage', avatar)$/;"	r
 avatarURL	src/components/Header.vue	/^        this.avatarURL = window.bus.user.profileImage$/;"	r
 bindEvents	src/components/Header.vue	/^    bindEvents () {$/;"	f
 bindEvents	src/components/Home.vue	/^    bindEvents () {$/;"	f
@@ -67,8 +64,10 @@ bindEvents	src/components/Map.vue	/^    bindEvents () {$/;"	f
 bindKeys	src/components/Map.vue	/^    bindKeys () {$/;"	f
 body	src/components/Map.vue	/^      let body = L.DomUtil.create('div', 'Popup__body', content)$/;"	r
 btn	src/components/Map.vue	/^      let btn = L.DomUtil.create('button', 'Button Popup__button', controls)$/;"	r
+canLogin	src/components/Header.vue	/^      this.canLogin = !window.bus.isAnonymous()$/;"	r
 className	src/components/Map.vue	/^      let className = 'Popup'$/;"	r
-className	src/components/Map.vue	/^      let className = 'icon'$/;"	r
+className	src/components/Map.vue	/^      let className = classNames.join(' ')$/;"	r
+classNames	src/components/Map.vue	/^      let classNames = [ 'icon' ]$/;"	r
 classNames	src/components/Map.vue	/^      let classNames = []$/;"	r
 classes	src/components/Locations.vue	/^      let classes = []$/;"	r
 comment	src/components/Map.vue	/^      let comment = L.DomUtil.create('div', 'Popup__comment', body)$/;"	r
@@ -117,7 +116,7 @@ extraParams	src/components/Search.vue	/^      let extraParams = '&polygon_geojso
 extractEmojis	src/components/Map.vue	/^    extractEmojis (text) {$/;"	f
 fitBounds	src/components/Map.vue	/^    fitBounds () {$/;"	f
 focusOnPopup	src/components/Map.vue	/^    focusOnPopup () {$/;"	f
-footer	src/components/Map.vue	/^      let footer = L.DomUtil.create('div', 'Popup__footer', content)$/;"	r
+footer	src/components/Map.vue	/^        let footer = L.DomUtil.create('div', 'Popup__footer', content)$/;"	r
 footer	src/components/Search.vue	/^          let footer = `<a class="Button Alert__button" href="https:\/\/www.openstreetmap.org\/search?query=${this.q}#map=${config.MAP.ZOOM}\/${config.MAP.LAT}\/${config.MAP.LON}" target="__blank">Add this place in OSM<\/a>`$/;"	r
 footerHeight	src/components/Sidebar.vue	/^      let footerHeight = this.$refs.footer.getBoundingClientRect().height $/;"	r
 geocode	src/components/Map.vue	/^    geocode () {$/;"	f
@@ -126,7 +125,7 @@ getApproveLabel	src/components/Locations.vue	/^    getApproveLabel (marker) {$/;
 getConfig	src/components/Config.vue	/^    getConfig () {$/;"	f
 getDescription	src/components/Map.vue	/^    getDescription () {$/;"	f
 getHeight	src/components/Sidebar.vue	/^    getHeight () {$/;"	f
-getIcon	src/components/Map.vue	/^    getIcon (emojis) {$/;"	f
+getIcon	src/components/Map.vue	/^    getIcon (emojis, location) {$/;"	f
 getItemById	src/components/Locations.vue	/^    getItemById (id) {$/;"	f
 getLocations	src/components/Home.vue	/^    getLocations () {$/;"	f
 getName	src/components/Map.vue	/^    getName () {$/;"	f
@@ -139,12 +138,13 @@ height	src/components/Sidebar.vue	/^      this.height = documentHeight - (footer
 hideSuccess	src/components/Map.vue	/^    hideSuccess () {$/;"	f
 href	src/components/Header.vue	/^        window.location.href = config.ENDPOINTS.LOGIN_PATH$/;"	r
 href	src/components/Home.vue	/^        window.location.href = config.ENDPOINTS.LOGIN_PATH$/;"	r
-href	src/components/Map.vue	/^        avatar.href= `https:\/\/twitter.com\/${options.user.username}`$/;"	r
+href	src/components/Map.vue	/^          avatar.href= `https:\/\/twitter.com\/${options.user.username}`$/;"	r
 href	src/components/Map.vue	/^        user.href= `https:\/\/twitter.com\/${options.user.username}`$/;"	r
 html	src/components/Map.vue	/^        html = emojis[0]$/;"	r
 html	src/components/Map.vue	/^      let html = ''$/;"	r
 icon	src/components/Map.vue	/^      let icon = this.getIcon()$/;"	r
 icon	src/components/Map.vue	/^      let icon = this.getIcon(emojis)$/;"	r
+icon	src/components/Map.vue	/^      let icon = this.getIcon(emojis, location)$/;"	r
 id	src/components/Locations.vue	/^      let id = marker.options.location.id$/;"	r
 if	src/components/About.vue	/^      if (e.target && e.target.tagName !== 'A') {$/;"	f
 if	src/components/Alert.vue	/^      if (e.target && e.target.tagName !== 'A') {$/;"	f
@@ -158,6 +158,7 @@ if	src/components/Header.vue	/^      if (this.loggedIn) {$/;"	f
 if	src/components/Home.vue	/^        if (!result && !result.user) {$/;"	f
 if	src/components/Home.vue	/^        if (result.coordinates) {$/;"	f
 if	src/components/Home.vue	/^      if (e.keyCode === 27) {$/;"	f
+if	src/components/Locations.vue	/^          if (result.approved) {$/;"	f
 if	src/components/Locations.vue	/^        if (result && !result.error) {$/;"	f
 if	src/components/Locations.vue	/^        if (result) {$/;"	f
 if	src/components/Locations.vue	/^      if (confirmation) {$/;"	f
@@ -165,10 +166,10 @@ if	src/components/Map.vue	/^          if (description.length > 0) {$/;"	f
 if	src/components/Map.vue	/^          if (result.address.house_number) {$/;"	f
 if	src/components/Map.vue	/^        if (config.MAP.FIT_BOUNDS) {$/;"	f
 if	src/components/Map.vue	/^        if (e.keyCode === 27) {$/;"	f
+if	src/components/Map.vue	/^        if (options.user.profileImage) {$/;"	f
 if	src/components/Map.vue	/^        if (result.address.house_number) {$/;"	f
 if	src/components/Map.vue	/^        if (result.address.road) {$/;"	f
 if	src/components/Map.vue	/^      if (!this.enableSend) {$/;"	f
-if	src/components/Map.vue	/^      if (config.ADMIN.PROTECTED) {$/;"	f
 if	src/components/Map.vue	/^      if (emojis && emojis.length) {$/;"	f
 if	src/components/Map.vue	/^      if (index !== undefined) {$/;"	f
 if	src/components/Map.vue	/^      if (options.address) {$/;"	f
@@ -176,7 +177,6 @@ if	src/components/Map.vue	/^      if (options.description && options.description
 if	src/components/Map.vue	/^      if (options.description) {$/;"	f
 if	src/components/Map.vue	/^      if (options.geocode) {$/;"	f
 if	src/components/Map.vue	/^      if (options.readonly) {$/;"	f
-if	src/components/Map.vue	/^      if (options.user) {$/;"	f
 if	src/components/Map.vue	/^      if (result.address.road) {$/;"	f
 if	src/components/Map.vue	/^      if (text && text.length) {$/;"	f
 if	src/components/Map.vue	/^      if (this.marker) {$/;"	f
@@ -185,7 +185,7 @@ if	src/components/Search.vue	/^        if (results.length) {$/;"	f
 if	src/components/Search.vue	/^      if (!this.q) {$/;"	f
 index	src/components/Map.vue	/^      let index = this.markers.findIndex((item) => { $/;"	r
 init	src/components/Map.vue	/^    init () {$/;"	f
-innerHTML	src/components/Map.vue	/^      btn.innerHTML = window.bus.isLoggedIn() ? 'Add location' : 'Log in with Twitter'$/;"	r
+innerHTML	src/components/Map.vue	/^      btn.innerHTML = showAddLocation ? 'Add location' : 'Log in with Twitter'$/;"	r
 innerHTML	src/components/Map.vue	/^      header.innerHTML = options.name$/;"	r
 innerText	src/components/Map.vue	/^        address.innerText = options.address$/;"	r
 innerText	src/components/Map.vue	/^        description.innerText = options.description$/;"	r
@@ -246,11 +246,11 @@ onAddLocation	src/components/Home.vue	/^    onAddLocation ({ coordinates, name, 
 onAddLocations	src/components/Map.vue	/^    onAddLocations (locations) {$/;"	f
 onAddMarker	src/components/Locations.vue	/^    onAddMarker (marker) {$/;"	f
 onAddMarkers	src/components/Locations.vue	/^    onAddMarkers (markers) {$/;"	f
-onClickAbout	src/components/About.vue	/^    onClickAbout (e) {$/;"	f
 onClickAbout	src/components/Header.vue	/^    onClickAbout () {$/;"	f
 onClickAlert	src/components/Alert.vue	/^    onClickAlert (e) {$/;"	f
 onClickConfig	src/components/Header.vue	/^    onClickConfig () {$/;"	f
 onClickDestroy	src/components/Config.vue	/^    onClickDestroy () {$/;"	f
+onClickInside	src/components/About.vue	/^    onClickInside (e) {$/;"	f
 onClickInside	src/components/Config.vue	/^    onClickInside (e) {$/;"	f
 onClickLogin	src/components/Header.vue	/^    onClickLogin () {$/;"	f
 onClickMarker	src/components/Locations.vue	/^    onClickMarker (marker) {$/;"	f
@@ -288,8 +288,8 @@ onToggleAlert	src/components/Home.vue	/^    onToggleAlert (title, description, f
 onToggleApprove	src/components/Locations.vue	/^    onToggleApprove (response) {$/;"	f
 onToggleConfig	src/components/Home.vue	/^    onToggleConfig () {$/;"	f
 onToggleMapSize	src/components/Home.vue	/^    onToggleMapSize (value) {$/;"	f
-onVisitMarker	src/components/Map.vue	/^    onVisitMarker (marker) {$/;"	f
-onclick	src/components/Map.vue	/^      btn.onclick = window.bus.isLoggedIn() ? this.addLocation : this.login$/;"	r
+onVisitMarker	src/components/Map.vue	/^    onVisitMarker (marker, approved) {$/;"	f
+onclick	src/components/Map.vue	/^      btn.onclick =  showAddLocation ? this.addLocation : this.login$/;"	r
 onkeydown	src/components/Map.vue	/^      document.onkeydown = (e) => {$/;"	r
 onkeyup	src/components/Home.vue	/^      document.onkeyup = this.onKeyUp$/;"	r
 onkeyup	src/components/Map.vue	/^      textarea.onkeyup = (e) => {$/;"	r
@@ -320,6 +320,7 @@ setDescription	src/components/Map.vue	/^    setDescription (text) {$/;"	f
 setName	src/components/Map.vue	/^    setName (text) {$/;"	f
 showAbout	src/components/Home.vue	/^        this.showAbout = false$/;"	r
 showAbout	src/components/Home.vue	/^      this.showAbout = !this.showAbout$/;"	r
+showAddLocation	src/components/Map.vue	/^      let showAddLocation = (window.bus.isLoggedIn() || window.bus.isAnonymous())$/;"	r
 showAlert	src/components/Home.vue	/^        this.showAlert = false$/;"	r
 showAlert	src/components/Home.vue	/^      this.showAlert = !this.showAlert$/;"	r
 showApproveItem	src/components/Locations.vue	/^    showApproveItem (marker) {$/;"	f
@@ -330,7 +331,7 @@ showRemoveItem	src/components/Locations.vue	/^    showRemoveItem (marker) {$/;"	
 showSavedLocation	src/components/Map.vue	/^    showSavedLocation (data) {$/;"	f
 showSuccess	src/components/Map.vue	/^    showSuccess () {$/;"	f
 spinner	src/components/Map.vue	/^      let spinner = L.DomUtil.create('div', 'Popup__spinner Spinner', body)$/;"	r
-src	src/components/Map.vue	/^        avatarImage.src= options.user.profileImage$/;"	r
+src	src/components/Map.vue	/^          avatarImage.src= options.user.profileImage$/;"	r
 startLoading	src/components/Map.vue	/^    startLoading () {$/;"	f
 stopLoading	src/components/Map.vue	/^    stopLoading () {$/;"	f
 success	src/components/Map.vue	/^      let success = L.DomUtil.create('div', 'Popup__success', body)$/;"	r
