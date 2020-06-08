@@ -1,11 +1,11 @@
 map:
   DEFAULT_SEARCH_LOCATION: ""
-  LAT: "40.712"
-  LON: "-74"
-  ZOOM: "3"
+  LAT: "36"
+  LON: "-36"
+  ZOOM: "4"
   FIT_BOUNDS: false
 admin:
-  TITLE: Map with Me
+  TITLE: Map with me your favorite places
   ADMIN_USERNAME: javier
   MODERATED: false
   PROTECTED: false
