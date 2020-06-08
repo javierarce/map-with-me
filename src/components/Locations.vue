@@ -5,7 +5,7 @@
         <div class="Locations__itemName" v-html="marker.options.location.name"></div>
         <div class="Locations__itemDescription" v-html="marker.options.location.description"></div>
         <div class="Locations__itemAddress" v-html="marker.options.location.address"></div>
-        <div class="Locations__itemFooter">
+        <div class="Locations__itemFooter" v-if="showFooter(marker)">
           <div class="Locations__itemUser" v-html="username(marker)"></div>
           <div class="Locations__itemFooterOptions">
             <button class="Locations__itemApprove" @click="onClickToggleApprove($event, marker)" v-if="showApproveItem(marker)" v-html="getApproveLabel(marker)"></button>
@@ -139,6 +139,9 @@ export default {
     },
     removeMarker (id) {
       window.bus.$emit(config.ACTIONS.REMOVE_MARKER, id)
+    },
+    showFooter (marker) {
+      return this.showApproveItem(marker) || (marker.options && marker.options.location && marker.options.location.user)
     },
     showApproveItem (marker) {
       return window.bus.isModerated() && (window.bus.isLoggedIn() && window.bus.user.username === window.bus.getAdminUsername() && !this.isMyMarker(marker))
