@@ -4,7 +4,7 @@ import Vue from 'vue/dist/vue';
 import VueRouter from 'vue-router'
 
 const Home = require('./components/Home.vue').default
-const Config = require('./components/Config.vue').default
+const Destroy = require('./components/Destroy.vue').default
 const App = require('./app.vue').default
 
 import config from '../config'
@@ -22,7 +22,7 @@ const router = new VueRouter({
   routes: [
     { path: '/', component: Home, name: 'Home' },
     { path: '/admin/:secret', component: Home, name: 'Admin' },
-    { path: '/config', component: Config, name: 'Config' }
+    { path: '/config', component: Destroy, name: 'Destroy' }
   ]
 })
 

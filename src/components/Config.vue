@@ -4,49 +4,49 @@
     <div class="Config__backdrop"></div>
 
     <div class="Config__inner has-transition">
-    <div class="Config__content" @click="onClickInside">
+      <div class="Config__content" @click="onClickInside">
         <div class="Config__spinner Spinner is-small" v-if="isSaving"></div>
 
-      <div class="Config__form">
-        <h3 class="Config__sectionTitle">Configure your map</h3>
+        <div class="Config__form">
+          <h3 class="Config__sectionTitle">Configure your map</h3>
 
-        <label for="title">
-          <strong class="Input__label">Title</strong>
-          <div class="Input__field Config__field">
-            <input id="title" type="text" class="Input" placeholder="Title" v-model="title">
-          </div>
-        </label>
-
-        <label for="default_search_location">
-          <strong class="Input__label">Search location</strong>
-          <div class="Input__field Config__field">
-            <input id="default_search_location" type="text" class="Input" placeholder="Default location" v-model="default_search_location">
-          </div>
-        </label>
-
-        <div class="Config__sectionContent">
-          <label for="lon">
-            <strong class="Input__label">Longitude</strong>
+          <label for="title">
+            <strong class="Input__label">Title</strong>
             <div class="Input__field Config__field">
-              <input id="lon" type="text" class="Input" placeholder="Longitude" v-model="lon">
+              <input id="title" type="text" class="Input" placeholder="Title" v-model="title">
             </div>
           </label>
 
-          <label for="lat">
-            <strong class="Input__label">Latitude</strong>
+          <label for="default_search_location">
+            <strong class="Input__label">Search location</strong>
             <div class="Input__field Config__field">
-              <input id="lat" type="text" class="Input" placeholder="Latitude" v-model="lat">
+              <input id="default_search_location" type="text" class="Input" placeholder="Default location" v-model="default_search_location">
             </div>
           </label>
 
-          <label for="zoom">
-            <strong class="Input__label">Zoom level</strong>
-            <div class="Input__field Config__field is-small">
-              <input id="zoom" type="text" class="Input" placeholder="Zoom" v-model="zoom">
-            </div>
-          </label>
+          <div class="Config__sectionContent">
+            <label for="lon">
+              <strong class="Input__label">Longitude</strong>
+              <div class="Input__field Config__field">
+                <input id="lon" type="text" class="Input" placeholder="Longitude" v-model="lon">
+              </div>
+            </label>
 
-        </div>
+            <label for="lat">
+              <strong class="Input__label">Latitude</strong>
+              <div class="Input__field Config__field">
+                <input id="lat" type="text" class="Input" placeholder="Latitude" v-model="lat">
+              </div>
+            </label>
+
+            <label for="zoom">
+              <strong class="Input__label">Zoom level</strong>
+              <div class="Input__field Config__field is-small">
+                <input id="zoom" type="text" class="Input" placeholder="Zoom" v-model="zoom">
+              </div>
+            </label>
+
+          </div>
 
           <label for="admin">
             <strong class="Input__label">Admin username</strong>
@@ -55,62 +55,47 @@
             </div>
           </label>
 
-        <div class="Config__sectionContent">
-
-          <label for="anonymous">
-            <strong class="Input__label">Anonymous</strong>
-            <div class="Input__field Input__checkbox Config__field">
-              <input id="anonymous" type="checkbox" v-model="anonymous"> <p>Login is not required.</p>
-            </div>
-          </label>
-
-          <label for="moderated">
-            <strong class="Input__label">Moderated</strong>
-            <div class="Input__field Input__checkbox Config__field">
-              <input id="moderated" type="checkbox" v-model="moderated"> <p>Submissions require approval.</p>
-            </div>
-          </label>
-
-          <label for="protected">
-            <strong class="Input__label">Protected</strong>
-            <div class="Input__field Input__checkbox Config__field">
-              <input id="protected" type="checkbox" v-model="protected"> <p>Map is read-only.</p>
-            </div>
-          </label>
-        </div>
-
-
-
-        <div class="Config__buttons">
           <div class="Config__sectionContent">
-            <div class="Input__field Config__field">
-              <input type="text" class="Input" placeholder="Secret" v-model="secret">
+
+            <label for="anonymous">
+              <strong class="Input__label">Anonymous</strong>
+              <div class="Input__field Input__checkbox Config__field">
+                <input id="anonymous" type="checkbox" v-model="anonymous"> <p>Login is not required.</p>
+              </div>
+            </label>
+
+            <label for="moderated">
+              <strong class="Input__label">Moderated</strong>
+              <div class="Input__field Input__checkbox Config__field">
+                <input id="moderated" type="checkbox" v-model="moderated"> <p>Submissions require approval.</p>
+              </div>
+            </label>
+
+            <label for="protected">
+              <strong class="Input__label">Protected</strong>
+              <div class="Input__field Input__checkbox Config__field">
+                <input id="protected" type="checkbox" v-model="protected"> <p>Map is read-only.</p>
+              </div>
+            </label>
+          </div>
+
+
+
+          <div class="Config__buttons">
+            <div class="Config__sectionContent">
+              <div class="Input__field Config__field">
+                <input type="text" class="Input" placeholder="Secret" v-model="secret">
+              </div>
+              <button class="Button is-bold" @click="onClickSaveConfig" :class="saveButtonClass">Save configuration</button>
             </div>
-            <button class="Button is-bold" @click="onClickSaveConfig" :class="saveButtonClass">Save configuration</button>
           </div>
         </div>
-      </div>
 
-      <div class="Config__footer">
-        After changing this configuration, please restart the server.
-      </div>
-    </div>
-
-    <div class="Config__content is-dangerous" @click="onClickInside" v-if="false">
-      <div class="Config__spinner Spinner is-small" v-if="isDestroying"></div>
-      <div class="Config__buttons">
-        <h3 class="Config__sectionTitle">Destroy DB</h3>
-        <p class="Config__sectionDescription">Enter your secret to destroy the database. This action cannot be undone.</p>
-        <div class="Config__sectionContent">
-          <div class="Input__field Config__field">
-            <input type="text" class="Input" placeholder="Secret" v-model="secretDestroy">
-          </div>
-
-          <button class="Button is-bold is-destructive" @click="onClickDestroy" :class="destroyButtonClass">Destroy DB</button>
+        <div class="Config__footer">
+          <button class="Button is-link" @click="onClickDestroy">Destroy database</button>
+          <div>After changing this configuration, please restart the server.</div> 
         </div>
       </div>
-
-    </div>
     </div>
   </div>
 </template>
@@ -123,13 +108,6 @@ import mapConfig from '../../map.yaml'
 export default {
   mixins: [mixins],
   watch: {
-    secretDestroy (val) {
-      if (val) {
-        this.destroyButtonIsEnabled = true
-      } else {
-        this.destroyButtonIsEnabled = false
-      }
-    },
     secret (val) {
       if (val) {
         this.sendButtonIsEnabled = true
@@ -140,10 +118,8 @@ export default {
   },
   data () {
     return {
-      isDestroying: false,
       isSaving: false,
       sendButtonIsEnabled: false,
-      destroyButtonIsEnabled: false,
       default_search_location: mapConfig.map.DEFAULT_SEARCH_LOCATION,
       title: mapConfig.admin.TITLE,
       lat: mapConfig.map.LAT,
@@ -154,15 +130,9 @@ export default {
       protected: mapConfig.admin.PROTECTED,
       admin: mapConfig.admin.ADMIN_USERNAME,
       secret: undefined,
-      secretDestroy: undefined
     }
   },
   computed: {
-    destroyButtonClass () {
-      if (!this.destroyButtonIsEnabled) {
-        return 'is-disabled'
-      }
-    },
     saveButtonClass () {
       if (!this.sendButtonIsEnabled) {
         return 'is-disabled'
@@ -170,6 +140,10 @@ export default {
     }
   },
   methods: {
+    onClickDestroy (e) {
+      window.bus.$emit(config.ACTIONS.TOGGLE_CONFIG)
+      window.bus.$emit(config.ACTIONS.TOGGLE_DESTROY)
+    },
     onClickOutside () {
       window.bus.$emit(config.ACTIONS.TOGGLE_CONFIG)
     },
@@ -178,28 +152,6 @@ export default {
       if (e.target && e.target.tagName !== 'A') {
         e.stopPropagation()
       }
-    },
-
-    onRecreateDB (response) {
-      response.json().then((result) => {
-        window.bus.$emit(config.ACTIONS.STOP_LOADING)
-        this.isDestroying = false
-      })
-    },
-
-    onClickDestroy () {
-      if (!this.secretDestroy) {
-        return
-      }
-
-      window.bus.$emit(config.ACTIONS.START_LOADING)
-      this.isDestroying = true
-
-      this.post(config.ENDPOINTS.RECREATE_DB, { secret: this.secretDestroy })
-        .then(this.onRecreateDB.bind(this))
-        .catch((error) => {
-          console.log(error)
-        })
     },
 
     onGetConfig (response) {
@@ -213,7 +165,7 @@ export default {
 
     onSaveConfig (response) {
       response.json().then((result) => {
-      window.bus.$emit(config.ACTIONS.STOP_LOADING)
+        window.bus.$emit(config.ACTIONS.STOP_LOADING)
         this.isSaving = false
         console.log(result);
       })

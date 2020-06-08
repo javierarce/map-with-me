@@ -24,6 +24,7 @@ const ACTIONS = {
   SHOW_SAVED_LOCATION: 'show-saved-location',
   START_LOADING: 'start-loading',
   STOP_LOADING: 'stop-loading',
+  TOGGLE_DESTROY: 'toggle-destroy',
   TOGGLE_ABOUT: 'toggle-about',
   TOGGLE_CONFIG: 'toggle-config',
   TOGGLE_ALERT: 'toggle-alert',

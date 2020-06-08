@@ -75,6 +75,7 @@ components	src/components/Header.vue	/^  components: {$/;"	o
 components	src/components/Home.vue	/^  components: {$/;"	o
 components	src/components/Sidebar.vue	/^  components: {$/;"	o
 computed	src/components/Config.vue	/^  computed: {$/;"	o
+computed	src/components/Destroy.vue	/^  computed: {$/;"	o
 computed	src/components/Map.vue	/^  computed: {$/;"	o
 configuration	src/components/Config.vue	/^      let configuration = {$/;"	r
 confirmation	src/components/Locations.vue	/^      let confirmation = confirm('Are you sure you want to delete this location?')$/;"	r
@@ -86,6 +87,7 @@ coordinates	src/components/Map.vue	/^      this.coordinates = { lat: latlng[0], 
 coordinates	src/components/Map.vue	/^      this.coordinates = { lat: latlng[0], lng: latlng[1] }$/;"	r
 createPopup	src/components/Map.vue	/^    createPopup (coordinates, options = {}) {$/;"	f
 data	src/components/Config.vue	/^  data () {$/;"	f
+data	src/components/Destroy.vue	/^  data () {$/;"	f
 data	src/components/Header.vue	/^  data() {$/;"	f
 data	src/components/Home.vue	/^  data () {$/;"	f
 data	src/components/Locations.vue	/^  data () {$/;"	f
@@ -99,9 +101,9 @@ description	src/components/Map.vue	/^      let description = data.description$/;
 description	src/components/Map.vue	/^      let description = location.description$/;"	r
 description	src/components/Map.vue	/^      let description = this.getDescription()$/;"	r
 description	src/components/Search.vue	/^          let description = config.TEXTS.NO_RESULTS_DESCRIPTION$/;"	r
-destroyButtonClass	src/components/Config.vue	/^    destroyButtonClass () {$/;"	f
-destroyButtonIsEnabled	src/components/Config.vue	/^        this.destroyButtonIsEnabled = false$/;"	r
-destroyButtonIsEnabled	src/components/Config.vue	/^        this.destroyButtonIsEnabled = true$/;"	r
+destroyButtonClass	src/components/Destroy.vue	/^    destroyButtonClass () {$/;"	f
+destroyButtonIsEnabled	src/components/Destroy.vue	/^        this.destroyButtonIsEnabled = false$/;"	r
+destroyButtonIsEnabled	src/components/Destroy.vue	/^        this.destroyButtonIsEnabled = true$/;"	r
 disableSendButton	src/components/Map.vue	/^    disableSendButton () {$/;"	f
 documentHeight	src/components/Sidebar.vue	/^      let documentHeight = this.$el.getBoundingClientRect().height$/;"	r
 e	src/components/Map.vue	/^        e = e || window.event$/;"	r
@@ -148,12 +150,15 @@ icon	src/components/Map.vue	/^      let icon = this.getIcon(emojis, location)$/;
 id	src/components/Locations.vue	/^      let id = marker.options.location.id$/;"	r
 if	src/components/About.vue	/^      if (e.target && e.target.tagName !== 'A') {$/;"	f
 if	src/components/Alert.vue	/^      if (e.target && e.target.tagName !== 'A') {$/;"	f
-if	src/components/Config.vue	/^      if (!this.destroyButtonIsEnabled) {$/;"	f
 if	src/components/Config.vue	/^      if (!this.secret) {$/;"	f
-if	src/components/Config.vue	/^      if (!this.secretDestroy) {$/;"	f
 if	src/components/Config.vue	/^      if (!this.sendButtonIsEnabled) {$/;"	f
 if	src/components/Config.vue	/^      if (e.target && e.target.tagName !== 'A') {$/;"	f
 if	src/components/Config.vue	/^      if (val) {$/;"	f
+if	src/components/Destroy.vue	/^      if (!this.destroyButtonIsEnabled) {$/;"	f
+if	src/components/Destroy.vue	/^      if (!this.secret) {$/;"	f
+if	src/components/Destroy.vue	/^      if (!this.sendButtonIsEnabled) {$/;"	f
+if	src/components/Destroy.vue	/^      if (e.target && e.target.tagName !== 'A') {$/;"	f
+if	src/components/Destroy.vue	/^      if (val) {$/;"	f
 if	src/components/Header.vue	/^      if (this.loggedIn) {$/;"	f
 if	src/components/Home.vue	/^        if (!result && !result.user) {$/;"	f
 if	src/components/Home.vue	/^        if (result.coordinates) {$/;"	f
@@ -192,8 +197,8 @@ innerText	src/components/Map.vue	/^        description.innerText = options.descr
 innerText	src/components/Map.vue	/^        textarea.innerText = options.description$/;"	r
 innerText	src/components/Map.vue	/^        user.innerText = options.user.username$/;"	r
 invalidateSize	src/components/Map.vue	/^    invalidateSize () {$/;"	f
-isDestroying	src/components/Config.vue	/^        this.isDestroying = false$/;"	r
-isDestroying	src/components/Config.vue	/^      this.isDestroying = true$/;"	r
+isDestroying	src/components/Destroy.vue	/^        this.isDestroying = false$/;"	r
+isDestroying	src/components/Destroy.vue	/^      this.isDestroying = true$/;"	r
 isMarkerActive	src/components/Locations.vue	/^    isMarkerActive (marker) {$/;"	f
 isMarkerRejected	src/components/Locations.vue	/^    isMarkerRejected (marker) {$/;"	f
 isMyMarker	src/components/Locations.vue	/^    isMyMarker (marker) {$/;"	f
@@ -224,6 +229,7 @@ markers	src/components/Locations.vue	/^      this.markers = markers$/;"	r
 methods	src/components/About.vue	/^  methods: {$/;"	o
 methods	src/components/Alert.vue	/^  methods: {$/;"	o
 methods	src/components/Config.vue	/^  methods: {$/;"	o
+methods	src/components/Destroy.vue	/^  methods: {$/;"	o
 methods	src/components/Header.vue	/^  methods: {$/;"	o
 methods	src/components/Home.vue	/^  methods: {$/;"	o
 methods	src/components/Locations.vue	/^  methods: {$/;"	o
@@ -249,14 +255,17 @@ onAddMarkers	src/components/Locations.vue	/^    onAddMarkers (markers) {$/;"	f
 onClickAbout	src/components/Header.vue	/^    onClickAbout () {$/;"	f
 onClickAlert	src/components/Alert.vue	/^    onClickAlert (e) {$/;"	f
 onClickConfig	src/components/Header.vue	/^    onClickConfig () {$/;"	f
-onClickDestroy	src/components/Config.vue	/^    onClickDestroy () {$/;"	f
+onClickDestroy	src/components/Config.vue	/^    onClickDestroy (e) {$/;"	f
+onClickDestroy	src/components/Destroy.vue	/^    onClickDestroy () {$/;"	f
 onClickInside	src/components/About.vue	/^    onClickInside (e) {$/;"	f
 onClickInside	src/components/Config.vue	/^    onClickInside (e) {$/;"	f
+onClickInside	src/components/Destroy.vue	/^    onClickInside (e) {$/;"	f
 onClickLogin	src/components/Header.vue	/^    onClickLogin () {$/;"	f
 onClickMarker	src/components/Locations.vue	/^    onClickMarker (marker) {$/;"	f
 onClickOutside	src/components/About.vue	/^    onClickOutside () {$/;"	f
 onClickOutside	src/components/Alert.vue	/^    onClickOutside () {$/;"	f
 onClickOutside	src/components/Config.vue	/^    onClickOutside () {$/;"	f
+onClickOutside	src/components/Destroy.vue	/^    onClickOutside () {$/;"	f
 onClickRemove	src/components/Locations.vue	/^    onClickRemove (e, marker) {$/;"	f
 onClickSaveConfig	src/components/Config.vue	/^    onClickSaveConfig () {$/;"	f
 onClickTitle	src/components/Header.vue	/^    onClickTitle () {$/;"	f
@@ -273,7 +282,7 @@ onLoad	src/components/Home.vue	/^    onLoad () {$/;"	f
 onLoggedIn	src/components/Header.vue	/^    onLoggedIn () {$/;"	f
 onLogin	src/components/Home.vue	/^    onLogin ({ coordinates, zoom, name, description, address }) {$/;"	f
 onMapClick	src/components/Map.vue	/^    onMapClick (e) {$/;"	f
-onRecreateDB	src/components/Config.vue	/^    onRecreateDB (response) {$/;"	f
+onRecreateDB	src/components/Destroy.vue	/^    onRecreateDB (response) {$/;"	f
 onRemoveLocation	src/components/Locations.vue	/^    onRemoveLocation (response) {$/;"	f
 onRemoveMarker	src/components/Map.vue	/^    onRemoveMarker (id) {$/;"	f
 onSaveConfig	src/components/Config.vue	/^    onSaveConfig (response) {$/;"	f
@@ -287,6 +296,7 @@ onToggleAbout	src/components/Home.vue	/^    onToggleAbout () {$/;"	f
 onToggleAlert	src/components/Home.vue	/^    onToggleAlert (title, description, footer) {$/;"	f
 onToggleApprove	src/components/Locations.vue	/^    onToggleApprove (response) {$/;"	f
 onToggleConfig	src/components/Home.vue	/^    onToggleConfig () {$/;"	f
+onToggleDestroy	src/components/Home.vue	/^    onToggleDestroy () {$/;"	f
 onToggleMapSize	src/components/Home.vue	/^    onToggleMapSize (value) {$/;"	f
 onVisitMarker	src/components/Map.vue	/^    onVisitMarker (marker, approved) {$/;"	f
 onclick	src/components/Map.vue	/^      btn.onclick =  showAddLocation ? this.addLocation : this.login$/;"	r
@@ -310,9 +320,10 @@ q	src/components/Search.vue	/^      this.q = this.$refs.search.value$/;"	r
 removeMarker	src/components/Locations.vue	/^    removeMarker (id) {$/;"	f
 removeMarker	src/components/Map.vue	/^    removeMarker () {$/;"	f
 saveButtonClass	src/components/Config.vue	/^    saveButtonClass () {$/;"	f
+saveButtonClass	src/components/Destroy.vue	/^    saveButtonClass () {$/;"	f
 search	src/components/Search.vue	/^    search () {$/;"	f
 secret	src/components/Config.vue	/^    secret (val) {$/;"	f
-secretDestroy	src/components/Config.vue	/^    secretDestroy (val) {$/;"	f
+secret	src/components/Destroy.vue	/^    secret (val) {$/;"	f
 sendButtonIsEnabled	src/components/Config.vue	/^        this.sendButtonIsEnabled = false$/;"	r
 sendButtonIsEnabled	src/components/Config.vue	/^        this.sendButtonIsEnabled = true$/;"	r
 setAddress	src/components/Map.vue	/^    setAddress (text) {$/;"	f
@@ -327,6 +338,8 @@ showApproveItem	src/components/Locations.vue	/^    showApproveItem (marker) {$/;
 showConfig	src/components/Home.vue	/^        this.showConfig = false$/;"	r
 showConfig	src/components/Home.vue	/^      this.showConfig = !this.showConfig$/;"	r
 showDefaultPoint	src/components/Map.vue	/^    showDefaultPoint () {$/;"	f
+showDestroy	src/components/Home.vue	/^        this.showDestroy = false$/;"	r
+showDestroy	src/components/Home.vue	/^      this.showDestroy = !this.showDestroy$/;"	r
 showRemoveItem	src/components/Locations.vue	/^    showRemoveItem (marker) {$/;"	f
 showSavedLocation	src/components/Map.vue	/^    showSavedLocation (data) {$/;"	f
 showSuccess	src/components/Map.vue	/^    showSuccess () {$/;"	f
@@ -349,6 +362,7 @@ user	src/components/Map.vue	/^      let user = location.user$/;"	r
 username	src/components/Header.vue	/^        this.username = `@${window.bus.user.username}`$/;"	r
 username	src/components/Locations.vue	/^    username (marker) {$/;"	f
 watch	src/components/Config.vue	/^  watch: {$/;"	o
+watch	src/components/Destroy.vue	/^  watch: {$/;"	o
 watch	src/components/Locations.vue	/^  watch: {$/;"	o
 zoom	src/components/Config.vue	/^        this.zoom = result.zoom$/;"	r
 zoom	src/components/Map.vue	/^      let zoom = this.map.getZoom()$/;"	r

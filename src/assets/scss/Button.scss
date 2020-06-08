@@ -68,16 +68,22 @@
 
 .Button.is-disabled {
   opacity: 0.5;
+  background: #ccc;
   cursor: default;
 }
 
 .Button.is-disabled:hover {
   cursor: default;
   opacity: 0.5;
-  background: #2A84D2;
+  background: #ccc;
 }
 
 .Button.is-disabled.is-destructive:hover {
   opacity: 0.5;
-  background: #c50000;
+  background: #ccc;
+}
+
+.Button.is-link {
+  color: #000;
+  text-decoration: underline;
 }

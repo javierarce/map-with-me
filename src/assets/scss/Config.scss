@@ -67,10 +67,16 @@
 }
 
 .Config__footer {
-  margin: 12px 0 0;
-  font-size: .8em;
+  margin: 24px 0 0;
+  font-size: 0.8em;
   line-height: 125%;
   opacity: 0.5;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.Config__footer > .is-link {
+  flex: 1;
 }
 
 .Config__button {

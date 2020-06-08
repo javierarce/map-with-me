@@ -2,9 +2,20 @@
   <div class="App">
     <transition name="slide-fade">
     <Alert v-if="showAlert" :title="alertTitle" :description="alertDescription" :footer="alertFooter" />
+    </transition>
+
+    <transition name="slide-fade">
     <About v-if="showAbout" />
+    </transition>
+
+    <transition name="slide-fade">
+    <Destroy v-if="showDestroy" />
+    </transition>
+
+    <transition name="slide-fade">
     <Config v-if="showConfig" />
     </transition>
+
     <Header />
     <Map />
     <Sidebar />
@@ -15,12 +26,13 @@
 import mixins from '../mixins'
 import config from '../../config'
 
-import Config from './Config.vue'
-import Sidebar from './Sidebar.vue'
 import About from './About.vue'
 import Alert from './Alert.vue'
+import Config from './Config.vue'
+import Destroy from './Destroy.vue'
 import Header from './Header.vue'
 import Map from './Map.vue'
+import Sidebar from './Sidebar.vue'
 
 export default {
   mixins: [mixins],
@@ -28,6 +40,7 @@ export default {
     About,
     Alert,
     Config,
+    Destroy,
     Header,
     Map,
     Sidebar
@@ -39,6 +52,7 @@ export default {
       alertTitle: undefined,
       locations: [],
       showAbout: false,
+      showDestroy: false,
       showConfig: false,
       showAlert: false
     }
@@ -56,6 +70,7 @@ export default {
       window.bus.$off(config.ACTIONS.ON_LOAD)
       window.bus.$off(config.ACTIONS.START_LOADING)
       window.bus.$off(config.ACTIONS.STOP_LOADING)
+      window.bus.$off(config.ACTIONS.TOGGLE_DESTROY)
       window.bus.$off(config.ACTIONS.TOGGLE_ABOUT)
       window.bus.$off(config.ACTIONS.TOGGLE_CONFIG)
       window.bus.$off(config.ACTIONS.TOGGLE_ALERT)
@@ -66,6 +81,7 @@ export default {
       window.bus.$on(config.ACTIONS.ON_LOAD, this.onLoad)
       window.bus.$on(config.ACTIONS.START_LOADING, this.onStartLoading)
       window.bus.$on(config.ACTIONS.STOP_LOADING, this.onStopLoading)
+      window.bus.$on(config.ACTIONS.TOGGLE_DESTROY, this.onToggleDestroy)
       window.bus.$on(config.ACTIONS.TOGGLE_ABOUT, this.onToggleAbout)
       window.bus.$on(config.ACTIONS.TOGGLE_CONFIG, this.onToggleConfig)
       window.bus.$on(config.ACTIONS.TOGGLE_ALERT, this.onToggleAlert)
@@ -80,6 +96,7 @@ export default {
       if (e.keyCode === 27) {
         this.showAlert = false
         this.showAbout = false
+        this.showDestroy = false
         this.showConfig = false
       }
     },
@@ -131,6 +148,9 @@ export default {
     },
     onToggleConfig () {
       this.showConfig = !this.showConfig
+    },
+    onToggleDestroy () {
+      this.showDestroy = !this.showDestroy
     },
     onToggleAbout () {
       this.showAbout = !this.showAbout
