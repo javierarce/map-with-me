@@ -65,6 +65,10 @@
   justify-content: space-between;
   flex-direction: column;
 }
+
+.Button.About__button.is-bold {
+  font-size: 1em;
+}
 .About__backdrop {
 	background: linear-gradient(-45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB);
 	opacity: 0.5;

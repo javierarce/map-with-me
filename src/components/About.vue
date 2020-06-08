@@ -13,21 +13,21 @@
             <div>
               <div class="About__columnTitle">Create your own map</div>
               <p>Remix this project in Glitch and follow the instructions you'll find in the README.md file.</p>
-          <a href="https:/glitch.com/edit/#!/remix/mapwithme" class="Button is-bold" title="Remix this project in Glitch" target="_blank">Remix the project</a>
+          <a href="https://glitch.com/edit/#!/remix/mapwithme" class="Button About__button is-bold" title="Remix this project in Glitch" target="_blank">Remix the project</a>
             </div>
 
             <div>
               <div class="About__columnTitle">Improve the tool</div>
           <p>Follow the development of the tool, suggest improvements, and
             report bugs in GitHub.</p>
-          <a href="https://github.com/javierarce/map-with-me" class="Button is-bold" title="Visit repo in GitHub" target="_blank">Visit repo</a>
+          <a href="https://github.com/javierarce/map-with-me" class="Button About__button is-bold" title="Visit repo in GitHub" target="_blank">Visit repo</a>
             </div>
             <div>
               <div class="About__columnTitle">Get the data</div>
               <p>
                 The public data is available in a CSV file. You can also subscribe to this map with <a href="/rss" title="RSS" target="_blank">RSS</a>.
               </p>
-              <a href="/csv" title="Export locations in CSV format" target="_blank"class="Button is-bold">Download the data</a>
+              <a href="/csv" title="Export locations in CSV format" target="_blank"class="Button About__button is-bold">Download the data</a>
 
             </div>
           </div>
