@@ -308,8 +308,8 @@ export default {
           let avatar = L.DomUtil.create('a', 'Popup__userAvatar', footer)
           avatar.href= `https://twitter.com/${options.user.username}`
 
-          let avatarImage = L.DomUtil.create('img', 'Popup__userAvatarImage', avatar)
-          avatarImage.src= options.user.profileImage
+          // let avatarImage = L.DomUtil.create('img', 'Popup__userAvatarImage', avatar)
+          // avatarImage.src= options.user.profileImage
         }
 
         let user = L.DomUtil.create('a', 'Popup__user', footer)
