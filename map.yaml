@@ -1,5 +1,5 @@
 map:
-  DEFAULT_SEARCH_LOCATION: Barcelona, Spain
+  DEFAULT_SEARCH_LOCATION: ""
   LAT: "40.712"
   LON: "-74"
   ZOOM: "3"
@@ -9,4 +9,4 @@ admin:
   ADMIN_USERNAME: javier
   MODERATED: true
   PROTECTED: false
-  ANONYMOUS: false
+  ANONYMOUS: true

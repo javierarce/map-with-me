@@ -342,14 +342,14 @@ showConfig	src/components/Home.vue	/^      this.showConfig = !this.showConfig$/;
 showDefaultPoint	src/components/Map.vue	/^    showDefaultPoint () {$/;"	f
 showDestroy	src/components/Home.vue	/^        this.showDestroy = false$/;"	r
 showDestroy	src/components/Home.vue	/^      this.showDestroy = !this.showDestroy$/;"	r
+showFooter	src/components/Locations.vue	/^    showFooter (marker) {$/;"	f
+showModerationHint	src/components/Config.vue	/^    showModerationHint () {$/;"	f
 showRemoveItem	src/components/Locations.vue	/^    showRemoveItem (marker) {$/;"	f
 showSavedLocation	src/components/Map.vue	/^    showSavedLocation (data) {$/;"	f
 showSuccess	src/components/Map.vue	/^    showSuccess () {$/;"	f
-spinner	src/components/Map.vue	/^      let spinner = L.DomUtil.create('div', 'Popup__spinner Spinner', body)$/;"	r
 src	src/components/Map.vue	/^          avatarImage.src= options.user.profileImage$/;"	r
 startLoading	src/components/Map.vue	/^    startLoading () {$/;"	f
 stopLoading	src/components/Map.vue	/^    stopLoading () {$/;"	f
-success	src/components/Map.vue	/^      let success = L.DomUtil.create('div', 'Popup__success', body)$/;"	r
 textarea	src/components/Map.vue	/^      let textarea = L.DomUtil.create('textarea', 'Popup__input js-description', comment)$/;"	r
 title	src/components/Search.vue	/^          let title = config.TEXTS.NO_RESULTS_TITLE.replace('{q}', this.q)$/;"	r
 toggle	src/components/Map.vue	/^    toggle () {$/;"	f

@@ -80,9 +80,10 @@
               </div>
             </label>
           </div>
+          <transition name="fade">
+          <div class="Config__hint" v-if="showModerationHint">Visit {{currentURL}}admin/SECRET to manage the submissions.</div>
+          </transition>
           </div>
-
-
 
           <div class="Config__buttons">
             <div class="Config__sectionContent">
@@ -124,6 +125,7 @@ export default {
   data () {
     return {
       isSaving: false,
+      currentURL: window.location.href,
       sendButtonIsEnabled: false,
       default_search_location: mapConfig.map.DEFAULT_SEARCH_LOCATION,
       title: mapConfig.admin.TITLE,
@@ -138,6 +140,9 @@ export default {
     }
   },
   computed: {
+    showModerationHint () {
+      return this.moderated && this.anonymous
+    },
     saveButtonClass () {
       if (!this.sendButtonIsEnabled) {
         return 'is-disabled'
