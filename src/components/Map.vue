@@ -73,8 +73,11 @@ export default {
         }
       }
     },
-    onVisitMarker (marker, approved) {
-      marker.fire('click')
+    onVisitMarker (marker) {
+      this.map.setView(marker.getLatLng(), 17, { animate: true, easeLinearity: .5, duration: 0.250 });
+      setTimeout(() => {
+        marker.fire('click')
+      }, 500)
     },
     onSetView (result) {
       this.removeMarker()
