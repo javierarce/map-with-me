@@ -73,6 +73,9 @@ export default {
       response.json().then((result) => {
         window.bus.$emit(config.ACTIONS.STOP_LOADING)
         this.isDestroying = false
+
+        window.bus.$emit(config.ACTIONS.TOGGLE_DESTROY)
+        this.$router.go()
       })
     },
 
