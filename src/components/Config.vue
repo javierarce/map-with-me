@@ -189,7 +189,6 @@ export default {
       response.json().then((result) => {
         window.bus.$emit(config.ACTIONS.STOP_LOADING)
         this.isSaving = false
-        console.log(result);
       })
     },
 

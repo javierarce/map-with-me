@@ -12,6 +12,7 @@ DB_PASS= // Password for your database
 
 SECRET= // You'll need this to update your  map configuration or recreate the database
 ```
+
 If you want to use Twitter as an authentication mechanism you'll need to create an app and add the credentials:
 
 ```js
