@@ -300,22 +300,16 @@ export default {
 
       let header = L.DomUtil.create('div', 'Popup__header js-name', content)
 
+      if (!options.readonly) {
+        header.contentEditable='true'
+      }
+
       header.innerHTML = options.name
 
       let body = L.DomUtil.create('div', 'Popup__body', content)
 
       if (!window.bus.isAnonymous() && options.user) {
         let footer = L.DomUtil.create('div', 'Popup__footer', content)
-
-        /*
-        if (options.user.profileImage) {
-          let avatar = L.DomUtil.create('a', 'Popup__userAvatar', footer)
-          avatar.href= `https://twitter.com/${options.user.username}`
-
-          let avatarImage = L.DomUtil.create('img', 'Popup__userAvatarImage', avatar)
-          avatarImage.src= options.user.profileImage
-        }
-        */
 
         let user = L.DomUtil.create('a', 'Popup__user', footer)
         user.href= `https://twitter.com/${options.user.username}`
@@ -376,6 +370,7 @@ export default {
 
       return this.popup
     },
+
     addLocation () {
       if (!this.enableSend) {
         return
