@@ -2,7 +2,7 @@ require('dotenv').config()
 
 const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader')
-const mode = process.env.ENVIRONMENT
+const mode = process.env.ENVIRONMENT || 'production'
 
 module.exports = {
   mode,
