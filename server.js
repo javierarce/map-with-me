@@ -6,7 +6,6 @@ const cmd = require('node-cmd')
 const bodyParser = require('body-parser')
 const session = require('express-session')
 const rss = require('rss')
-const sanitize = require('sanitize-html')
 const helmet = require('helmet')
 
 const Mapper = require('./lib/map')
