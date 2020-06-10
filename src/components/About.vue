@@ -20,14 +20,14 @@
               <div class="About__columnTitle">Improve the tool</div>
           <p>Follow the development of the tool, suggest improvements, and
             report bugs in GitHub.</p>
-          <a href="https://github.com/javierarce/map-with-me" class="Button About__button is-bold" title="Visit repo in GitHub" target="_blank">Visit repo</a>
+          <a href="https://github.com/javierarce/map-with-me" class="Button About__button is-bold" title="Visit the repo in GitHub" target="_blank">Visit the repo</a>
             </div>
             <div>
-              <div class="About__columnTitle">Get the data</div>
+              <div class="About__columnTitle">Export the data</div>
               <p>
-                The public data is available in a CSV file. You can also subscribe to this map with <a href="/rss" title="RSS" target="_blank">RSS</a>.
+                Get the data in a GeoJSON or a <a href="/csv" target="_blank">CSV file</a>. You can also subscribe to this map via <a href="/rss" title="RSS" target="_blank">RSS</a>.
               </p>
-              <a href="/csv" title="Export locations in CSV format" target="_blank"class="Button About__button is-bold">Download the data</a>
+              <a href="/geojson" title="Export locations in GeoJSON format" target="_blank"class="Button About__button is-bold">Get the data</a>
 
             </div>
           </div>

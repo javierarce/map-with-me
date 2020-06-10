@@ -118,6 +118,7 @@ app.get('/api/reset', (request, response) => { Map.onRemoveSession(request, resp
 
 app.get('/rss', (request, response) => { Map.onGetRSS(request, response)})
 app.get('/csv', (request, response) => { Map.onGetCSV(request, response)})
+app.get('/geojson', (request, response) => { Map.onGetGeoJSON(request, response)})
 
 app.get('/auth/twitter', passport.authenticate('twitter'))
 app.get('/auth/twitter/callback', passport.authenticate('twitter', { successRedirect: '/', failureRedirect: '/login' }))
