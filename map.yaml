@@ -7,6 +7,6 @@ map:
 admin:
   TITLE: Map with me your favorite places
   ADMIN_USERNAME: javier
-  MODERATED: true
+  MODERATED: false
   PROTECTED: false
   ANONYMOUS: false
