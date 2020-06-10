@@ -110,7 +110,9 @@
         </div>
       </div>
       <div class="Config__dangerZone">
-        <button class="Button is-link" @click="onClickDestroy">Destroy database</button>
+        <div class="Config__dangerZoneContent">
+          Do you want to start again? <button class="Button is-link" @click="onClickDestroy">Destroy the database</button>
+        </div>
       </div>
     </div>
   </div>
