@@ -29,6 +29,7 @@ const router = new VueRouter({
 window.bus = new Vue({
   data () {
     return {
+      markers: [],
       user: undefined
     }
   },

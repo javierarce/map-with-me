@@ -24,7 +24,6 @@ export default {
     return {
       map: {},
       expanded: false,
-      markers: [],
       readonly: undefined,
       coordinates: undefined,
       options: {},
@@ -181,31 +180,32 @@ export default {
       this.map.setView(latlng, data.zoom)
     },
     onRemoveMarker (id) {
-      let index = this.markers.findIndex((item) => { 
+      let index = window.bus.markers.findIndex((item) => { 
         return item.options.location.id === id
       })
 
-      if (index !== undefined) {
-        this.map.removeLayer(this.markers[index])
-        this.$delete(this.markers, index)
+      if (index !== -1) {
+        this.map.removeLayer(window.bus.markers[index])
+        this.$delete(window.bus.markers, index)
+      } else {
+        console.log('marker not found', window.bus.markers);
       }
     },
     onAddLocations (locations) {
       locations.forEach(this.addMarker.bind(this)) 
 
-      if (this.markers.length) {
+      if (window.bus.markers.length) {
         if (config.MAP.FIT_BOUNDS) {
           this.fitBounds()
         }  else {
           window.bus.$emit(config.ACTIONS.ON_LOAD)
         }
-        window.bus.$emit(config.ACTIONS.ADD_MARKERS, this.markers)
       } else {
         window.bus.$emit(config.ACTIONS.ON_LOAD)
       }
     },
     fitBounds () {
-      let group = L.featureGroup(this.markers)
+      let group = L.featureGroup(window.bus.markers)
       this.map.flyToBounds(group.getBounds())
       window.bus.$emit(config.ACTIONS.ON_LOAD)
     },
@@ -229,7 +229,7 @@ export default {
 
       marker.bindPopup(this.popup, { maxWidth: 'auto' }).addTo(this.map)
 
-      this.markers.push(marker)
+      window.bus.markers.push(marker)
     },
     extractEmojis (text) {
       let emojis = []

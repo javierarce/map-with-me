@@ -30,7 +30,7 @@ export default {
   data () {
     return {
       activeMarker: undefined,
-      markers: []
+      markers: window.bus.markers
     }
   },
   watch: {
@@ -47,11 +47,9 @@ export default {
   methods: {
     bindEvents () {
       window.bus.$off(config.ACTIONS.ADD_MARKER)
-      window.bus.$off(config.ACTIONS.ADD_MARKERS)
       window.bus.$off(config.ACTIONS.SELECT_MARKER)
 
       window.bus.$on(config.ACTIONS.ADD_MARKER, this.onAddMarker)
-      window.bus.$on(config.ACTIONS.ADD_MARKERS, this.onAddMarkers)
       window.bus.$on(config.ACTIONS.SELECT_MARKER, this.onSelectMarker)
     },
     onClickToggleApprove (e, marker) {
@@ -100,7 +98,6 @@ export default {
     },
     onRemoveLocation (response) {
       response.json().then((result) => {
-        console.log(result)
         if (result && !result.error) {
           let $item = this.getItemById(result.id) 
           $item.classList.add('is-hidden')
@@ -130,9 +127,6 @@ export default {
     onAddMarker (marker) {
       this.activateMarker(marker)
       this.markers.unshift(marker)
-    },
-    onAddMarkers (markers) {
-      this.markers = markers
     },
     isMyMarker (marker) {
       return marker.options.location.user ? (marker.options.location.user.username === window.bus.user.username) : false
