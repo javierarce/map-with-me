@@ -79,3 +79,6 @@ bower.json
 
 # Ignore pow environment settings
 .powenv
+
+release
+exclude.txt
