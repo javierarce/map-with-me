@@ -29,9 +29,7 @@ export default {
   methods: {
     getHeight () {
       let documentHeight = this.$el.getBoundingClientRect().height
-      let footerHeight = this.$refs.footer.getBoundingClientRect().height 
-
-      this.height = documentHeight - (footerHeight + MARGIN_BOTTOM)
+      this.height = documentHeight - MARGIN_BOTTOM
     }
   }
 }
