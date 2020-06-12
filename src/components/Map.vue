@@ -313,7 +313,7 @@ export default {
 
         let user = L.DomUtil.create('a', 'Popup__user', footer)
         user.href= `https://twitter.com/${options.user.username}`
-        user.innerText = options.user.username
+        user.innerText = `@${options.user.username}`
       }
 
       let comment = L.DomUtil.create('div', 'Popup__comment', body)
