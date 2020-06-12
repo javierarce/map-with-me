@@ -1,10 +1,9 @@
-name: Glitch Sync
+name: Deploy to Glitch
 
 on:
   push:
     branches:
       - master
-
 jobs:
   sync:
     runs-on: ubuntu-latest
