@@ -8,10 +8,10 @@
     "start:client": "webpack-dev-server --config webpack.config.js",
     "start": "babel-watch ./server.js"
   },
-    "author": { 
-      "name" : "Javier Arce", 
-      "email" : "javierarce@gmail.com", 
-      "url" : "https://twitter.com/javier"
+  "author": {
+    "name": "Javier Arce",
+    "email": "javierarce@gmail.com",
+    "url": "https://twitter.com/javier"
   },
   "bugs": {
     "url": "https://github.com/javierarce/map-with-me/issues"
@@ -39,6 +39,7 @@
     "file-loader": "^6.0.0",
     "fs": "^0.0.1-security",
     "helmet": "^3.22.0",
+    "html-webpack-plugin": "^4.3.0",
     "leaflet": "^1.6.0",
     "node-cmd": "^3.0.0",
     "node-sass-middleware": "^0.11.0",

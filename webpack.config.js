@@ -3,6 +3,12 @@ require('dotenv').config()
 const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader')
 const mode = process.env.ENVIRONMENT || 'production'
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const YAML = require('yaml')
+const fs = require('fs')
+
+const config = fs.readFileSync('./map.yaml', 'utf8')
+const appConfig = YAML.parse(config).admin
 
 module.exports = {
   mode,
@@ -11,7 +17,9 @@ module.exports = {
       './src/main.js'
     ]
   },
-  performance: { hints: false } ,
+  performance: { 
+    hints: false
+  },
   devServer: {
     contentBase: path.join(__dirname, 'public'),
     port: 8080,
@@ -60,7 +68,7 @@ module.exports = {
               [
                 '@babel/preset-env',
                 {
-                  'modules': false,//commonjs,amd,umd,systemjs,auto
+                  'modules': false,
                   'useBuiltIns': 'usage',
                   'targets': '> 0.25%, not dead',
                   'corejs': 3
@@ -70,8 +78,7 @@ module.exports = {
           }
         }
       ]
-    }
-    ]
+    }]
   },
   resolve: {
     alias: {
@@ -79,6 +86,10 @@ module.exports = {
     }
   },
   plugins: [
-    new VueLoaderPlugin()
+    new VueLoaderPlugin(),
+    new HtmlWebpackPlugin({
+      TITLE: appConfig.TITLE,
+      template: './public/index.html'
+    })
   ]
 }
