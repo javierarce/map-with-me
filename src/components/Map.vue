@@ -89,7 +89,7 @@ export default {
       let name = result.display_name.split(',')[0]
       let address = []
 
-      if (result.address.road) {
+      if (result && result.address && result.address.road) {
         address.push(result.address.road)
 
         if (result.address.house_number) {
@@ -467,7 +467,7 @@ export default {
 
         let address = []
 
-        if (result.address.road) {
+        if (result && result.address && result.address.road) {
           address.push(result.address.road)
 
           if (result.address.house_number) {
@@ -477,7 +477,7 @@ export default {
 
         address = address.join(', ')
 
-        let name = result.namedetails.name || address || result.display_name
+        let name = (result.namedetails && result.namedetails.name) || address || result.display_name
         address = address || result.display_name
 
         name = this.truncate(name, MAX_TITLE_LENGTH)
@@ -544,6 +544,9 @@ export default {
       }, 500)
     },
     truncate (text, length = 100) {
+      if (!text) {
+        return
+      }
       return text.length > length ? `${text.substring(0, length)}...` : text
     }
   }
