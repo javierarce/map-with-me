@@ -19,7 +19,7 @@
 
 .Header__info {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
 }
 
 .Header__description {
@@ -41,6 +41,7 @@
   display: flex;
   align-items: center;
   transition: opacity 250ms cubic-bezier(1.000, 0.000, 0.000, 1.000);
+  margin: 0 10px 0 0;
 }
 .Header__linksItem.with-image {
   display: flex;
@@ -79,7 +80,6 @@
   .Header__info {
     justify-content: space-between;
   }
-  .Button.Header__title,
   .Header__linksItem {
     font-size: 1em;
   }
