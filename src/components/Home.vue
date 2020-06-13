@@ -119,7 +119,7 @@ export default {
         this.getLocations()
 
       }).catch((error) => {
-        console.log('Error', error)
+        console.error(error)
       })
     },
     onGetAddedLocation (response) {
@@ -136,7 +136,7 @@ export default {
       this.get(config.ENDPOINTS.STATUS)
         .then(this.onGetStatus.bind(this))
         .catch((error) => {
-          console.log('Error', error)
+          console.error(error)
         })
     },
     onStartLoading () {
@@ -167,14 +167,14 @@ export default {
       this.post(config.ENDPOINTS.ADD, { coordinates, name, description, address })
         .then(this.onGetAddedLocation.bind(this))
         .catch((error) => {
-          console.log('Error', error)
+          console.error(error)
         })
     },
     getLocations () {
       this.get(config.ENDPOINTS.LOCATIONS)
         .then(this.onGetLocations.bind(this))
         .catch((error) => {
-          console.log(error)
+          console.error(error)
         })
     },
     onLogin ({ coordinates, zoom, name, description, address }) {
