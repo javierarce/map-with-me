@@ -138,7 +138,10 @@ export default {
       }, 200)
     },
     showDefaultPoint () {
-      this.map.flyTo([config.MAP.LAT, config.MAP.LON], config.MAP.ZOOM)
+      this.map.flyTo([config.MAP.LAT, config.MAP.LON], config.MAP.ZOOM, {
+        animate: true,
+        duration: 1
+      })
     },
     onShowAddedLocation (location) {
       this.stopLoading()
