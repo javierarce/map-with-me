@@ -14,7 +14,8 @@ import mapConfig from '../../map.yaml'
 
 const emojiRegex = require('emoji-regex')
 
-import * as L from 'leaflet';
+import * as L from 'leaflet'
+require('leaflet.markercluster')
 
 const MAX_TITLE_LENGTH = 80
 
@@ -22,6 +23,7 @@ export default {
   mixins: [mixins],
   data() {
     return {
+      cluster: {},
       map: {},
       expanded: false,
       readonly: undefined,
@@ -73,7 +75,7 @@ export default {
       }
     },
     onVisitMarker (marker) {
-      this.map.setView(marker.getLatLng(), 17, { animate: true, easeLinearity: .5, duration: 0.250 });
+      this.map.setView(marker.getLatLng(), 17, { animate: true, easeLinearity: .5, duration: 0.250 })
       setTimeout(() => {
         marker.fire('click')
       }, 500)
@@ -188,7 +190,7 @@ export default {
         this.map.removeLayer(window.bus.markers[index])
         this.$delete(window.bus.markers, index)
       } else {
-        console.log('marker not found', window.bus.markers);
+        console.error('Marker not found', window.bus.markers)
       }
     },
     onAddLocations (locations) {
@@ -203,6 +205,7 @@ export default {
       } else {
         window.bus.$emit(config.ACTIONS.ON_LOAD)
       }
+      this.map.addLayer(this.cluster)
     },
     fitBounds () {
       let group = L.featureGroup(window.bus.markers)
@@ -227,8 +230,9 @@ export default {
         window.bus.$emit(config.ACTIONS.SELECT_MARKER, marker)
       })
 
-      marker.bindPopup(this.popup, { maxWidth: 'auto' }).addTo(this.map)
+      marker.bindPopup(this.popup, { maxWidth: 'auto' })
 
+      this.cluster.addLayer(marker)
       window.bus.markers.push(marker)
     },
     extractEmojis (text) {
@@ -250,6 +254,11 @@ export default {
       }
 
       this.map = L.map('map', options).setView([config.MAP.LAT, config.MAP.LON], config.MAP.ZOOM)
+
+      this.cluster = L.markerClusterGroup({
+        spiderfyOnMaxZoom: false,
+        showCoverageOnHover: false
+      })
 
       this.map.on('popupopen', (e) => {
         setTimeout(() => {
@@ -485,7 +494,7 @@ export default {
       this.get(url)
         .then(this.onGetGeocoding.bind(this))
         .catch((error) => {
-          console.log(error)
+          console.error(error)
         })
     },
     removeMarker () {
@@ -532,7 +541,7 @@ export default {
       }, 500)
     },
     truncate (text, length = 100) {
-      return text.length > length ? `${text.substring(0, length)}...` : text;
+      return text.length > length ? `${text.substring(0, length)}...` : text
     }
   }
 }
