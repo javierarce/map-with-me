@@ -1,8 +1,8 @@
 map:
   DEFAULT_SEARCH_LOCATION: ""
-  LAT: "40.4176751"
-  LON: "-3.7076269"
-  ZOOM: "14"
+  LAT: "39"
+  LON: "-37"
+  ZOOM: "4"
   FIT_BOUNDS: false
 admin:
   TITLE: Map with me your favorite places
