@@ -99,6 +99,7 @@ if (process.env.CONSUMER_KEY && process.env.CONSUMER_SECRET) {
 }
 
 app.use('/leaflet', express.static(__dirname + '/node_modules/leaflet/dist'))
+app.use('/leaflet.markercluster', express.static(__dirname + '/node_modules/leaflet.markercluster/dist'))
 
 app.post('/api/recreate', (request, response) => { Map.onRecreateDB(request, response)})
 
