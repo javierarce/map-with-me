@@ -106,7 +106,6 @@ export default {
     onGetStatus (response) {
       response.json().then((result) => {
         if (!result && !result.user) {
-          console.log('not logged in')
           return
         }
 
@@ -120,7 +119,7 @@ export default {
         this.getLocations()
 
       }).catch((error) => {
-        console.log(error)
+        console.log('Error', error)
       })
     },
     onGetAddedLocation (response) {
@@ -168,7 +167,7 @@ export default {
       this.post(config.ENDPOINTS.ADD, { coordinates, name, description, address })
         .then(this.onGetAddedLocation.bind(this))
         .catch((error) => {
-          console.log(error)
+          console.log('Error', error)
         })
     },
     getLocations () {
