@@ -256,7 +256,7 @@ export default {
         onRemove: () => {
         },
         onAdd: (map)  => {
-          let div = L.DomUtil.create('div', 'Button Button__toggle')
+          let div = L.DomUtil.create('div', 'ToggleControl')
 
           L.DomEvent.on(div, 'click', (e) => {
             e.stopPropagation()
