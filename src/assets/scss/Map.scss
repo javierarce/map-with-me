@@ -99,3 +99,48 @@
 .marker-cluster span {
   line-height: 30px;
 }
+
+.Map .leaflet-bar {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .2);
+}
+.Map .leaflet-container a {
+	background: #2477BE;
+}
+.Map .leaflet-bar a:first-child {
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+}
+.Map .leaflet-bar a:last-child {
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+  border-bottom: none;
+}
+
+
+
+.ZoomOutControl.leaflet-control:hover {
+  background-color: #f4f4f4;
+}
+.ZoomOutControl.leaflet-control {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .2);
+  background: #fff;
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.ZoomOutControl:before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 10px;
+  height: 10px;
+  border: 2px solid #2477BE;
+  border-radius: 100%;
+}
+
+.Map .leaflet-top .leaflet-control {
+  margin-top: 8px;
+}

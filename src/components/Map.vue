@@ -1,8 +1,5 @@
 <template>
   <div class="Map__container">
-    <div class="Map__buttons">
-      <button class="Button Button__toggle" :class="toggleButtonClass" @click="toggle"></button>
-    </div>
     <div id="map" class="Map"></div>
   </div>
 </template>
@@ -25,6 +22,8 @@ export default {
     return {
       cluster: {},
       map: {},
+      toggleMapControl: undefined,
+      zoomOutControl: undefined,
       expanded: false,
       readonly: undefined,
       coordinates: undefined,
@@ -133,6 +132,8 @@ export default {
     toggle () {
       this.expanded = !this.expanded
       window.bus.$emit(config.ACTIONS.TOGGLE_MAP_SIZE, this.expanded)
+      this.toggleControl.getContainer().classList.toggle('is-expanded')
+
       setTimeout(() => {
         window.bus.$emit(config.ACTIONS.INVALIDATE_MAP_SIZE)
       }, 200)
@@ -198,22 +199,12 @@ export default {
     },
     onAddLocations (locations) {
       locations.forEach(this.addMarker.bind(this)) 
-
-      if (window.bus.markers.length) {
-        if (config.MAP.FIT_BOUNDS) {
-          this.fitBounds()
-        }  else {
-          window.bus.$emit(config.ACTIONS.ON_LOAD)
-        }
-      } else {
-        window.bus.$emit(config.ACTIONS.ON_LOAD)
-      }
+      window.bus.$emit(config.ACTIONS.ON_LOAD)
       this.map.addLayer(this.cluster)
     },
     fitBounds () {
       let group = L.featureGroup(window.bus.markers)
-      this.map.flyToBounds(group.getBounds())
-      window.bus.$emit(config.ACTIONS.ON_LOAD)
+      this.map.fitBounds(group.getBounds())
     },
     addMarker (location) {
       let latlng = [location.lat, location.lng]
@@ -249,14 +240,70 @@ export default {
 
       return emojis
     },
+
     init () {
       let options = { 
         scrollWheelZoom: true,
-        zoomControl: false,
+        zoomControl: true,
         maxBoundsViscosity: 1.0,
       }
 
       this.map = L.map('map', options).setView([config.MAP.LAT, config.MAP.LON], config.MAP.ZOOM)
+
+      this.map.zoomControl.setPosition('topright')
+
+      L.Control.ToggleExpand = L.Control.extend({
+        onRemove: () => {
+        },
+        onAdd: (map)  => {
+          let div = L.DomUtil.create('div', 'Button Button__toggle')
+
+          L.DomEvent.on(div, 'click', (e) => {
+            e.stopPropagation()
+            e.preventDefault()
+
+            L.DomEvent.disableClickPropagation(div)
+            this.toggle()
+          })
+          return div
+        }
+      })
+
+      L.Control.ZoomOut = L.Control.extend({
+        onRemove: () => {
+        },
+        onAdd: (map)  => {
+          let div = L.DomUtil.create('div', 'ZoomOutControl')
+
+          L.DomEvent.on(div, 'click', (e) => {
+            e.stopPropagation()
+            e.preventDefault()
+
+            L.DomEvent.disableClickPropagation(div)
+            this.removeMarker()
+            this.fitBounds()
+          })
+          return div
+        }
+      });
+
+      this.toggleControl = this.createToggleExpand({ position: 'topright' }).addTo(this.map);
+
+      this.map.on('zoomend', () => {
+        let zoom = this.map.getZoom();
+
+        if (zoom > 6) {
+          if (!this.zoomOutControl) {
+            this.zoomOutControl = this.createZoomOut({ position: 'topright' }).addTo(this.map);
+            // this.zoomControl.getContainer().setAttribute('arial-label', 'Zoom out')
+          }
+        } else {
+          if (this.zoomOutControl) {
+            this.zoomOutControl.remove()
+            this.zoomOutControl = undefined
+          }
+        }
+      })
 
       this.cluster = L.markerClusterGroup({
         spiderfyOnMaxZoom: false,
@@ -280,6 +327,13 @@ export default {
         maxZoom: 20,
         minZoom: 0
       }).addTo(this.map)
+    },
+
+    createToggleExpand (opts) {
+      return new L.Control.ToggleExpand(opts)
+    },
+    createZoomOut (opts) {
+      return new L.Control.ZoomOut(opts)
     },
 
     createPopup (coordinates, options = {}) {
