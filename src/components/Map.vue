@@ -86,17 +86,7 @@ export default {
       this.coordinates = { lat: latlng[0], lng: latlng[1] }
 
       let name = result.display_name.split(',')[0]
-      let address = []
-
-      if (result && result.address && result.address.road) {
-        address.push(result.address.road)
-
-        if (result.address.house_number) {
-          address.push(result.address.house_number)
-        }
-      }
-
-      address = address.join(', ')
+      let address = (result && this.parseAddress(result.address)) || undefined
 
       this.popup = this.createPopup(latlng, { name, address })
       let icon = this.getIcon()
@@ -515,27 +505,28 @@ export default {
       this.popup.getContent().querySelector('.js-address').textContent = text
       this.popup.getContent().classList.add('has-address')
     },
+
+    parseAddress(address) {
+      let parts = []
+
+      let tpl = 'road, house_number, city, country'
+
+      tpl.split(', ').forEach((part) => {
+        if (address && address[part]) {
+          parts.push(address[part])
+        }
+      })
+
+      return parts.length ? parts.join(', ') : 'Mysterious location'
+    },
+
     onGetGeocoding (response) {
       response.json().then((result) => {
         this.stopLoading()
 
-        let address = []
-
-        if (result && result.address && result.address.road) {
-          address.push(result.address.road)
-
-          if (result.address.house_number) {
-            address.push(result.address.house_number)
-          }
-        }
-
-        address = address.join(', ')
-
         let name = (result.namedetails && result.namedetails.name) || address || result.display_name
-        address = address || result.display_name
-
-        name = this.truncate(name, MAX_TITLE_LENGTH)
-        this.setName(name)
+        let address = (result && this.parseAddress(result.address)) || result.display_name
+        this.setName(this.truncate(name, MAX_TITLE_LENGTH))
         this.setAddress(address)
       })
     },
