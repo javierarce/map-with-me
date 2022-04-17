@@ -114,7 +114,6 @@ class Locations {
 
   onGetAddedLocation (response) {
     response.json().then((result) => {
-      console.log(result)
       window.bus.emit(config.ACTIONS.SHOW_ADDED_LOCATION, result)
     })
   }
@@ -219,6 +218,241 @@ window.mobileCheck = function() {
 }
 const MAX_TITLE_LENGTH = 80
 
+class Popup {
+  constructor (latlng, options) {
+    this.enableSend = true
+    this.latlng = latlng
+    this.geocode = options.geocode || false
+    this.name = options.name
+    this.description = options.description
+    this.user = options.user
+    this.address = options.address
+    this.readonly = options.readonly
+
+    this.bindEvents()
+    this.render()
+  }
+
+  bindEvents () {
+    window.bus.on(config.ACTIONS.START_LOADING, this.startLoading.bind(this))
+    window.bus.on(config.ACTIONS.STOP_LOADING, this.stopLoading.bind(this))
+  }
+
+  startLoading () {
+    this.el.getContent().classList.add('is-loading')
+  }
+
+  stopLoading () {
+    this.el.getContent().classList.remove('is-loading')
+  }
+
+  enableSendButton () {
+    if (this.el && this.el.getContent()) {
+      this.el.getContent().classList.add('can-send')
+      this.enableSend = true
+    }
+  }
+
+  disableSendButton () {
+    if (this.el && this.el.getContent()) {
+      this.el.getContent().classList.remove('can-send')
+      this.enableSend = false
+    }
+  }
+
+  addLocation () {
+    if (!this.enableSend) {
+      return
+    }
+
+    this.startLoading()
+
+    let coordinates = this.latlng
+    let name = this.getName()
+    let description = this.getDescription()
+    let address = this.getAddress()
+
+    window.bus.emit(config.ACTIONS.ADD_LOCATION, { coordinates, name, description, address })
+  }
+
+  showSuccess () {
+    this.el.getContent().classList.add('was-successful')
+
+    setTimeout(() => {
+      this.hideSuccess()
+    }, 1500)
+  }
+
+  hideSuccess () {
+    this.el.getContent().classList.remove('was-successful')
+  }
+
+  focus () {
+    this.el.getContent().querySelector('.js-description').focus()
+  }
+
+  startLoading () {
+    this.el.getContent().classList.add('is-loading')
+  }
+
+  stopLoading () {
+    this.el.getContent().classList.remove('is-loading')
+  }
+
+  startGeocoding () {
+    this.startLoading()
+
+    let lat = this.latlng.lat
+    let lng = this.latlng.lng
+    let extraParams = '&addressdetails=1&namedetails=1&extratags=1&zoom=18&format=json'
+
+    let url = `${config.ENDPOINTS.NOMINATIM}${config.ENDPOINTS.GEOCODE_URL}?lat=${lat}&lon=${lng}${extraParams}`
+
+    get(url)
+      .then(this.onGetGeocoding.bind(this))
+      .catch((error) => {
+        console.error(error)
+      })
+  }
+
+  onGetGeocoding (response) {
+    response.json().then((result) => {
+      this.stopLoading()
+
+      let address = (result && this.parseAddress(result.address)) || result.display_name
+      let name = (result.namedetails && result.namedetails.name) || address || result.display_name
+
+      this.setName(this.truncate(name, MAX_TITLE_LENGTH))
+      this.setAddress(address)
+    })
+  }
+
+  truncate (text, length = 100) {
+    if (!text) {
+      return
+    }
+    return text.length > length ? `${text.substring(0, length)}...` : text
+  }
+
+  parseAddress(address) {
+    let parts = []
+
+    let tpl = 'road, house_number, city, country'
+
+    tpl.split(', ').forEach((part) => {
+      if (address && address[part]) {
+        parts.push(address[part])
+      }
+    })
+
+    return parts.length ? parts.join(', ') : 'Mysterious location'
+  }
+
+  setName (text) {
+    this.el.getContent().querySelector('.js-name').textContent = text
+  }
+
+  setAddress (text) {
+    this.el.getContent().querySelector('.js-address').textContent = text
+    this.el.getContent().classList.add('has-address')
+  }
+
+
+  getName () {
+    return this.el.getContent().querySelector('.js-name').textContent
+  }
+
+
+  getDescription () {
+    return this.el.getContent().querySelector('.js-description').value
+  }
+
+  getAddress () {
+    return this.el.getContent().querySelector('.js-address').textContent
+  }
+
+  render () {
+    let classNames = []
+
+    if (this.readonly) {
+      classNames.push('is-readonly')
+    }
+
+    if (this.address) {
+      classNames.push('has-address')
+    }
+
+    let className = 'Popup'
+
+    this.el = L.popup({
+      className
+    })
+
+    let content = L.DomUtil.create('div', `Popup__content ${classNames.join(' ')}`)
+
+    let header = L.DomUtil.create('div', 'Popup__header js-name', content)
+
+    if (!this.readonly) {
+      header.contentEditable='true'
+    }
+
+    header.innerHTML = this.name
+
+    let body = L.DomUtil.create('div', 'Popup__body', content)
+
+    let comment = L.DomUtil.create('div', 'Popup__comment', body)
+    let controls = L.DomUtil.create('div', 'Popup__controls', body)
+
+    L.DomUtil.create('div', 'Popup__spinner Spinner', body)
+    L.DomUtil.create('div', 'Popup__success', body)
+
+    let description = L.DomUtil.create('div', 'Popup__description js-comment', comment)
+
+    if (this.description) {
+      description.innerText = this.description
+    }
+
+    let textarea = L.DomUtil.create('textarea', 'Popup__input js-description', comment)
+    textarea.setAttribute('placeholder', config.TEXTS.PLACEHOLDER)
+
+    textarea.onkeyup = (e) => {
+      let description = this.getDescription()
+
+      if (description.length > 0) {
+        this.enableSendButton()
+      } else {
+        this.disableSendButton()
+      }
+    }
+
+    if (this.description && this.description.length) {
+      textarea.innerText = this.description
+      window.bus.emit('enable-send-button')
+    }
+
+    let btn = L.DomUtil.create('button', 'Button Popup__button', controls)
+    btn.setAttribute('type', 'button')
+
+    let showAddLocation = true
+
+    btn.innerHTML = showAddLocation ? 'Add location' : 'Log in with Twitter'
+    btn.onclick =  showAddLocation ? this.addLocation.bind(this) : this.login.bind(this)
+
+    let address = L.DomUtil.create('div', 'Popup__address js-address', body)
+
+    if (this.address) {
+      address.innerText = this.address
+    }
+
+    this.el.setContent(content)
+
+    if (this.geocode) {
+      this.startGeocoding()
+    }
+
+    return this.el
+  }
+}
 class Map {
   constructor () {
     this.bindEvents()
@@ -229,7 +463,6 @@ class Map {
     this.coordinates = undefined
     this.options = {}
     this.marker = undefined
-    this.enableSend = true
   }
 
   bindEvents () {
@@ -251,7 +484,6 @@ class Map {
     this.toggleControl.getContainer().classList.toggle('is-expanded')
 
     setTimeout(() => {
-      console.log('invalidate')
       window.bus.emit(config.ACTIONS.INVALIDATE_MAP_SIZE)
     }, 200)
   }
@@ -264,112 +496,12 @@ class Map {
     return new L.Control.ZoomOut(opts)
   }
 
-  createPopup (coordinates, options = {}) {
-    let classNames = []
-
-    if (options.readonly) {
-      classNames.push('is-readonly')
-    }
-
-    if (options.address) {
-      classNames.push('has-address')
-    }
-
-    let className = 'Popup'
-
-    this.popup = L.popup({
-      className
-    })
-
-    let content = L.DomUtil.create('div', `Popup__content ${classNames.join(' ')}`)
-
-    let header = L.DomUtil.create('div', 'Popup__header js-name', content)
-
-    if (!options.readonly) {
-      header.contentEditable='true'
-    }
-
-    header.innerHTML = options.name
-
-    let body = L.DomUtil.create('div', 'Popup__body', content)
-
-    let comment = L.DomUtil.create('div', 'Popup__comment', body)
-    let controls = L.DomUtil.create('div', 'Popup__controls', body)
-
-    L.DomUtil.create('div', 'Popup__spinner Spinner', body)
-    L.DomUtil.create('div', 'Popup__success', body)
-
-    let description = L.DomUtil.create('div', 'Popup__description js-comment', comment)
-
-    if (options.description) {
-      description.innerText = options.description
-    }
-
-    let textarea = L.DomUtil.create('textarea', 'Popup__input js-description', comment)
-    textarea.setAttribute('placeholder', config.TEXTS.PLACEHOLDER)
-
-    textarea.onkeyup = (e) => {
-      let description = this.getDescription()
-
-      if (description.length > 0) {
-        this.enableSendButton()
-      } else {
-        this.disableSendButton()
-      }
-    }
-
-    if (options.description && options.description.length) {
-      textarea.innerText = options.description
-      this.enableSendButton()
-    }
-
-    let btn = L.DomUtil.create('button', 'Button Popup__button', controls)
-    btn.setAttribute('type', 'button')
-
-    let showAddLocation = true
-
-    btn.innerHTML = showAddLocation ? 'Add location' : 'Log in with Twitter'
-    btn.onclick =  showAddLocation ? this.addLocation.bind(this) : this.login.bind(this)
-
-    let address = L.DomUtil.create('div', 'Popup__address js-address', body)
-
-    if (options.address) {
-      address.innerText = options.address
-    }
-
-    this.popup.setContent(content)
-
-    if (options.geocode) {
-      this.geocode()
-    }
-
-    return this.popup
-  }
-
   startLoading () {
     window.bus.emit(config.ACTIONS.START_LOADING)
-    this.popup.getContent().classList.add('is-loading')
   }
 
   stopLoading () {
     window.bus.emit(config.ACTIONS.STOP_LOADING)
-    this.popup.getContent().classList.remove('is-loading')
-  }
-
-  setName (text) {
-    this.popup.getContent().querySelector('.js-name').textContent = text
-  }
-
-  getName () {
-    return document.body.querySelector('.js-name').textContent
-  }
-
-  getDescription () {
-    return document.body.querySelector('.js-description').value
-  }
-
-  getAddress () {
-    return document.body.querySelector('.js-address').textContent
   }
 
   setDescription (text) {
@@ -378,98 +510,6 @@ class Map {
     if (text && text.length) {
       this.enableSendButton()
     }
-  }
-
-  setAddress (text) {
-    this.popup.getContent().querySelector('.js-address').textContent = text
-    this.popup.getContent().classList.add('has-address')
-  }
-
-  parseAddress(address) {
-    let parts = []
-
-    let tpl = 'road, house_number, city, country'
-
-    tpl.split(', ').forEach((part) => {
-      if (address && address[part]) {
-        parts.push(address[part])
-      }
-    })
-
-    return parts.length ? parts.join(', ') : 'Mysterious location'
-  }
-
-  onGetGeocoding (response) {
-    response.json().then((result) => {
-      this.stopLoading()
-
-      let address = (result && this.parseAddress(result.address)) || result.display_name
-      let name = (result.namedetails && result.namedetails.name) || address || result.display_name
-
-      this.setName(this.truncate(name, MAX_TITLE_LENGTH))
-      this.setAddress(address)
-    })
-  }
-
-  parseAddress(address) {
-    let parts = []
-
-    let tpl = 'road, house_number, city, country'
-
-    tpl.split(', ').forEach((part) => {
-      if (address && address[part]) {
-        parts.push(address[part])
-      }
-    })
-
-    return parts.length ? parts.join(', ') : 'Mysterious location'
-  }
-
-  geocode () {
-    this.startLoading()
-
-    let lat = this.coordinates.lat
-    let lng = this.coordinates.lng
-    let extraParams = '&addressdetails=1&namedetails=1&extratags=1&zoom=18&format=json'
-
-    let url = `${config.ENDPOINTS.NOMINATIM}${config.ENDPOINTS.GEOCODE_URL}?lat=${lat}&lon=${lng}${extraParams}`
-
-    get(url)
-      .then(this.onGetGeocoding.bind(this))
-      .catch((error) => {
-        console.error(error)
-      })
-  }
-
-
-  enableSendButton () {
-    if (this.popup && this.popup.getContent()) {
-      this.popup.getContent().classList.add('can-send')
-      this.enableSend = true
-    }
-  }
-
-  disableSendButton () {
-    if (this.popup && this.popup.getContent()) {
-      this.popup.getContent().classList.remove('can-send')
-      this.enableSend = false
-    }
-  }
-
-  addLocation () {
-    console.log('sending', this.enableSend)
-    if (!this.enableSend) {
-      return
-    }
-
-    this.startLoading()
-
-    let address = this.getAddress()
-    let coordinates = this.coordinates
-    let description = this.getDescription()
-    let name = this.getName()
-
-    window.bus.emit(config.ACTIONS.ADD_LOCATION, { coordinates, name, description, address })
   }
 
   addLocations (locations) {
@@ -486,20 +526,19 @@ class Map {
     let user = location.user
     let address = location.address
 
-    this.popup = this.createPopup(latlng, { name, description, user, address, readonly: true })
+    this.popup = new Popup(latlng, { name, description, user, address, readonly: true })
 
     let icon = this.getIcon(null, location)
     let marker = L.marker(latlng, { icon, location })
 
     marker.on('click', () => {
-      console.log('click')
-      //window.bus.emit(config.ACTIONS.SELECT_MARKER, marker)
+      window.bus.emit(config.ACTIONS.SELECT_MARKER, marker)
     })
 
-    marker.bindPopup(this.popup, { maxWidth: 'auto' })
+    marker.bindPopup(this.popup.el, { maxWidth: 'auto' })
 
     this.cluster.addLayer(marker)
-    //window.bus.markers.push(marker)
+    window.bus.markers.push(marker)
   }
 
   bindKeys () {
@@ -534,6 +573,20 @@ class Map {
     this.marker = L.marker(latlng, { icon }).bindPopup(this.popup, { maxWidth: 'auto' }).addTo(this.map)
     this.marker.openPopup()
     this.map.setView(latlng, result.zoom)
+  }
+
+  parseAddress(address) { // TODO: remove duplication
+    let parts = []
+
+    let tpl = 'road, house_number, city, country'
+
+    tpl.split(', ').forEach((part) => {
+      if (address && address[part]) {
+        parts.push(address[part])
+      }
+    })
+
+    return parts.length ? parts.join(', ') : 'Mysterious location'
   }
 
   getIcon (emojis, location) {
@@ -586,29 +639,17 @@ class Map {
   openPopup (name, description, options = {}) {
     options = {...options, geocode: true, name, description }
 
-    this.disableSendButton()
-    this.popup = this.createPopup(this.coordinates, options)
+    this.popup = new Popup(this.coordinates, options)
 
     let icon = this.getIcon()
-    this.marker = L.marker(this.coordinates, { icon }).bindPopup(this.popup, { maxWidth: 'auto' }).addTo(this.map)
+    this.marker = L.marker(this.coordinates, { icon }).bindPopup(this.popup.el, { maxWidth: 'auto' }).addTo(this.map)
     this.marker.openPopup()
 
     this.map.setView(this.coordinates)
 
     setTimeout(() => {
-      this.focusOnPopup()
+      this.popup.focus()
     }, 500)
-  }
-
-  focusOnPopup () {
-    this.popup.getContent().querySelector('.js-description').focus()
-  }
-
-  truncate (text, length = 100) {
-    if (!text) {
-      return
-    }
-    return text.length > length ? `${text.substring(0, length)}...` : text
   }
 
   addControls () {
@@ -677,33 +718,21 @@ class Map {
 
     let options = { name, description, address, user, readonly: true }
 
-    this.popup = this.createPopup(this.coordinates, options)
+    this.popup = new Popup(this.coordinates, options)
 
     let emojis = undefined // this.extractEmojis(description)
     let icon = this.getIcon(emojis)
-    let marker = L.marker(this.coordinates, { icon, location }).bindPopup(this.popup, { maxWidth: 'auto' }).addTo(this.map)
+    let marker = L.marker(this.coordinates, { icon, location }).bindPopup(this.popup.el, { maxWidth: 'auto' }).addTo(this.map)
 
     window.bus.emit(config.ACTIONS.ADD_MARKER, marker)
     marker.openPopup()
 
-    this.showSuccess()
+    this.popup.showSuccess()
 
     setTimeout(() => {
-      this.focusOnPopup()
+      this.popup.focus()
     }, 500)
   }
-
-    showSuccess () {
-      this.popup.getContent().classList.add('was-successful')
-
-      setTimeout(() => {
-        this.hideSuccess()
-      }, 1500)
-    }
-
-    hideSuccess () {
-      this.popup.getContent().classList.remove('was-successful')
-    }
 
   showSavedLocation (data) {
     let latlng = [data.lat, data.lng]
@@ -743,29 +772,6 @@ class Map {
   fitBounds () {
     let group = L.featureGroup(window.bus.markers)
     this.map.fitBounds(group.getBounds())
-  }
-
-  addMarker (location) {
-    let latlng = [location.lat, location.lng]
-
-    let name = location.name
-    let description = location.description
-    let user = location.user
-    let address = location.address
-
-    this.popup = this.createPopup(latlng, { name, description, user, address, readonly: true })
-
-    let icon = this.getIcon(undefined, location)
-    let marker = L.marker(latlng, { icon, location })
-
-    marker.on('click', () => {
-      window.bus.emit(config.ACTIONS.SELECT_MARKER, marker)
-    })
-
-    marker.bindPopup(this.popup, { maxWidth: 'auto' })
-
-    this.cluster.addLayer(marker)
-    window.bus.markers.push(marker)
   }
 
   onPopupOpen (e) {

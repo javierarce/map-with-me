@@ -2,6 +2,7 @@ cat public/js/config.js \
     public/js/bus.js \
     public/js/locations.js \
     public/js/base.js \
+    public/js/popup.js \
     public/js/map.js \
     public/js/client.js \
     > public/js/dist/all.js

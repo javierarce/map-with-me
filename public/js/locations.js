@@ -28,7 +28,6 @@ class Locations {
 
   onGetAddedLocation (response) {
     response.json().then((result) => {
-      console.log(result)
       window.bus.emit(config.ACTIONS.SHOW_ADDED_LOCATION, result)
     })
   }
