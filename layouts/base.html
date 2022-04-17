@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>NLP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
+
+    <link rel="stylesheet" href="/leaflet/leaflet.css">
+    <link rel="stylesheet" media="all"  href="/css/style.css" type="text/css">
+
+    <script src="/leaflet/leaflet.js"></script>
+    <script src="/leaflet.markercluster/leaflet.markercluster-src.js"></script>
+
+    <% if (isDevelopment) { -%>
+    <link rel="stylesheet" href="/css/reset.css" />
+    <link rel="stylesheet" href="/css/transitions.css" />
+    <link rel="stylesheet" href="/css/tooltip.css" />
+    <link rel="stylesheet" href="/css/popup.css" />
+    <link rel="stylesheet" href="/css/map.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <script src="/js/config.js"></script>
+    <script src="/js/bus.js"></script>
+    <script src="/js/locations.js"></script>
+    <script src="/js/base.js"></script>
+    <script src="/js/map.js"></script>
+    <script src="/js/client.js"></script>
+    <% } else { -%>
+    <link rel="stylesheet" href="/css/dist/style.css" />
+    <script src="/js/dist/all.js"></script>
+    <% } -%>
+  </head>
+  <body>
+    <div id="app" class="App"><%- body %></div>
+  </body>
+</html>

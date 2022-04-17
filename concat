@@ -1,0 +1,15 @@
+cat public/js/config.js \
+    public/js/bus.js \
+    public/js/locations.js \
+    public/js/base.js \
+    public/js/map.js \
+    public/js/client.js \
+    > public/js/dist/all.js
+
+cat public/css/reset.css \
+    public/css/transitions.css \
+    public/css/tooltip.css \
+    public/css/popup.css \
+    public/css/style.css \
+    public/css/map.css \
+    > public/css/dist/style.css

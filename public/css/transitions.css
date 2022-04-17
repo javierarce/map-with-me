@@ -1,0 +1,46 @@
+@keyframes load8 {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes Gradient {
+  0% {
+    background-position: 0% 50%
+  }
+  50% {
+    background-position: 100% 50%
+  }
+  100% {
+    background-position: 0% 50%
+  }
+}
+
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 250ms ease-in-out;
+}
+
+.slide-fade-enter .has-transition, 
+.slide-fade-leave-to .has-transition {
+  transform: translateY(20px);
+  opacity: 0;
+}
+
+.slide-fade-enter .Config__backdrop, 
+.slide-fade-leave-to .Config__backdrop,
+.slide-fade-enter .About__backdrop, 
+.slide-fade-leave-to .About__backdrop,
+.slide-fade-enter .Alert__backdrop, 
+.slide-fade-leave-to .Alert__backdrop {
+  opacity: 0;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}

@@ -1,25 +1,39 @@
 {
   "name": "MapWithMe",
-    "version": "2.0.0",
-    "description": "Create collaborative maps with your friends (and enemies)",
-    "main": "server.js",
-    "license": "MIT",
-    "author": {
-      "name": "Javier Arce",
-      "email": "javierarce@gmail.com",
-      "url": "https://twitter.com/javier"
-    },
-    "bugs": {
-      "url": "https://github.com/javierarce/map-with-me/issues"
-    },
-    "devDependencies": {
-      "express": "^4.17.1",
-    },
-    "dependencies": {
-      "body-parser": "^1.19.0",
-      "dotenv": "^8.2.0",
-      "fs": "^0.0.1-security",
-      "leaflet": "^1.6.0",
-      "leaflet.markercluster": "^1.4.1"
-    }
+  "version": "2.0.0",
+  "description": "Create collaborative maps with your friends (and enemies)",
+  "main": "server.js",
+  "license": "MIT",
+  "author": {
+    "name": "Javier Arce",
+    "email": "javierarce@gmail.com",
+    "url": "https://twitter.com/javier"
+  },
+  "bugs": {
+    "url": "https://github.com/javierarce/map-with-me/issues"
+  },
+  "devDependencies": {
+    "express": "^4.17.1"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^16.0.0",
+    "ejs": "^3.1.6",
+    "emoji-regex": "^10.1.0",
+    "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.17.1",
+    "fs": "^0.0.1-security",
+    "helmet": "^5.0.2",
+    "passport": "^0.4.1",
+    "passport-twitter": "^1.0.4",
+    "leaflet": "^1.6.0",
+    "leaflet.markercluster": "^1.4.1",
+    "passport": "^0.5.2",
+    "passport-twitter": "^1.0.4",
+    "rss": "^1.2.2",
+    "sanitize-html": "^2.7.0",
+    "sequelize": "^6.19.0",
+    "sqlite3": "^5.0.3",
+    "yaml": "^2.0.1"
+  }
 }
