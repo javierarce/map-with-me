@@ -1,7 +1,7 @@
 map:
   DEFAULT_SEARCH_LOCATION: ""
   LAT: "39"
-  LON: "-37"
+  LNG: "-37"
   ZOOM: "4"
   FIT_BOUNDS: false
 admin:

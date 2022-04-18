@@ -29,18 +29,27 @@ const DB = new Storage()
 const Map = new Mapper(DB)
 
 
+app.use(express.static('public'))
+app.use(bodyParser.json())
+//app.use(helmet())
+
 app.use(session({ 
   secret: 'my-voice-is-my-passport-verify-me',
   resave: true,
   saveUninitialized: true
 }))
 
-app.use(express.static('public'))
-app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-
 app.use(passport.initialize())
 app.use(passport.session())
+
+passport.serializeUser((user, done) => {
+  done(null, user)
+})
+
+passport.deserializeUser((user, done) => {
+  done(null, user)
+})
 
 if (process.env.CONSUMER_KEY && process.env.CONSUMER_SECRET) {
   passport.use(new TwitterStrategy({
@@ -53,6 +62,7 @@ if (process.env.CONSUMER_KEY && process.env.CONSUMER_SECRET) {
     let username = profile.username
     let displayName = profile.displayName
     let profileImage = profile._json.profile_image_url_https.replace('_normal', '')
+    console.log(twitterID, username, displayName)
 
     DB.findOrCreate({ twitterID, username, displayName, profileImage }).then((user) => {
       done(null, user)
@@ -69,8 +79,9 @@ app.use('/emoji-regex', express.static(__dirname + '/node_modules/emoji-regex/')
 app.use('/leaflet', express.static(__dirname + '/node_modules/leaflet/dist'))
 app.use('/leaflet.markercluster', express.static(__dirname + '/node_modules/leaflet.markercluster/dist'))
 
-
 // API
+
+app.post('/api/recreate', (request, response) => { Map.onRecreateDB(request, response)})
 app.post('/api/add', (request, response) => { Map.onAddLocation(request, response)})
 app.post('/api/remove', (request, response) => { Map.onRemoveLocation(request, response)})
 app.post('/api/approve', (request, response) => { Map.onApproveLocation(request, response)})
@@ -84,6 +95,12 @@ app.get('/api/locations', (request, response) => { Map.onGetLocations(request, r
 app.get('/api/status', (request, response) => { Map.onGetStatus(request, response)})
 app.get('/api/reset', (request, response) => { Map.onRemoveSession(request, response)})
 
+app.get('/rss', (request, response) => { Map.onGetRSS(request, response)})
+app.get('/csv', (request, response) => { Map.onGetCSV(request, response)})
+app.get('/geojson', (request, response) => { Map.onGetGeoJSON(request, response)})
+
+app.get('/auth/twitter', passport.authenticate('twitter'))
+app.get('/auth/twitter/callback', passport.authenticate('twitter', { successRedirect: '/', failureRedirect: '/login' }))
 
 app.get('/', (request, response) => {
   const isDevelopment = process.env.MODE === 'DEVELOPMENT' ? true : false

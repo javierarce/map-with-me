@@ -17,7 +17,6 @@ class Locations {
     })
   }
 
-
   add ({ coordinates, name, description, address }) {
     post(config.ENDPOINTS.ADD, { coordinates, name, description, address })
       .then(this.onGetAddedLocation.bind(this))

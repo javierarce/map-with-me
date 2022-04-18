@@ -125,12 +125,12 @@
   visibility: visible;
 }
 .Popup__content.is-loading .Popup__controls {
-  opacity: 0;
-  visibility: hidden;
+  /*opacity: 0;*/
+  /*visibility: hidden;*/
 }
 .Popup__content.is-loading .Popup__comment {
-  opacity: 0;
-  visibility: hidden;
+  /*opacity: 0;*/
+  /*visibility: hidden;*/
 }
 
 .Popup__content.is-readonly .Popup__footer {

@@ -1,23 +1,30 @@
 const MAX_TITLE_LENGTH = 80
+const GEOCODING_EXTRA_PARAMS = '&addressdetails=1&namedetails=1&extratags=1&zoom=18&format=json'
+
 
 class Popup {
-  constructor (latlng, options) {
-    this.enableSend = true
-    this.latlng = latlng
+  constructor (coordinates, options) {
+    this.enableSend = false
+    this.coordinates = coordinates
     this.geocode = options.geocode || false
     this.name = options.name
     this.description = options.description
     this.user = options.user
     this.address = options.address
+    this.zoom = options.zoom
     this.readonly = options.readonly
 
     this.bindEvents()
     this.render()
+
+    if (this.geocode) {
+      this.startGeocoding()
+    }
   }
 
   bindEvents () {
-    window.bus.on(config.ACTIONS.START_LOADING, this.startLoading.bind(this))
-    window.bus.on(config.ACTIONS.STOP_LOADING, this.stopLoading.bind(this))
+    window.bus.on(config.ACTIONS.START_LOADING, this.onStartLoading.bind(this))
+    window.bus.on(config.ACTIONS.STOP_LOADING, this.onStopLoading.bind(this))
   }
 
   startLoading () {
@@ -25,6 +32,14 @@ class Popup {
   }
 
   stopLoading () {
+    this.el.getContent().classList.remove('is-loading')
+  }
+
+  onStartLoading () {
+    this.el.getContent().classList.add('is-loading')
+  }
+
+  onStopLoading () {
     this.el.getContent().classList.remove('is-loading')
   }
 
@@ -47,9 +62,9 @@ class Popup {
       return
     }
 
-    this.startLoading()
+    window.bus.emit(config.ACTIONS.START_LOADING)
 
-    let coordinates = this.latlng
+    let coordinates = this.coordinates
     let name = this.getName()
     let description = this.getDescription()
     let address = this.getAddress()
@@ -70,27 +85,22 @@ class Popup {
   }
 
   focus () {
-    this.el.getContent().querySelector('.js-description').focus()
-  }
-
-  startLoading () {
-    this.el.getContent().classList.add('is-loading')
-  }
-
-  stopLoading () {
-    this.el.getContent().classList.remove('is-loading')
+    setTimeout(() => {
+      this.el.getContent().querySelector('.js-description').focus()
+    }, 500)
   }
 
   startGeocoding () {
-    this.startLoading()
+    window.bus.emit(config.ACTIONS.START_LOADING)
+    this.setName('Geocoding…')
+    this.setAddress('Geocoding…')
 
-    let lat = this.latlng.lat
-    let lng = this.latlng.lng
-    let extraParams = '&addressdetails=1&namedetails=1&extratags=1&zoom=18&format=json'
+    let lat = this.coordinates.lat
+    let lng = this.coordinates.lng
 
-    let url = `${config.ENDPOINTS.NOMINATIM}${config.ENDPOINTS.GEOCODE_URL}?lat=${lat}&lon=${lng}${extraParams}`
+    let URL = `${config.ENDPOINTS.NOMINATIM}${config.ENDPOINTS.GEOCODE_URL}?lat=${lat}&lon=${lng}${GEOCODING_EXTRA_PARAMS}`
 
-    get(url)
+    get(URL)
       .then(this.onGetGeocoding.bind(this))
       .catch((error) => {
         console.error(error)
@@ -99,13 +109,14 @@ class Popup {
 
   onGetGeocoding (response) {
     response.json().then((result) => {
-      this.stopLoading()
+      window.bus.emit(config.ACTIONS.STOP_LOADING)
 
       let address = (result && this.parseAddress(result.address)) || result.display_name
       let name = (result.namedetails && result.namedetails.name) || address || result.display_name
 
       this.setName(this.truncate(name, MAX_TITLE_LENGTH))
       this.setAddress(address)
+      this.focus()
     })
   }
 
@@ -153,14 +164,35 @@ class Popup {
     return this.el.getContent().querySelector('.js-address').textContent
   }
 
+  login () {
+    this.startLoading()
+
+    let address = this.getAddress()
+    let coordinates = this.coordinates
+    let description = this.getDescription()
+    let name = this.getName()
+    let zoom = this.zoom
+
+    window.bus.emit(config.ACTIONS.LOGIN, { coordinates, zoom, name, description, address })
+  }
+
   render () {
     let classNames = []
+
+    if (window.bus.isLoggedIn()) {
+      classNames.push('is-logged')
+    } 
+
+    if (!window.bus.isLoggedIn() || this.description && this.description.length){
+      classNames.push('can-send')
+      this.enableSend = true
+    }
 
     if (this.readonly) {
       classNames.push('is-readonly')
     }
 
-    if (this.address) {
+    if (this.address || window.bus.isLoggedIn()) {
       classNames.push('has-address')
     }
 
@@ -182,6 +214,14 @@ class Popup {
 
     let body = L.DomUtil.create('div', 'Popup__body', content)
 
+    if (!window.bus.isAnonymous() && this.user) {
+      let footer = L.DomUtil.create('div', 'Popup__footer', content)
+
+      let user = L.DomUtil.create('a', 'Popup__user', footer)
+      user.href= `https://twitter.com/${this.user.username}`
+      user.innerText = `@${this.user.username}`
+    }
+
     let comment = L.DomUtil.create('div', 'Popup__comment', body)
     let controls = L.DomUtil.create('div', 'Popup__controls', body)
 
@@ -198,12 +238,21 @@ class Popup {
     textarea.setAttribute('placeholder', config.TEXTS.PLACEHOLDER)
 
     textarea.onkeyup = (e) => {
+
+      e = e || window.event
+
+      if (e.keyCode === 27) {
+        window.bus.emit('close-popup')
+      }
+
       let description = this.getDescription()
 
-      if (description.length > 0) {
-        this.enableSendButton()
-      } else {
-        this.disableSendButton()
+      if (window.bus.isLoggedIn()) {
+        if (description.length > 0) {
+          this.enableSendButton()
+        } else {
+          this.disableSendButton()
+        }
       }
     }
 
@@ -215,7 +264,7 @@ class Popup {
     let btn = L.DomUtil.create('button', 'Button Popup__button', controls)
     btn.setAttribute('type', 'button')
 
-    let showAddLocation = true
+    let showAddLocation = (window.bus.isLoggedIn() || window.bus.isAnonymous())
 
     btn.innerHTML = showAddLocation ? 'Add location' : 'Log in with Twitter'
     btn.onclick =  showAddLocation ? this.addLocation.bind(this) : this.login.bind(this)
@@ -227,10 +276,6 @@ class Popup {
     }
 
     this.el.setContent(content)
-
-    if (this.geocode) {
-      this.startGeocoding()
-    }
 
     return this.el
   }

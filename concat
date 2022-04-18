@@ -1,4 +1,5 @@
 cat public/js/config.js \
+    public/js/emojis.js \
     public/js/bus.js \
     public/js/locations.js \
     public/js/base.js \

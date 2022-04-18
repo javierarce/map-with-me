@@ -1,10 +1,10 @@
 class App {
   constructor () {
     this.map = new Map()
-    this.bindEvents()
-
     this.locations = new Locations()
-    this.locations.get()
+
+    this.bindEvents()
+    this.getStatus()
   }
 
   bindEvents () {
@@ -25,25 +25,56 @@ class App {
   onLoad () {
     document.body.classList.add('is-loaded')
   }
-    onStartLoading () {
-      document.body.classList.add('is-loading')
-    }
 
-    onStopLoading () {
-      document.body.classList.remove('is-loading')
-    }
+  getStatus () {
+    get(config.ENDPOINTS.STATUS)
+      .then(this.onGetStatus.bind(this))
+      .catch((error) => {
+        console.error(error)
+      })
+  }
 
-    onToggleConfig () {
-      this.showConfig = !this.showConfig
-    }
+  onGetStatus (response) {
+    response.json().then((result) => {
+      if (!result && !result.user) {
+        return
+      }
 
-    onToggleDestroy () {
-      this.showDestroy = !this.showDestroy
-    }
+      window.bus.user = result.user
+      window.bus.emit(config.ACTIONS.LOGGED_IN)
 
-    onToggleAbout () {
-      this.showAbout = !this.showAbout
-    }
+      if (result.coordinates) {
+        window.bus.emit(config.ACTIONS.SHOW_SAVED_LOCATION, result.coordinates)
+      }
+
+    this.locations.get()
+
+    }).catch((error) => {
+      console.error(error)
+    })
+  }
+
+  onStartLoading () {
+    console.log(1)
+    document.body.classList.add('is-loading')
+  }
+
+  onStopLoading () {
+    console.log(0)
+    document.body.classList.remove('is-loading')
+  }
+
+  onToggleConfig () {
+    this.showConfig = !this.showConfig
+  }
+
+  onToggleDestroy () {
+    this.showDestroy = !this.showDestroy
+  }
+
+  onToggleAbout () {
+    this.showAbout = !this.showAbout
+  }
 
   onToggleAlert (title, description, footer) {
     this.showAlert = !this.showAlert
@@ -57,15 +88,12 @@ class App {
   }
 
   onAddLocation ({ coordinates, name, description, address }) {
+    window.bus.emit(config.ACTIONS.START_LOADING)
     this.locations.add({ coordinates, name, description, address })
   }
 
-  onGetLocations (locations) {
-    this.map.addLocations(locations)
-  }
-
   onLogin ({ coordinates, zoom, name, description, address }) {
-    this.post(config.ENDPOINTS.SAVE, { coordinates, zoom, name, description, address }).then((response) => {
+    post(config.ENDPOINTS.SAVE, { coordinates, zoom, name, description, address }).then((response) => {
       window.location.href = config.ENDPOINTS.LOGIN_PATH
     })
   }

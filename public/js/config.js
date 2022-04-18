@@ -2,9 +2,17 @@ const config = {
   MAP: {
     DEFAULT_SEARCH_LOCATION: "",
     LAT: "39",
-    LON: "-37",
+    LNG: "-37",
     ZOOM: "4",
     FIT_BOUNDS: false
+  },
+
+  ADMIN: {
+    TITLE: 'Map with me your favorite places',
+    ADMIN_USERNAME: 'javier',
+    MODERATED: false,
+    PROTECTED: false,
+    ANONYMOUS: false
   },
 
   TEXTS: {

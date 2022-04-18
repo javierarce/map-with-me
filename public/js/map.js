@@ -1,3 +1,4 @@
+
 class Map {
   constructor () {
     this.bindEvents()
@@ -11,6 +12,7 @@ class Map {
   }
 
   bindEvents () {
+    window.bus.on('close-popup', this.closePopup.bind(this))
     window.bus.on(config.ACTIONS.ADD_LOCATIONS, this.onAddLocations.bind(this))
 
     window.bus.on(config.ACTIONS.REMOVE_MARKER, this.onRemoveMarker.bind(this))
@@ -20,6 +22,12 @@ class Map {
     window.bus.on(config.ACTIONS.SHOW_DEFAULT_POINT, this.showDefaultPoint.bind(this))
     window.bus.on(config.ACTIONS.SHOW_SAVED_LOCATION, this.showSavedLocation.bind(this))
     window.bus.on(config.ACTIONS.VISIT_MARKER, this.onVisitMarker.bind(this))
+  }
+
+  bindMapEvents () {
+    this.map.on('zoomend', this.onZoomEnd.bind(this))
+    this.map.on('popupopen', this.onPopupOpen.bind(this))
+    this.map.on('click', this.onMapClick.bind(this))
   }
 
   toggle () {
@@ -63,17 +71,29 @@ class Map {
     this.map.addLayer(this.cluster)
   }
 
+  flattenCoordinates (coordinates) {
+    return [coordinates.lat, coordinates.lng]
+  }
+
   addMarker (location) {
-    let latlng = [location.lat, location.lng]
+    if (!location.lat && !location.lng) {
+      console.log(location)
+      return
+    }
+
+    let coordinates = { lat: location.lat, lng: location.lng }
+    let latlng = this.flattenCoordinates(coordinates) 
 
     let name = location.name
     let description = location.description
     let user = location.user
     let address = location.address
+    let zoom = this.map.getZoom()
 
-    this.popup = new Popup(latlng, { name, description, user, address, readonly: true })
+    this.popup = new Popup(coordinates, { name, description, user, address, readonly: true, zoom })
 
-    let icon = this.getIcon(null, location)
+    let emojis = this.extractEmojis(description)
+    let icon = this.getIcon(emojis, location)
     let marker = L.marker(latlng, { icon, location })
 
     marker.on('click', () => {
@@ -84,6 +104,17 @@ class Map {
 
     this.cluster.addLayer(marker)
     window.bus.markers.push(marker)
+  }
+
+  extractEmojis (text) {
+    let emojis = []
+    let match
+
+    while (match = regexp.exec(text)) {
+      emojis.push(match[0])
+    }
+
+    return emojis
   }
 
   bindKeys () {
@@ -106,16 +137,16 @@ class Map {
   onSetView (result) {
     this.removeMarker()
 
-    let latlng = [result.lat, result.lon]
-    this.coordinates = { lat: latlng[0], lng: latlng[1] }
+    this.coordinates = { lat: result.lat, lng: result.lon }
+    let latlng = this.flattenCoordinates(this.coordinates)
 
     let name = result.display_name.split(',')[0]
     let address = (result && this.parseAddress(result.address)) || undefined
 
-    this.popup = this.createPopup(latlng, { name, address })
+    this.popup = new Popup(latlng, { name, address })
     let icon = this.getIcon()
 
-    this.marker = L.marker(latlng, { icon }).bindPopup(this.popup, { maxWidth: 'auto' }).addTo(this.map)
+    this.marker = L.marker(latlng, { icon }).bindPopup(this.popup.el, { maxWidth: 'auto' }).addTo(this.map)
     this.marker.openPopup()
     this.map.setView(latlng, result.zoom)
   }
@@ -167,8 +198,12 @@ class Map {
     this.openPopup()
   }
 
-  removeMarker () {
+  closePopup () {
     this.map.closePopup()
+  }
+
+  removeMarker () {
+    this.closePopup()
 
     if (this.marker) {
       this.marker.remove()
@@ -182,26 +217,20 @@ class Map {
   }
 
   openPopup (name, description, options = {}) {
-    options = {...options, geocode: true, name, description }
-
-    this.popup = new Popup(this.coordinates, options)
+    let zoom = this.map.getZoom()
+    let latlng = this.flattenCoordinates(this.coordinates)
+    this.popup = new Popup(this.coordinates, {...options, geocode: true, name, description, zoom })
 
     let icon = this.getIcon()
-    this.marker = L.marker(this.coordinates, { icon }).bindPopup(this.popup.el, { maxWidth: 'auto' }).addTo(this.map)
+    this.marker = L.marker(latlng, { icon }).bindPopup(this.popup.el, { maxWidth: 'auto' }).addTo(this.map)
     this.marker.openPopup()
-
-    this.map.setView(this.coordinates)
-
-    setTimeout(() => {
-      this.popup.focus()
-    }, 500)
+    this.map.setView(latlng)
   }
 
   addControls () {
     this.map.zoomControl.setPosition('topright')
 
     L.Control.ToggleExpand = L.Control.extend({
-      onRemove: () => { },
       onAdd: (map)  => {
         let div = L.DomUtil.create('div', 'ToggleControl')
         L.DomEvent.on(div, 'click', (e) => {
@@ -214,7 +243,6 @@ class Map {
     })
 
     L.Control.ZoomOut = L.Control.extend({
-      onRemove: () => { },
       onAdd: (map)  => {
         let div = L.DomUtil.create('div', 'ZoomOutControl')
         L.DomEvent.on(div, 'click', (e) => {
@@ -246,7 +274,7 @@ class Map {
   }
 
   showDefaultPoint () {
-    this.map.flyTo([config.MAP.LAT, config.MAP.LON], config.MAP.ZOOM, {
+    this.map.flyTo([config.MAP.LAT, config.MAP.LNG], config.MAP.ZOOM, {
       animate: true,
       duration: 1
     })
@@ -260,14 +288,17 @@ class Map {
     let description = location.description
     let address = location.address
     let user = location.user
+    let zoom = this.map.getZoom()
 
-    let options = { name, description, address, user, readonly: true }
+    let latlng = this.flattenCoordinates(this.coordinates)
+
+    let options = { name, description, address, user, readonly: true , zoom }
 
     this.popup = new Popup(this.coordinates, options)
 
-    let emojis = undefined // this.extractEmojis(description)
+    let emojis = this.extractEmojis(description)
     let icon = this.getIcon(emojis)
-    let marker = L.marker(this.coordinates, { icon, location }).bindPopup(this.popup.el, { maxWidth: 'auto' }).addTo(this.map)
+    let marker = L.marker(latlng, { icon, location }).bindPopup(this.popup.el, { maxWidth: 'auto' }).addTo(this.map)
 
     window.bus.emit(config.ACTIONS.ADD_MARKER, marker)
     marker.openPopup()
@@ -280,17 +311,18 @@ class Map {
   }
 
   showSavedLocation (data) {
-    let latlng = [data.lat, data.lng]
+    this.coordinates = { lat: data.lat, lng: data.lng }
+    let latlng = this.flattenCoordinates(this.coordinates)
 
-    this.coordinates = { lat: latlng[0], lng: latlng[1] }
     let name = data.name
     let description = data.description
     let address = data.address
 
-    this.popup = this.createPopup(latlng, { name, description, address })
+    this.popup = new Popup(this.coordinates, { name, description, address })
+
     let icon = this.getIcon()
 
-    this.marker = L.marker(latlng, { icon }).bindPopup(this.popup, { maxWidth: 'auto' }).addTo(this.map)
+    this.marker = L.marker(latlng, { icon }).bindPopup(this.popup.el, { maxWidth: 'auto' }).addTo(this.map)
     this.marker.openPopup()
     this.map.setView(latlng, data.zoom)
   }
@@ -334,7 +366,7 @@ class Map {
       maxBoundsViscosity: 1.0
     }
 
-    this.map = L.map('map', options).setView([config.MAP.LAT, config.MAP.LON], config.MAP.ZOOM)
+    this.map = L.map('map', options).setView([config.MAP.LAT, config.MAP.LNG], config.MAP.ZOOM)
 
     this.cluster = L.markerClusterGroup({
       spiderfyOnMaxZoom: false,
@@ -343,9 +375,7 @@ class Map {
 
     this.addControls()
 
-    this.map.on('zoomend', this.onZoomEnd.bind(this))
-    this.map.on('popupopen', this.onPopupOpen.bind(this))
-    this.map.on('click', this.onMapClick, this)
+    this.bindMapEvents()
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}' + (L.Browser.retina ? '@2x.png' : '.png'), {
       attribution:'&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attributions">CARTO</a>',
