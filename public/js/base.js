@@ -3,6 +3,30 @@ const killEvent = (e) => {
   e.preventDefault()
 }
 
+const truncate = (text, length = 100) => {
+  if (!text) {
+    return
+  }
+
+  return text.length > length ? `${text.substring(0, length)}...` : text
+}
+
+const extractNumber = (text) => {
+  let matches = text.match(/^(\d+|[a-z])\./)
+  return matches && matches[1]
+}
+
+const extractEmojis = (text) => {
+  let emojis = []
+  let match
+
+  while (match = regexp.exec(text)) {
+    emojis.push(match[0])
+  }
+
+  return emojis
+}
+
 const isEmpty = (obj) => {
   return Object.keys(obj).length === 0;
 }

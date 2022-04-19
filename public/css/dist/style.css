@@ -153,9 +153,12 @@ table {
 }
 .Popup__description {
   display: none;
-  padding: 16px;
+  padding: 16px 16px 8px 16px;
   font-size: 1.1em;
   line-height: 135%;
+  max-height: 186px;
+  overflow: hidden;
+  overflow-y: scroll;
 }
 
 .Popup__content .Popup__input {
@@ -189,11 +192,11 @@ table {
 
 .Popup__address {
   display: none;
-  font-size: .8em;
+  font-size: 0.8em;
   width: 100%;
   opacity: .5;
   line-height: 135%;
-  padding: 0 16px 16px 16px;
+  padding: 8px 16px 16px 16px;
 }
 
 .Popup__button {
@@ -485,6 +488,271 @@ button:hover {
 
 
 
+.is-loaded .Sidebar {
+  opacity: 1;
+  visibility: visible;
+}
+
+.is-expanded .Sidebar {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.Sidebar {
+  position: absolute;
+  right: 0;
+  color: #fff;
+  top: 60px;
+  bottom: 30px;
+  right: 36px;
+  width: 270px;
+  transition: opacity 250ms ease-in-out;
+  visibility: hidden; 
+  overflow: hidden;
+  overflow-y: scroll;
+  opacity: 0;
+  z-index: 10;
+}
+.Sidebar__content {
+  height: 100%;
+}
+
+.Sidebar__descriptionText  {
+  margin: 0 0 16px;
+}
+.Sidebar a {
+  color: #fff;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.Button.Sidebar__button {
+  display: inline-block;
+  border-radius: 4px;
+  width: 100%;
+  margin: auto;
+  font-size: 1em;
+  padding: 16px 0;
+  border: none;
+  outline: none;
+  border: 1px solid rgba(255, 255,255, 0.2);
+  color: #fff;
+  font-weight: normal;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: none;
+  transition: background 250ms ease-in-out;
+}
+
+.Button.Sidebar__button {
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.1);
+}
+.Sidebar__footer {
+  font-size: .7em;
+  line-height: 135%;
+  position: absolute;
+  bottom: 0;
+  opacity: 0.8;
+}
+
+.Sidebar__footer a {
+  color: #fff;
+  font-weight: bold;
+}
+
+@media only screen and (max-width: 800px) {
+  .Sidebar {
+    display: none;
+  }
+  .Sidebar__footer {
+    position: relative;
+    margin: 0 0 16px 0;
+  }
+}
+.Locations {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+.Locations__none {
+  display: flex;
+  width: 100%;
+  border: none;
+  padding: 16px 32px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255,255, 0.2);
+  transition: background 150ms ease-in-out, visibility 250ms ease-in-out, opacity 250ms ease-in-out;
+  text-align: center;
+  height: 100%;
+}
+.Locations__item:hover {
+  box-shadow: 2px 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.Location.is-active .Locations__item {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 2px 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.Location.is-rejected .Locations__item .Locations__itemName,
+.Location.is-rejected .Locations__item .Locations__itemDescription,
+.Location.is-rejected .Locations__item .Locations__itemAddress {
+  opacity: 0.4;
+}
+.Locations__item:hover {
+  cursor: pointer;
+}
+.Locations__item {
+  width: 100%;
+  border: none;
+  padding: 16px;
+  margin: 0 0 16px 0;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255,255, 0.2);
+  transition: box-shadow 150ms ease-in-out, background 150ms ease-in-out, visibility 250ms ease-in-out, opacity 250ms ease-in-out;
+  text-align: left;
+  font-size: 1em;
+  outline: none;
+  background: transparent;
+  color: #fff;
+  text-decoration: none;
+  box-shadow: none;
+  -webkit-appearance: none;
+}
+.Locations__item.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+.Locations__itemName {
+  margin: 0 0 8px 0;
+  font-weight: bold;
+}
+.Locations__itemDescription {
+  margin: 0 0 8px 0;
+}
+.Locations__itemAddress {
+  font-size: 0.7em;
+  color: rgba(0,0,0, 0.3);
+}
+.Locations__itemFooterOptions > * {
+  margin: 0 0 0 8px;
+}
+.Locations__itemFooterOptions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.Locations__itemFooter {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  font-size: .8em;
+  opacity: 0.8;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  margin: 8px 0 0 0;
+  padding: 8px 0 0 0;
+}
+
+@media only screen and (max-width: 800px) {
+  .Locations {
+    display: none;
+  }
+}
+.is-loaded .Header {
+  opacity: 1;
+  visibility: visible;
+}
+
+.Header {
+  position: absolute;
+  padding: 0 30px;
+  top: 20px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  visibility: hidden; 
+  opacity: 0;
+  transition: opacity 250ms ease-in-out;
+  z-index: 1000;
+}
+
+.Header__info {
+  display: flex;
+  align-items: center;
+}
+
+.Header__description {
+  color: #fff;
+  opacity: .6;
+}
+
+.Header__title {
+  font-weight: bold;
+  font-size: 1.4em;
+  color: #fff;
+  margin: 0 8px 0 0;
+}
+.is-expanded .Header__links {
+  opacity: 0;
+}
+
+.Header__links {
+  display: flex;
+  align-items: center;
+  transition: opacity 250ms cubic-bezier(1.000, 0.000, 0.000, 1.000);
+  margin: 0 10px 0 0;
+}
+.Header__linksItem.is-hidden {
+  display: none;
+}
+.Header__linksItem.with-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 12px;
+}
+.Header__linksItemUsername {
+  margin: 0 8px 0 0;
+}
+.Header__linksItemAvatar {
+  width: 28px;
+  height: 28px;
+}
+
+.Header__linksItem.with-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 100%;
+}
+
+.Header__linksItem {
+  font-size: 1em;
+  font-weight: bold;
+  color: #fff;
+  margin: 0 0 0 16px;
+}
+
+@media only screen and (max-width: 800px) {
+  .Header {
+    align-items: flex-end;
+    width: 100%;
+    padding: 0 20px;
+  }
+  .Header__info {
+    justify-content: space-between;
+  }
+  .Header__linksItem {
+    font-size: 1em;
+  }
+}
 .is-expanded .Map__container {
   width: 100%;
 }
@@ -605,10 +873,20 @@ button:hover {
   transition: border 150ms ease-in-out, background 150ms ease-in-out, transform 250ms cubic-bezier(0,0,0.25,1); 
 }
 
+.leaflet-marker-icon.icon.leaflet-zoom-animated.leaflet-interactive.has-order {
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #fff;
+}
 
 .leaflet-marker-icon.icon.leaflet-zoom-animated.leaflet-interactive:hover {
 	border: 8px solid #fff;
 }
+
 .leaflet-marker-icon.icon.leaflet-zoom-animated.leaflet-interactive.has-emoji {
   display: flex;
   justify-content: center;

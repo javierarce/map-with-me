@@ -34,6 +34,21 @@ class Bus {
     return config.ADMIN.PROTECTED
   }
 
+  findMarkerById (id) {
+    let found = undefined
+
+    for (let i = 0; i < this.markers.length; i++) {
+      let marker = this.markers[i]
+
+      if (id ===  marker.options.location.id) {
+        found =  marker
+        break
+      }
+    }
+
+    return found
+  }
+
   on (name, callback) {
     this.$el.addEventListener(name, (e) => {
       callback && callback(e.detail)

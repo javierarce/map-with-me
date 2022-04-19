@@ -114,19 +114,16 @@ class Popup {
       let address = (result && this.parseAddress(result.address)) || result.display_name
       let name = (result.namedetails && result.namedetails.name) || address || result.display_name
 
-      this.setName(this.truncate(name, MAX_TITLE_LENGTH))
+      this.setName(truncate(name, MAX_TITLE_LENGTH))
       this.setAddress(address)
       this.focus()
     })
   }
 
-  truncate (text, length = 100) {
-    if (!text) {
-      return
-    }
-    return text.length > length ? `${text.substring(0, length)}...` : text
+  removeOrderFromText (text) {
+     return text.replace(/^(\d+|[a-z])\./, '').trim()
   }
-
+  
   parseAddress(address) {
     let parts = []
 
@@ -155,7 +152,6 @@ class Popup {
     return this.el.getContent().querySelector('.js-name').textContent
   }
 
-
   getDescription () {
     return this.el.getContent().querySelector('.js-description').value
   }
@@ -183,9 +179,8 @@ class Popup {
       classNames.push('is-logged')
     } 
 
-    if (!window.bus.isLoggedIn() || this.description && this.description.length){
+    if (this.description && this.description.length){
       classNames.push('can-send')
-      this.enableSend = true
     }
 
     if (this.readonly) {
@@ -231,7 +226,7 @@ class Popup {
     let description = L.DomUtil.create('div', 'Popup__description js-comment', comment)
 
     if (this.description) {
-      description.innerText = this.description
+      description.innerText = this.removeOrderFromText(this.description)
     }
 
     let textarea = L.DomUtil.create('textarea', 'Popup__input js-description', comment)
@@ -247,12 +242,10 @@ class Popup {
 
       let description = this.getDescription()
 
-      if (window.bus.isLoggedIn()) {
-        if (description.length > 0) {
-          this.enableSendButton()
-        } else {
-          this.disableSendButton()
-        }
+      if (description.length > 0) {
+        this.enableSendButton()
+      } else {
+        this.disableSendButton()
       }
     }
 

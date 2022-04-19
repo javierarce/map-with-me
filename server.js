@@ -76,11 +76,11 @@ app.use(expressLayouts)
 app.set('layout', '../layouts/base')
 
 app.use('/emoji-regex', express.static(__dirname + '/node_modules/emoji-regex/'))
+app.use('/ejs', express.static(__dirname + '/node_modules/ejs'))
 app.use('/leaflet', express.static(__dirname + '/node_modules/leaflet/dist'))
 app.use('/leaflet.markercluster', express.static(__dirname + '/node_modules/leaflet.markercluster/dist'))
 
 // API
-
 app.post('/api/recreate', (request, response) => { Map.onRecreateDB(request, response)})
 app.post('/api/add', (request, response) => { Map.onAddLocation(request, response)})
 app.post('/api/remove', (request, response) => { Map.onRemoveLocation(request, response)})

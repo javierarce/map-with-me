@@ -1,0 +1,82 @@
+.is-loaded .Sidebar {
+  opacity: 1;
+  visibility: visible;
+}
+
+.is-expanded .Sidebar {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.Sidebar {
+  position: absolute;
+  right: 0;
+  color: #fff;
+  top: 60px;
+  bottom: 30px;
+  right: 36px;
+  width: 270px;
+  transition: opacity 250ms ease-in-out;
+  visibility: hidden; 
+  overflow: hidden;
+  overflow-y: scroll;
+  opacity: 0;
+  z-index: 10;
+}
+.Sidebar__content {
+  height: 100%;
+}
+
+.Sidebar__descriptionText  {
+  margin: 0 0 16px;
+}
+.Sidebar a {
+  color: #fff;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.Button.Sidebar__button {
+  display: inline-block;
+  border-radius: 4px;
+  width: 100%;
+  margin: auto;
+  font-size: 1em;
+  padding: 16px 0;
+  border: none;
+  outline: none;
+  border: 1px solid rgba(255, 255,255, 0.2);
+  color: #fff;
+  font-weight: normal;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: none;
+  transition: background 250ms ease-in-out;
+}
+
+.Button.Sidebar__button {
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.1);
+}
+.Sidebar__footer {
+  font-size: .7em;
+  line-height: 135%;
+  position: absolute;
+  bottom: 0;
+  opacity: 0.8;
+}
+
+.Sidebar__footer a {
+  color: #fff;
+  font-weight: bold;
+}
+
+@media only screen and (max-width: 800px) {
+  .Sidebar {
+    display: none;
+  }
+  .Sidebar__footer {
+    position: relative;
+    margin: 0 0 16px 0;
+  }
+}

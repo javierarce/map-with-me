@@ -102,6 +102,21 @@ class Bus {
     return config.ADMIN.PROTECTED
   }
 
+  findMarkerById (id) {
+    let found = undefined
+
+    for (let i = 0; i < this.markers.length; i++) {
+      let marker = this.markers[i]
+
+      if (id ===  marker.options.location.id) {
+        found =  marker
+        break
+      }
+    }
+
+    return found
+  }
+
   on (name, callback) {
     this.$el.addEventListener(name, (e) => {
       callback && callback(e.detail)
@@ -155,9 +170,184 @@ class Locations {
     })
   }
 }
+class Location {
+  constructor (data) {
+    console.log(data)
+    this.location = data.location
+    this.user = data.location.user
+    this.marker = data.marker
+
+    this.isActive = false
+    this.username = this.user && this.user.username
+  }
+
+  template () {
+
+    return `
+      <button :data-id="${this.location.id}" class="Locations__item" class="">
+        <div class="Locations__itemName">${this.location.name}</div>
+        <div class="Locations__itemDescription">${this.location.description}</div>
+        <div class="Locations__itemAddress">${this.location.address}</div>
+          <% if (showFooter) { %>
+        <div class="Locations__itemFooter">
+          <div class="Locations__itemUser">@<%= username %></div>
+          <div class="Locations__itemFooterOptions">
+
+          <% if (showApproveItem) { %>
+            <button class="Locations__itemApprove js-approve"><%= approveLabel %></button>
+            <% } %>
+          <% if (showRemoveItem) { %>
+            <button class="Locations__itemRemove js-remove">delete</button>
+          <% } %>
+          </div>
+          <% } %>
+        </div>
+      </button>
+    `
+  }
+
+  showFooter () {
+    return this.showApproveItem(this.location || this.user)
+  }
+
+  showApproveItem () {
+    return window.bus.isModerated() && (window.bus.isLoggedIn() && window.bus.user.username === window.bus.getAdminUsername() && !this.isMyMarker())
+  }
+
+  showRemoveItem () {
+    return window.bus.isLoggedIn() && (this.isMyMarker() || window.bus.isAdmin())
+  }
+
+  getApproveLabel () {
+    return this.location.approved ? 'reject' : 'approve'
+  }
+
+  isMyMarker () {
+    return this.user ? (this.user.username === window.bus.user.username) : false
+  }
+
+  onClickRemove (e) {
+    killEvent(e)
+
+    let confirmation = confirm('Are you sure you want to delete this location?')
+
+    if (confirmation) {
+      let location = this.location
+
+      this.post(config.ENDPOINTS.REMOVE, { location })
+        .then(this.onRemoveLocation.bind(this))
+        .catch((error) => {
+          console.log(error)
+        })
+    }
+  }
+
+  onToggleApprove (response) {
+    response.json().then((result) => {
+      if (result) {
+        let marker = this.markers.find(marker => marker.options.location.id === result.id)
+        marker.options.location.approved = result.approved
+
+        if (result.approved) {
+          marker.getElement().classList.remove('is-disabled')
+        } else {
+          marker.getElement().classList.add('is-disabled')
+        }
+      }
+    })
+  }
+
+  onClick () {
+    //if (this.isActive) {
+      //return
+    //}
+
+    this.activateMarker()
+    console.log()
+    window.bus.emit(config.ACTIONS.VISIT_MARKER, this.marker)
+  }
+
+  activateMarker () {
+    this.isActive = true
+
+    let classes = this.itemClass()
+
+    if (classes) {
+      this.$el.classList.add(classes)
+    }
+  }
+
+  onSelectMarker (marker) {
+    this.activateMarker()
+
+    let $item = this.getItemById(marker.options.location.id) 
+    $item.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  removeMarker (id) {
+    window.bus.emit(config.ACTIONS.REMOVE_MARKER, id)
+  }
+
+  isMarkerRejected () {
+    return !this.location.approved
+  }
+
+  itemClass () {
+    let classes = []
+
+    if (this.isActive) {
+      classes.push('is-active')
+    }
+
+    if (window.bus.isAdmin() && this.isMarkerRejected()) {
+      classes.push('is-rejected')
+    }
+
+    return classes.join(' ')
+  }
+
+  render () {
+    this.$el = createElement({ className: 'Location'})
+    let html = ejs.render(this.template(), { username: this.username, showFooter: this.showFooter(), showApproveItem: this.showApproveItem(), showRemoveItem: this.showRemoveItem(), approveLabel: this.getApproveLabel() })
+    this.$el.insertAdjacentHTML('beforeend', html)
+    let classes = this.itemClass()
+
+    if (classes) {
+      this.$el.classList.add(classes)
+    }
+
+    this.$el.onclick = this.onClick.bind(this)
+
+    return this
+  }
+}
 const killEvent = (e) => {
   e.stopPropagation()
   e.preventDefault()
+}
+
+const truncate = (text, length = 100) => {
+  if (!text) {
+    return
+  }
+
+  return text.length > length ? `${text.substring(0, length)}...` : text
+}
+
+const extractNumber = (text) => {
+  let matches = text.match(/^(\d+|[a-z])\./)
+  return matches && matches[1]
+}
+
+const extractEmojis = (text) => {
+  let emojis = []
+  let match
+
+  while (match = regexp.exec(text)) {
+    emojis.push(match[0])
+  }
+
+  return emojis
 }
 
 const isEmpty = (obj) => {
@@ -369,19 +559,16 @@ class Popup {
       let address = (result && this.parseAddress(result.address)) || result.display_name
       let name = (result.namedetails && result.namedetails.name) || address || result.display_name
 
-      this.setName(this.truncate(name, MAX_TITLE_LENGTH))
+      this.setName(truncate(name, MAX_TITLE_LENGTH))
       this.setAddress(address)
       this.focus()
     })
   }
 
-  truncate (text, length = 100) {
-    if (!text) {
-      return
-    }
-    return text.length > length ? `${text.substring(0, length)}...` : text
+  removeOrderFromText (text) {
+     return text.replace(/^(\d+|[a-z])\./, '').trim()
   }
-
+  
   parseAddress(address) {
     let parts = []
 
@@ -410,7 +597,6 @@ class Popup {
     return this.el.getContent().querySelector('.js-name').textContent
   }
 
-
   getDescription () {
     return this.el.getContent().querySelector('.js-description').value
   }
@@ -438,9 +624,8 @@ class Popup {
       classNames.push('is-logged')
     } 
 
-    if (!window.bus.isLoggedIn() || this.description && this.description.length){
+    if (this.description && this.description.length){
       classNames.push('can-send')
-      this.enableSend = true
     }
 
     if (this.readonly) {
@@ -486,7 +671,7 @@ class Popup {
     let description = L.DomUtil.create('div', 'Popup__description js-comment', comment)
 
     if (this.description) {
-      description.innerText = this.description
+      description.innerText = this.removeOrderFromText(this.description)
     }
 
     let textarea = L.DomUtil.create('textarea', 'Popup__input js-description', comment)
@@ -502,12 +687,10 @@ class Popup {
 
       let description = this.getDescription()
 
-      if (window.bus.isLoggedIn()) {
-        if (description.length > 0) {
-          this.enableSendButton()
-        } else {
-          this.disableSendButton()
-        }
+      if (description.length > 0) {
+        this.enableSendButton()
+      } else {
+        this.disableSendButton()
       }
     }
 
@@ -614,7 +797,6 @@ class Map {
 
   addMarker (location) {
     if (!location.lat && !location.lng) {
-      console.log(location)
       return
     }
 
@@ -629,8 +811,10 @@ class Map {
 
     this.popup = new Popup(coordinates, { name, description, user, address, readonly: true, zoom })
 
-    let emojis = this.extractEmojis(description)
-    let icon = this.getIcon(emojis, location)
+    let emojis = extractEmojis(description)
+    let number = extractNumber(description)
+
+    let icon = this.getIcon({ emojis, number, location })
     let marker = L.marker(latlng, { icon, location })
 
     marker.on('click', () => {
@@ -639,19 +823,10 @@ class Map {
 
     marker.bindPopup(this.popup.el, { maxWidth: 'auto' })
 
+    window.bus.emit(config.ACTIONS.ADD_MARKER, { location, marker })
+
     this.cluster.addLayer(marker)
     window.bus.markers.push(marker)
-  }
-
-  extractEmojis (text) {
-    let emojis = []
-    let match
-
-    while (match = regexp.exec(text)) {
-      emojis.push(match[0])
-    }
-
-    return emojis
   }
 
   bindKeys () {
@@ -665,9 +840,12 @@ class Map {
   }
 
   onVisitMarker (marker) {
-    this.map.setView(marker.getLatLng(), 17, { animate: true, easeLinearity: .5, duration: 0.250 })
+    let location = marker.getLatLng()
+    let latlng = [ location.lat, location.lng ]
+
+    this.map.setView(latlng, 20, { animate: true, easeLinearity: .5, duration: 0.250 })
     setTimeout(() => {
-      marker.fire('click')
+        marker.fire('click')
     }, 500)
   }
 
@@ -681,7 +859,7 @@ class Map {
     let address = (result && this.parseAddress(result.address)) || undefined
 
     this.popup = new Popup(latlng, { name, address })
-    let icon = this.getIcon()
+    let icon = this.getIcon({})
 
     this.marker = L.marker(latlng, { icon }).bindPopup(this.popup.el, { maxWidth: 'auto' }).addTo(this.map)
     this.marker.openPopup()
@@ -702,7 +880,7 @@ class Map {
     return parts.length ? parts.join(', ') : 'Mysterious location'
   }
 
-  getIcon (emojis, location) {
+  getIcon ({ location, emojis, number }) {
     let html = ''
 
     let classNames = [ 'icon' ]
@@ -711,7 +889,10 @@ class Map {
       classNames.push('is-disabled')
     }
 
-    if (emojis && emojis.length) {
+    if (number) {
+      html = number
+      classNames.push('has-order')
+    } else if (emojis && emojis.length) {
       html = emojis[0]
       classNames.push('has-emoji')
     }
@@ -758,7 +939,7 @@ class Map {
     let latlng = this.flattenCoordinates(this.coordinates)
     this.popup = new Popup(this.coordinates, {...options, geocode: true, name, description, zoom })
 
-    let icon = this.getIcon()
+    let icon = this.getIcon({})
     this.marker = L.marker(latlng, { icon }).bindPopup(this.popup.el, { maxWidth: 'auto' }).addTo(this.map)
     this.marker.openPopup()
     this.map.setView(latlng)
@@ -833,11 +1014,13 @@ class Map {
 
     this.popup = new Popup(this.coordinates, options)
 
-    let emojis = this.extractEmojis(description)
-    let icon = this.getIcon(emojis)
+    let emojis = extractEmojis(description)
+    let number = extractNumber(description)
+
+    let icon = this.getIcon({ emojis, number })
     let marker = L.marker(latlng, { icon, location }).bindPopup(this.popup.el, { maxWidth: 'auto' }).addTo(this.map)
 
-    window.bus.emit(config.ACTIONS.ADD_MARKER, marker)
+    window.bus.emit(config.ACTIONS.ADD_MARKER, { location, marker })
     marker.openPopup()
 
     this.popup.showSuccess()
@@ -857,7 +1040,7 @@ class Map {
 
     this.popup = new Popup(this.coordinates, { name, description, address })
 
-    let icon = this.getIcon()
+    let icon = this.getIcon({})
 
     this.marker = L.marker(latlng, { icon }).bindPopup(this.popup.el, { maxWidth: 'auto' }).addTo(this.map)
     this.marker.openPopup()
@@ -922,13 +1105,135 @@ class Map {
     }).addTo(this.map)
   }
 }
+class Header {
+  constructor () {
+    this.canLogin = false
+    this.title = window.bus.getTitle()
+    this.loggedIn = false
+    this.username = undefined
+    this.avatarURL = undefined
+    this.canLogin = !window.bus.isAnonymous()
+    this.unlogged = this.canLogin && this.loggedIn
+    this.allowToLog = this.canLogin && !this.loggedIn
+
+    this.bindEvents()
+  }
+
+  template () {
+    return `
+    <div class="Header__info">
+      <button class="Button Header__title js-button">${this.title}</button>
+      <Search />
+    </div>
+    <div class="Header__links js-links">
+      <button class="Button Header__linksItem js-about">About</button>
+      <button class="Button Header__linksItem js-config">Config</button>
+    </div>
+    `
+  }
+
+  bindEvents () {
+    window.bus.on(config.ACTIONS.LOGGED_IN, this.onLoggedIn.bind(this))
+  }
+
+  onClickTitle () {
+    window.bus.emit(config.ACTIONS.SHOW_DEFAULT_POINT)
+  }
+
+  onClickConfig () {
+    window.bus.emit(config.ACTIONS.TOGGLE_CONFIG)
+  }
+
+  onClickAbout () {
+    window.bus.emit(config.ACTIONS.TOGGLE_ABOUT)
+  }
+
+  onClickLogin () {
+    if (window.bus.isLoggedIn()) {
+      console.log('logout') // TODO
+    } else {
+      window.location.href = config.ENDPOINTS.LOGIN_PATH
+    }
+  }
+
+  onLoggedIn () {
+    this.loggedIn = window.bus.isLoggedIn()
+
+    if (this.loggedIn) {
+      this.avatarURL = window.bus.user.profileImage
+      this.username = `@${window.bus.user.username}`
+      this.$login.innerHTML = this.username
+
+    }
+  }
+
+  render () {
+    this.$el = createElement({ className: 'Header'})
+    this.$el.insertAdjacentHTML('beforeend', this.template())
+
+    this.$links = this.$el.querySelector('.js-links')
+
+    this.$title = this.$el.querySelector('.js-button')
+    this.$title.onclick = this.onClickTitle.bind(this)
+
+    this.$login = createElement({ elementType: 'button', className: 'Button Header__linksItem', text: 'Log in' })
+    this.$login.onclick = this.onClickLogin.bind(this)
+
+    this.$links.appendChild(this.$login)
+
+    return this.$el
+  }
+}
+
+class Sidebar {
+  constructor () {
+    this.locations = []
+
+    this.bindEvents()
+
+  let people = ['geddy', 'neil', 'alex'];
+  let html = ejs.render('<%= people.join(", "); %>', {people: people});
+    console.log(html)
+  }
+
+  bindEvents () {
+    window.bus.on(config.ACTIONS.ADD_MARKER, this.onAddLocation.bind(this))
+    window.bus.on(config.ACTIONS.SELECT_MARKER, this.onSelectMarker.bind(this))
+  }
+
+  template () {
+    return `<div class="Sidebar__content js-content"></div>`
+  }
+
+  onAddLocation (data) {
+    let location = new Location(data)
+    this.locations.push(location)
+    this.$content.appendChild(location.render().$el)
+  }
+
+  onSelectMarker () {
+  }
+
+  render () {
+    this.$el = createElement({ className: 'Sidebar'})
+    this.$el.insertAdjacentHTML('beforeend', this.template())
+    this.$content = this.$el.querySelector('.js-content')
+    return this.$el
+  }
+}
 class App {
   constructor () {
+    this.$el = getElement('.App')
+
+    this.header = new Header()
+    this.sidebar = new Sidebar()
+
     this.map = new Map()
     this.locations = new Locations()
 
     this.bindEvents()
     this.getStatus()
+    this.render()
   }
 
   bindEvents () {
@@ -1020,6 +1325,11 @@ class App {
     post(config.ENDPOINTS.SAVE, { coordinates, zoom, name, description, address }).then((response) => {
       window.location.href = config.ENDPOINTS.LOGIN_PATH
     })
+  }
+
+  render () {
+    this.$el.appendChild(this.header.render())
+    this.$el.appendChild(this.sidebar.render())
   }
 }
 

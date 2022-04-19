@@ -1,8 +1,11 @@
 .Popup__description {
   display: none;
-  padding: 16px;
+  padding: 16px 16px 8px 16px;
   font-size: 1.1em;
   line-height: 135%;
+  max-height: 186px;
+  overflow: hidden;
+  overflow-y: scroll;
 }
 
 .Popup__content .Popup__input {
@@ -36,11 +39,11 @@
 
 .Popup__address {
   display: none;
-  font-size: .8em;
+  font-size: 0.8em;
   width: 100%;
   opacity: .5;
   line-height: 135%;
-  padding: 0 16px 16px 16px;
+  padding: 8px 16px 16px 16px;
 }
 
 .Popup__button {

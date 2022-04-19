@@ -1,10 +1,16 @@
 class App {
   constructor () {
+    this.$el = getElement('.App')
+
+    this.header = new Header()
+    this.sidebar = new Sidebar()
+
     this.map = new Map()
     this.locations = new Locations()
 
     this.bindEvents()
     this.getStatus()
+    this.render()
   }
 
   bindEvents () {
@@ -96,6 +102,11 @@ class App {
     post(config.ENDPOINTS.SAVE, { coordinates, zoom, name, description, address }).then((response) => {
       window.location.href = config.ENDPOINTS.LOGIN_PATH
     })
+  }
+
+  render () {
+    this.$el.appendChild(this.header.render())
+    this.$el.appendChild(this.sidebar.render())
   }
 }
 

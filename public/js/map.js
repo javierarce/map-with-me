@@ -77,7 +77,6 @@ class Map {
 
   addMarker (location) {
     if (!location.lat && !location.lng) {
-      console.log(location)
       return
     }
 
@@ -92,8 +91,10 @@ class Map {
 
     this.popup = new Popup(coordinates, { name, description, user, address, readonly: true, zoom })
 
-    let emojis = this.extractEmojis(description)
-    let icon = this.getIcon(emojis, location)
+    let emojis = extractEmojis(description)
+    let number = extractNumber(description)
+
+    let icon = this.getIcon({ emojis, number, location })
     let marker = L.marker(latlng, { icon, location })
 
     marker.on('click', () => {
@@ -102,19 +103,10 @@ class Map {
 
     marker.bindPopup(this.popup.el, { maxWidth: 'auto' })
 
+    window.bus.emit(config.ACTIONS.ADD_MARKER, { location, marker })
+
     this.cluster.addLayer(marker)
     window.bus.markers.push(marker)
-  }
-
-  extractEmojis (text) {
-    let emojis = []
-    let match
-
-    while (match = regexp.exec(text)) {
-      emojis.push(match[0])
-    }
-
-    return emojis
   }
 
   bindKeys () {
@@ -128,9 +120,12 @@ class Map {
   }
 
   onVisitMarker (marker) {
-    this.map.setView(marker.getLatLng(), 17, { animate: true, easeLinearity: .5, duration: 0.250 })
+    let location = marker.getLatLng()
+    let latlng = [ location.lat, location.lng ]
+
+    this.map.setView(latlng, 20, { animate: true, easeLinearity: .5, duration: 0.250 })
     setTimeout(() => {
-      marker.fire('click')
+        marker.fire('click')
     }, 500)
   }
 
@@ -144,7 +139,7 @@ class Map {
     let address = (result && this.parseAddress(result.address)) || undefined
 
     this.popup = new Popup(latlng, { name, address })
-    let icon = this.getIcon()
+    let icon = this.getIcon({})
 
     this.marker = L.marker(latlng, { icon }).bindPopup(this.popup.el, { maxWidth: 'auto' }).addTo(this.map)
     this.marker.openPopup()
@@ -165,7 +160,7 @@ class Map {
     return parts.length ? parts.join(', ') : 'Mysterious location'
   }
 
-  getIcon (emojis, location) {
+  getIcon ({ location, emojis, number }) {
     let html = ''
 
     let classNames = [ 'icon' ]
@@ -174,7 +169,10 @@ class Map {
       classNames.push('is-disabled')
     }
 
-    if (emojis && emojis.length) {
+    if (number) {
+      html = number
+      classNames.push('has-order')
+    } else if (emojis && emojis.length) {
       html = emojis[0]
       classNames.push('has-emoji')
     }
@@ -221,7 +219,7 @@ class Map {
     let latlng = this.flattenCoordinates(this.coordinates)
     this.popup = new Popup(this.coordinates, {...options, geocode: true, name, description, zoom })
 
-    let icon = this.getIcon()
+    let icon = this.getIcon({})
     this.marker = L.marker(latlng, { icon }).bindPopup(this.popup.el, { maxWidth: 'auto' }).addTo(this.map)
     this.marker.openPopup()
     this.map.setView(latlng)
@@ -296,11 +294,13 @@ class Map {
 
     this.popup = new Popup(this.coordinates, options)
 
-    let emojis = this.extractEmojis(description)
-    let icon = this.getIcon(emojis)
+    let emojis = extractEmojis(description)
+    let number = extractNumber(description)
+
+    let icon = this.getIcon({ emojis, number })
     let marker = L.marker(latlng, { icon, location }).bindPopup(this.popup.el, { maxWidth: 'auto' }).addTo(this.map)
 
-    window.bus.emit(config.ACTIONS.ADD_MARKER, marker)
+    window.bus.emit(config.ACTIONS.ADD_MARKER, { location, marker })
     marker.openPopup()
 
     this.popup.showSuccess()
@@ -320,7 +320,7 @@ class Map {
 
     this.popup = new Popup(this.coordinates, { name, description, address })
 
-    let icon = this.getIcon()
+    let icon = this.getIcon({})
 
     this.marker = L.marker(latlng, { icon }).bindPopup(this.popup.el, { maxWidth: 'auto' }).addTo(this.map)
     this.marker.openPopup()
