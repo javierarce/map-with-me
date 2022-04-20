@@ -115,7 +115,7 @@ class Popup {
     response.json().then((result) => {
       window.bus.emit(config.ACTIONS.STOP_LOADING)
 
-      let address = (result && this.parseAddress(result.address)) || result.display_name
+      let address = (result && parseAddress(result.address)) || result.display_name
       let name = (result.namedetails && result.namedetails.name) || address || result.display_name
 
       this.setName(truncate(name, MAX_TITLE_LENGTH))
@@ -128,20 +128,6 @@ class Popup {
      return text.replace(/^(\d+|[a-z])\./, '').trim()
   }
   
-  parseAddress(address) {
-    let parts = []
-
-    let tpl = 'road, house_number, city, country'
-
-    tpl.split(', ').forEach((part) => {
-      if (address && address[part]) {
-        parts.push(address[part])
-      }
-    })
-
-    return parts.length ? parts.join(', ') : 'Mysterious location'
-  }
-
   setName (text) {
     this.el.getContent().querySelector('.js-name').textContent = text
   }

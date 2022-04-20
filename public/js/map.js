@@ -26,8 +26,30 @@ class Map {
 
   bindMapEvents () {
     this.map.on('zoomend', this.onZoomEnd.bind(this))
-    this.map.on('popupopen', this.onPopupOpen.bind(this))
     this.map.on('click', this.onMapClick.bind(this))
+  }
+
+  onZoomEnd () {
+    let zoom = this.map.getZoom()
+
+    if (zoom > 6) {
+      if (!this.zoomOutControl) {
+        this.zoomOutControl = this.createZoomOut({ position: 'topright' }).addTo(this.map)
+      }
+    } else {
+      if (this.zoomOutControl) {
+        this.zoomOutControl.remove()
+        this.zoomOutControl = undefined
+      }
+    }
+  }
+
+  onMapClick (e) {
+    if (this.removeMarker()) {
+      return
+    }
+
+    this.openPopup(e.latlng)
   }
 
   toggle () {
@@ -148,7 +170,7 @@ class Map {
     let latlng = this.flattenCoordinates(this.coordinates)
 
     let name = result.display_name.split(',')[0]
-    let address = (result && this.parseAddress(result.address)) || undefined
+    let address = (result && parseAddress(result.address)) || undefined
 
     this.popup = new Popup(latlng, { name, address })
     let icon = this.getIcon({})
@@ -156,20 +178,6 @@ class Map {
     this.marker = L.marker(latlng, { icon }).bindPopup(this.popup.el, { maxWidth: 'auto' }).addTo(this.map)
     this.marker.openPopup()
     this.map.setView(latlng, result.zoom)
-  }
-
-  parseAddress(address) { // TODO: remove duplication
-    let parts = []
-
-    let tpl = 'road, house_number, city, country'
-
-    tpl.split(', ').forEach((part) => {
-      if (address && address[part]) {
-        parts.push(address[part])
-      }
-    })
-
-    return parts.length ? parts.join(', ') : 'Mysterious location'
   }
 
   getIcon ({ location, emojis, number }) {
@@ -197,14 +205,6 @@ class Map {
       iconSize: [32, 32],
       iconAnchor: new L.Point(16, 0)
     })
-  }
-
-  onMapClick (e) {
-    if (this.removeMarker()) {
-      return
-    }
-
-    this.openPopup(e.latlng)
   }
 
   closePopup () {
@@ -267,21 +267,6 @@ class Map {
     this.toggleControl = this.createToggleExpand({ position: 'topright' }).addTo(this.map)
   }
 
-  onZoomEnd () {
-    let zoom = this.map.getZoom()
-
-    if (zoom > 6) {
-      if (!this.zoomOutControl) {
-        this.zoomOutControl = this.createZoomOut({ position: 'topright' }).addTo(this.map)
-      }
-    } else {
-      if (this.zoomOutControl) {
-        this.zoomOutControl.remove()
-        this.zoomOutControl = undefined
-      }
-    }
-  }
-
   showDefaultPoint () {
     this.map.flyTo([config.MAP.LAT, config.MAP.LNG], config.MAP.ZOOM, {
       animate: true,
@@ -325,14 +310,6 @@ class Map {
   fitBounds () {
     let group = L.featureGroup(window.bus.markers)
     this.map.fitBounds(group.getBounds())
-  }
-
-  onPopupOpen (e) {
-    setTimeout(() => {
-      let px = this.map.project(e.popup._latlng)
-      px.y -= e.popup._container.clientHeight/2 
-      this.map.panTo(this.map.unproject(px),{ animate: true })
-    }, 800)
   }
 
   render () {

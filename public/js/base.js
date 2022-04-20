@@ -11,6 +11,20 @@ const truncate = (text, length = 100) => {
   return text.length > length ? `${text.substring(0, length)}...` : text
 }
 
+const parseAddress = (address) => { 
+  let parts = []
+
+  let tpl = 'road, house_number, city, country'
+
+  tpl.split(', ').forEach((part) => {
+    if (address && address[part]) {
+      parts.push(address[part])
+    }
+  })
+
+  return parts.length ? parts.join(', ') : 'Mysterious location'
+}
+
 const extractNumber = (text) => {
   let matches = text.match(/^(\d+|[a-z])\./)
   return matches && matches[1]
