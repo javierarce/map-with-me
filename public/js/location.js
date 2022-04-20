@@ -10,9 +10,8 @@ class Location {
   }
 
   template () {
-
     return `
-      <button :data-id="${this.location.id}" class="Locations__item" class="">
+      <div :data-id="${this.location.id}" class="Locations__item">
         <div class="Locations__itemName">${this.location.name}</div>
         <div class="Locations__itemDescription">${this.location.description}</div>
         <div class="Locations__itemAddress">${this.location.address}</div>
@@ -20,22 +19,17 @@ class Location {
         <div class="Locations__itemFooter">
           <div class="Locations__itemUser">@<%= username %></div>
           <div class="Locations__itemFooterOptions">
-
-          <% if (showApproveItem) { %>
-            <button class="Locations__itemApprove js-approve"><%= approveLabel %></button>
-            <% } %>
-          <% if (showRemoveItem) { %>
-            <button class="Locations__itemRemove js-remove">delete</button>
-          <% } %>
+          <% if (showApproveItem) { %><button class="Locations__itemApprove js-approve"><%= approveLabel %></button><% } %>
+          <% if (showRemoveItem) { %><button class="Locations__itemRemove js-remove">delete</button><% } %>
           </div>
           <% } %>
         </div>
-      </button>
+      </div>
     `
   }
 
   showFooter () {
-    return this.showApproveItem(this.location || this.user)
+    return this.location || this.user
   }
 
   showApproveItem () {
@@ -57,17 +51,32 @@ class Location {
   onClickRemove (e) {
     killEvent(e)
 
+    //window.bus.emit(config.ACTIONS.REMOVE_LOCATION, this.marker)
+
     let confirmation = confirm('Are you sure you want to delete this location?')
 
     if (confirmation) {
       let location = this.location
 
-      this.post(config.ENDPOINTS.REMOVE, { location })
+      post(config.ENDPOINTS.REMOVE, { location })
         .then(this.onRemoveLocation.bind(this))
         .catch((error) => {
           console.log(error)
         })
     }
+  }
+
+  onRemoveLocation (response) {
+    response.json().then((result) => {
+      if (result && !result.error) {
+        this.$el.classList.add('is-hidden')
+        this.removeMarker()
+
+        setTimeout(() => {
+          this.$el.remove()
+        }, 500)
+      }
+    })
   }
 
   onToggleApprove (response) {
@@ -84,16 +93,14 @@ class Location {
       }
     })
   }
-
-  onClick () {
-    //if (this.isActive) {
+    onClick () {
+      //if (this.isActive) {
       //return
-    //}
+      //}
 
-    this.activateMarker()
-    console.log()
-    window.bus.emit(config.ACTIONS.VISIT_MARKER, this.marker)
-  }
+      this.activateMarker()
+      window.bus.emit(config.ACTIONS.VISIT_MARKER, this.marker)
+    }
 
   activateMarker () {
     this.isActive = true
@@ -112,8 +119,8 @@ class Location {
     $item.scrollIntoView({ behavior: 'smooth' })
   }
 
-  removeMarker (id) {
-    window.bus.emit(config.ACTIONS.REMOVE_MARKER, id)
+  removeMarker () {
+    window.bus.emit(config.ACTIONS.REMOVE_MARKER, this.location.id)
   }
 
   isMarkerRejected () {
@@ -138,6 +145,7 @@ class Location {
     this.$el = createElement({ className: 'Location'})
     let html = ejs.render(this.template(), { username: this.username, showFooter: this.showFooter(), showApproveItem: this.showApproveItem(), showRemoveItem: this.showRemoveItem(), approveLabel: this.getApproveLabel() })
     this.$el.insertAdjacentHTML('beforeend', html)
+
     let classes = this.itemClass()
 
     if (classes) {
@@ -145,6 +153,8 @@ class Location {
     }
 
     this.$el.onclick = this.onClick.bind(this)
+    this.$remove = this.$el.querySelector('.js-remove')
+    this.$remove.onclick = this.onClickRemove.bind(this)
 
     return this
   }

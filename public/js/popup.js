@@ -43,6 +43,10 @@ class Popup {
     this.el.getContent().classList.remove('is-loading')
   }
 
+  canSend () {
+    return this.getDescription().length > 0
+  }
+
   enableSendButton () {
     if (this.el && this.el.getContent()) {
       this.el.getContent().classList.add('can-send')
@@ -58,7 +62,7 @@ class Popup {
   }
 
   addLocation () {
-    if (!this.enableSend) {
+    if (!this.canSend()) {
       return
     }
 

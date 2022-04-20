@@ -182,9 +182,8 @@ class Location {
   }
 
   template () {
-
     return `
-      <button :data-id="${this.location.id}" class="Locations__item" class="">
+      <div :data-id="${this.location.id}" class="Locations__item">
         <div class="Locations__itemName">${this.location.name}</div>
         <div class="Locations__itemDescription">${this.location.description}</div>
         <div class="Locations__itemAddress">${this.location.address}</div>
@@ -192,22 +191,17 @@ class Location {
         <div class="Locations__itemFooter">
           <div class="Locations__itemUser">@<%= username %></div>
           <div class="Locations__itemFooterOptions">
-
-          <% if (showApproveItem) { %>
-            <button class="Locations__itemApprove js-approve"><%= approveLabel %></button>
-            <% } %>
-          <% if (showRemoveItem) { %>
-            <button class="Locations__itemRemove js-remove">delete</button>
-          <% } %>
+          <% if (showApproveItem) { %><button class="Locations__itemApprove js-approve"><%= approveLabel %></button><% } %>
+          <% if (showRemoveItem) { %><button class="Locations__itemRemove js-remove">delete</button><% } %>
           </div>
           <% } %>
         </div>
-      </button>
+      </div>
     `
   }
 
   showFooter () {
-    return this.showApproveItem(this.location || this.user)
+    return this.location || this.user
   }
 
   showApproveItem () {
@@ -229,17 +223,32 @@ class Location {
   onClickRemove (e) {
     killEvent(e)
 
+    //window.bus.emit(config.ACTIONS.REMOVE_LOCATION, this.marker)
+
     let confirmation = confirm('Are you sure you want to delete this location?')
 
     if (confirmation) {
       let location = this.location
 
-      this.post(config.ENDPOINTS.REMOVE, { location })
+      post(config.ENDPOINTS.REMOVE, { location })
         .then(this.onRemoveLocation.bind(this))
         .catch((error) => {
           console.log(error)
         })
     }
+  }
+
+  onRemoveLocation (response) {
+    response.json().then((result) => {
+      if (result && !result.error) {
+        this.$el.classList.add('is-hidden')
+        this.removeMarker()
+
+        setTimeout(() => {
+          this.$el.remove()
+        }, 500)
+      }
+    })
   }
 
   onToggleApprove (response) {
@@ -256,16 +265,14 @@ class Location {
       }
     })
   }
-
-  onClick () {
-    //if (this.isActive) {
+    onClick () {
+      //if (this.isActive) {
       //return
-    //}
+      //}
 
-    this.activateMarker()
-    console.log()
-    window.bus.emit(config.ACTIONS.VISIT_MARKER, this.marker)
-  }
+      this.activateMarker()
+      window.bus.emit(config.ACTIONS.VISIT_MARKER, this.marker)
+    }
 
   activateMarker () {
     this.isActive = true
@@ -284,8 +291,8 @@ class Location {
     $item.scrollIntoView({ behavior: 'smooth' })
   }
 
-  removeMarker (id) {
-    window.bus.emit(config.ACTIONS.REMOVE_MARKER, id)
+  removeMarker () {
+    window.bus.emit(config.ACTIONS.REMOVE_MARKER, this.location.id)
   }
 
   isMarkerRejected () {
@@ -310,6 +317,7 @@ class Location {
     this.$el = createElement({ className: 'Location'})
     let html = ejs.render(this.template(), { username: this.username, showFooter: this.showFooter(), showApproveItem: this.showApproveItem(), showRemoveItem: this.showRemoveItem(), approveLabel: this.getApproveLabel() })
     this.$el.insertAdjacentHTML('beforeend', html)
+
     let classes = this.itemClass()
 
     if (classes) {
@@ -317,6 +325,8 @@ class Location {
     }
 
     this.$el.onclick = this.onClick.bind(this)
+    this.$remove = this.$el.querySelector('.js-remove')
+    this.$remove.onclick = this.onClickRemove.bind(this)
 
     return this
   }
@@ -488,6 +498,10 @@ class Popup {
     this.el.getContent().classList.remove('is-loading')
   }
 
+  canSend () {
+    return this.getDescription().length > 0
+  }
+
   enableSendButton () {
     if (this.el && this.el.getContent()) {
       this.el.getContent().classList.add('can-send')
@@ -503,7 +517,7 @@ class Popup {
   }
 
   addLocation () {
-    if (!this.enableSend) {
+    if (!this.canSend()) {
       return
     }
 
@@ -785,7 +799,7 @@ class Map {
     }
   }
 
-  addLocations (locations) {
+  onAddLocations (locations) {
     locations.forEach(this.addMarker.bind(this)) 
     window.bus.emit(config.ACTIONS.ON_LOAD)
     this.map.addLayer(this.cluster)
@@ -793,6 +807,20 @@ class Map {
 
   flattenCoordinates (coordinates) {
     return [coordinates.lat, coordinates.lng]
+  }
+  
+  onShowAddedLocation (location) {
+    this.stopLoading()
+    this.removeMarker()
+
+    let marker = this.addMarker(location)
+
+    marker.openPopup()
+    this.popup.showSuccess()
+
+    //setTimeout(() => {
+      //this.popup.focus()
+    //}, 500)
   }
 
   addMarker (location) {
@@ -827,6 +855,8 @@ class Map {
 
     this.cluster.addLayer(marker)
     window.bus.markers.push(marker)
+
+    return marker
   }
 
   bindKeys () {
@@ -998,37 +1028,6 @@ class Map {
     })
   }
 
-  onShowAddedLocation (location) {
-    this.stopLoading()
-    this.removeMarker()
-
-    let name = location.name
-    let description = location.description
-    let address = location.address
-    let user = location.user
-    let zoom = this.map.getZoom()
-
-    let latlng = this.flattenCoordinates(this.coordinates)
-
-    let options = { name, description, address, user, readonly: true , zoom }
-
-    this.popup = new Popup(this.coordinates, options)
-
-    let emojis = extractEmojis(description)
-    let number = extractNumber(description)
-
-    let icon = this.getIcon({ emojis, number })
-    let marker = L.marker(latlng, { icon, location }).bindPopup(this.popup.el, { maxWidth: 'auto' }).addTo(this.map)
-
-    window.bus.emit(config.ACTIONS.ADD_MARKER, { location, marker })
-    marker.openPopup()
-
-    this.popup.showSuccess()
-
-    setTimeout(() => {
-      this.popup.focus()
-    }, 500)
-  }
 
   showSavedLocation (data) {
     this.coordinates = { lat: data.lat, lng: data.lng }
@@ -1054,16 +1053,10 @@ class Map {
 
     if (index !== -1) {
       this.map.removeLayer(window.bus.markers[index])
-      this.$delete(window.bus.markers, index)
+      window.bus.markers.splice(index, 1)
     } else {
       console.error('Marker not found', window.bus.markers)
     }
-  }
-
-  onAddLocations (locations) {
-    locations.forEach(this.addMarker.bind(this)) 
-    window.bus.emit(config.ACTIONS.ON_LOAD)
-    this.map.addLayer(this.cluster)
   }
 
   fitBounds () {
@@ -1190,10 +1183,6 @@ class Sidebar {
     this.locations = []
 
     this.bindEvents()
-
-  let people = ['geddy', 'neil', 'alex'];
-  let html = ejs.render('<%= people.join(", "); %>', {people: people});
-    console.log(html)
   }
 
   bindEvents () {

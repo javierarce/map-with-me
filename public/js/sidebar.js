@@ -3,10 +3,6 @@ class Sidebar {
     this.locations = []
 
     this.bindEvents()
-
-  let people = ['geddy', 'neil', 'alex'];
-  let html = ejs.render('<%= people.join(", "); %>', {people: people});
-    console.log(html)
   }
 
   bindEvents () {

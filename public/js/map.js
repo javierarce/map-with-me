@@ -65,7 +65,7 @@ class Map {
     }
   }
 
-  addLocations (locations) {
+  onAddLocations (locations) {
     locations.forEach(this.addMarker.bind(this)) 
     window.bus.emit(config.ACTIONS.ON_LOAD)
     this.map.addLayer(this.cluster)
@@ -73,6 +73,20 @@ class Map {
 
   flattenCoordinates (coordinates) {
     return [coordinates.lat, coordinates.lng]
+  }
+  
+  onShowAddedLocation (location) {
+    this.stopLoading()
+    this.removeMarker()
+
+    let marker = this.addMarker(location)
+
+    marker.openPopup()
+    this.popup.showSuccess()
+
+    //setTimeout(() => {
+      //this.popup.focus()
+    //}, 500)
   }
 
   addMarker (location) {
@@ -107,6 +121,8 @@ class Map {
 
     this.cluster.addLayer(marker)
     window.bus.markers.push(marker)
+
+    return marker
   }
 
   bindKeys () {
@@ -278,37 +294,6 @@ class Map {
     })
   }
 
-  onShowAddedLocation (location) {
-    this.stopLoading()
-    this.removeMarker()
-
-    let name = location.name
-    let description = location.description
-    let address = location.address
-    let user = location.user
-    let zoom = this.map.getZoom()
-
-    let latlng = this.flattenCoordinates(this.coordinates)
-
-    let options = { name, description, address, user, readonly: true , zoom }
-
-    this.popup = new Popup(this.coordinates, options)
-
-    let emojis = extractEmojis(description)
-    let number = extractNumber(description)
-
-    let icon = this.getIcon({ emojis, number })
-    let marker = L.marker(latlng, { icon, location }).bindPopup(this.popup.el, { maxWidth: 'auto' }).addTo(this.map)
-
-    window.bus.emit(config.ACTIONS.ADD_MARKER, { location, marker })
-    marker.openPopup()
-
-    this.popup.showSuccess()
-
-    setTimeout(() => {
-      this.popup.focus()
-    }, 500)
-  }
 
   showSavedLocation (data) {
     this.coordinates = { lat: data.lat, lng: data.lng }
@@ -334,16 +319,10 @@ class Map {
 
     if (index !== -1) {
       this.map.removeLayer(window.bus.markers[index])
-      this.$delete(window.bus.markers, index)
+      window.bus.markers.splice(index, 1)
     } else {
       console.error('Marker not found', window.bus.markers)
     }
-  }
-
-  onAddLocations (locations) {
-    locations.forEach(this.addMarker.bind(this)) 
-    window.bus.emit(config.ACTIONS.ON_LOAD)
-    this.map.addLayer(this.cluster)
   }
 
   fitBounds () {
