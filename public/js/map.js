@@ -45,9 +45,7 @@ class Map {
   }
 
   onMapClick (e) {
-    if (this.removeMarker()) {
-      return
-    }
+    this.removeMarker()
 
     this.openPopup(e.latlng)
   }
@@ -88,7 +86,7 @@ class Map {
   }
 
   onAddLocations (locations) {
-    locations.forEach(this.addMarker.bind(this)) 
+    locations.reverse().forEach(this.addMarker.bind(this)) 
     window.bus.emit(config.ACTIONS.ON_LOAD)
     this.map.addLayer(this.cluster)
   }

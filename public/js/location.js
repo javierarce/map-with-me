@@ -6,7 +6,7 @@ class Location {
     this.marker = data.marker
 
     this.isActive = false
-    this.username = this.user && this.user.username
+    this.username = this.user && this.user.username ? `@${this.user.username}` : 'Anonymous'
   }
 
   template () {
@@ -17,19 +17,19 @@ class Location {
         <div class="Locations__itemAddress">${this.location.address}</div>
           <% if (showFooter) { %>
         <div class="Locations__itemFooter">
-          <div class="Locations__itemUser">@<%= username %></div>
+          <div class="Locations__itemUser"><%= username %></div>
           <div class="Locations__itemFooterOptions">
           <% if (showApproveItem) { %><button class="Locations__itemApprove js-approve"><%= approveLabel %></button><% } %>
           <% if (showRemoveItem) { %><button class="Locations__itemRemove js-remove">delete</button><% } %>
           </div>
-          <% } %>
+         <% } %>
         </div>
       </div>
     `
   }
 
   showFooter () {
-    return this.location || this.user
+    return this.username || this.showApproveItem() || this.showRemoveItem()
   }
 
   showApproveItem () {
@@ -46,6 +46,10 @@ class Location {
 
   isMyMarker () {
     return this.user ? (this.user.username === window.bus.user.username) : false
+  }
+
+  onClickApprove (e) {
+    killEvent(e)
   }
 
   onClickRemove (e) {
@@ -153,8 +157,18 @@ class Location {
     }
 
     this.$el.onclick = this.onClick.bind(this)
+
     this.$remove = this.$el.querySelector('.js-remove')
-    this.$remove.onclick = this.onClickRemove.bind(this)
+
+    if (this.$remove) {
+      this.$remove.onclick = this.onClickRemove.bind(this)
+    }
+
+    this.$approve = this.$el.querySelector('.js-approve')
+
+    if (this.$approve) {
+      this.$approve.onclick = this.onClickApprove.bind(this)
+    }
 
     return this
   }

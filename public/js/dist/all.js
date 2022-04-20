@@ -10,9 +10,9 @@ const config = {
   ADMIN: {
     TITLE: 'Map with me your favorite places',
     ADMIN_USERNAME: 'javier',
-    MODERATED: false,
+    MODERATED: true,
     PROTECTED: false,
-    ANONYMOUS: false
+    ANONYMOUS: true
   },
 
   TEXTS: {
@@ -178,7 +178,7 @@ class Location {
     this.marker = data.marker
 
     this.isActive = false
-    this.username = this.user && this.user.username
+    this.username = this.user && this.user.username ? `@${this.user.username}` : 'Anonymous'
   }
 
   template () {
@@ -189,19 +189,19 @@ class Location {
         <div class="Locations__itemAddress">${this.location.address}</div>
           <% if (showFooter) { %>
         <div class="Locations__itemFooter">
-          <div class="Locations__itemUser">@<%= username %></div>
+          <div class="Locations__itemUser"><%= username %></div>
           <div class="Locations__itemFooterOptions">
           <% if (showApproveItem) { %><button class="Locations__itemApprove js-approve"><%= approveLabel %></button><% } %>
           <% if (showRemoveItem) { %><button class="Locations__itemRemove js-remove">delete</button><% } %>
           </div>
-          <% } %>
+         <% } %>
         </div>
       </div>
     `
   }
 
   showFooter () {
-    return this.location || this.user
+    return this.username || this.showApproveItem() || this.showRemoveItem()
   }
 
   showApproveItem () {
@@ -218,6 +218,10 @@ class Location {
 
   isMyMarker () {
     return this.user ? (this.user.username === window.bus.user.username) : false
+  }
+
+  onClickApprove (e) {
+    killEvent(e)
   }
 
   onClickRemove (e) {
@@ -325,8 +329,18 @@ class Location {
     }
 
     this.$el.onclick = this.onClick.bind(this)
+
     this.$remove = this.$el.querySelector('.js-remove')
-    this.$remove.onclick = this.onClickRemove.bind(this)
+
+    if (this.$remove) {
+      this.$remove.onclick = this.onClickRemove.bind(this)
+    }
+
+    this.$approve = this.$el.querySelector('.js-approve')
+
+    if (this.$approve) {
+      this.$approve.onclick = this.onClickApprove.bind(this)
+    }
 
     return this
   }
@@ -779,9 +793,7 @@ class Map {
   }
 
   onMapClick (e) {
-    if (this.removeMarker()) {
-      return
-    }
+    this.removeMarker()
 
     this.openPopup(e.latlng)
   }
@@ -822,7 +834,7 @@ class Map {
   }
 
   onAddLocations (locations) {
-    locations.forEach(this.addMarker.bind(this)) 
+    locations.reverse().forEach(this.addMarker.bind(this)) 
     window.bus.emit(config.ACTIONS.ON_LOAD)
     this.map.addLayer(this.cluster)
   }
@@ -1107,6 +1119,10 @@ class Header {
     window.bus.emit(config.ACTIONS.SHOW_DEFAULT_POINT)
   }
 
+  onClickAbout () {
+    window.bus.emit(config.ACTIONS.TOGGLE_ABOUT)
+  }
+
   onClickConfig () {
     window.bus.emit(config.ACTIONS.TOGGLE_CONFIG)
   }
@@ -1143,6 +1159,9 @@ class Header {
     this.$title = this.$el.querySelector('.js-button')
     this.$title.onclick = this.onClickTitle.bind(this)
 
+    this.$about = this.$el.querySelector('.js-about')
+    this.$about.onclick = this.onClickAbout.bind(this)
+
     this.$login = createElement({ elementType: 'button', className: 'Button Header__linksItem', text: 'Log in' })
     this.$login.onclick = this.onClickLogin.bind(this)
 
@@ -1154,8 +1173,6 @@ class Header {
 
 class Sidebar {
   constructor () {
-    this.locations = []
-
     this.bindEvents()
   }
 
@@ -1170,8 +1187,7 @@ class Sidebar {
 
   onAddLocation (data) {
     let location = new Location(data)
-    this.locations.push(location)
-    this.$content.appendChild(location.render().$el)
+    this.$content.prepend(location.render().$el)
   }
 
   onSelectMarker () {
@@ -1184,18 +1200,104 @@ class Sidebar {
     return this.$el
   }
 }
+class About {
+  constructor () {
+    this.isVisible = false
+  }
+
+  template () {
+    return `
+    <div class="About__backdrop"></div>
+    <div class="About__inner has-transition js-inner">
+      <div class="About__title">About</div>
+      <div class="About__content">
+        <div class="About__description">
+
+          <p><strong>Map with Me</strong> is a collaborative mapping tool for you and your friends.</p>
+
+
+          <div class="About__columns">
+            <div>
+              <div class="About__columnTitle">Create your own map</div>
+              <p>Remix this project in Glitch and follow the instructions you'll find in the README.md file.</p>
+          <a href="https://glitch.com/edit/#!/remix/mapwithme" class="Button About__button is-bold" title="Remix this project in Glitch" target="_blank">Remix the project</a>
+            </div>
+
+            <div>
+              <div class="About__columnTitle">Improve the tool</div>
+          <p>Follow the development of the tool, suggest improvements, and
+            report bugs in GitHub.</p>
+          <a href="https://github.com/javierarce/map-with-me" class="Button About__button is-bold" title="Visit the repo in GitHub" target="_blank">Visit the repo</a>
+            </div>
+            <div>
+              <div class="About__columnTitle">Export the data</div>
+              <p>
+                Get the data in a GeoJSON or a <a href="/csv" target="_blank">CSV file</a>. You can also subscribe to this map via <a href="/rss" title="RSS" target="_blank">RSS</a>.
+              </p>
+              <a href="/geojson" title="Export locations in GeoJSON format" target="_blank"class="Button About__button is-bold">Get the data</a>
+
+            </div>
+          </div>
+
+        </div>
+        <div class="About__footer">
+          <div class="About__export">
+              <p>This website uses data from <a href="https://www.openstreetmap.org/copyright">Nominatim</a>. If you remix it, please read its <a href="https://operations.osmfoundation.org/policies/nominatim/">usage policy</a>.</p>
+          </div>
+          <div class="About__copyright">Made by <a href="https://twitter.com/javier">Javier Arce</a></div>
+        </div>
+      </div>
+    </div>
+    `
+  }
+
+  hide () {
+    this.isVisible = false
+    this.$el.classList.remove('is-visible')
+  }
+
+  toggle () {
+    this.isVisible != this.isVisible
+    this.$el.classList.toggle(this.isVisible ? undefined : 'is-visible')
+  }
+
+  onClickOutside () {
+    window.bus.emit(config.ACTIONS.TOGGLE_ABOUT)
+  }
+
+  onClickInside (e) {
+    if (e.target && e.target.tagName !== 'A') {
+      killEvent(e)
+    }
+  }
+
+  render () {
+    this.$el = createElement({ className: 'About'})
+    let html = ejs.render(this.template())
+
+    this.$el.insertAdjacentHTML('beforeend', html)
+    this.$el.onclick = this.onClickOutside.bind(this)
+
+    this.$inner = this.$el.querySelector('.js-inner')
+    this.$inner.onclick = this.onClickInside.bind(this)
+
+    return this.$el
+  }
+}
+
 class App {
   constructor () {
     this.$el = getElement('.App')
 
+    this.about = new About()
     this.header = new Header()
     this.sidebar = new Sidebar()
 
     this.map = new Map()
     this.locations = new Locations()
 
-    this.bindEvents()
     this.getStatus()
+    this.bindEvents()
     this.render()
   }
 
@@ -1211,7 +1313,19 @@ class App {
     window.bus.on(config.ACTIONS.TOGGLE_ALERT, this.onToggleAlert.bind(this))
     window.bus.on(config.ACTIONS.TOGGLE_MAP_SIZE, this.onToggleMapSize.bind(this))
 
-    document.onkeyup = this.onKeyUp
+    document.onkeyup = this.onKeyUp.bind(this)
+  }
+
+  onKeyUp (e) {
+    killEvent(e)
+
+    if (e.keyCode === 27) {
+      this.about.hide()
+      //this.showAlert = false
+      //this.showAbout = false
+      //this.showDestroy = false
+      //this.showConfig = false
+    }
   }
 
   onLoad () {
@@ -1263,7 +1377,7 @@ class App {
   }
 
   onToggleAbout () {
-    this.showAbout = !this.showAbout
+    this.about.toggle()
   }
 
   onToggleAlert (title, description, footer) {
@@ -1289,6 +1403,7 @@ class App {
   }
 
   render () {
+    this.$el.prepend(this.about.render())
     this.$el.appendChild(this.header.render())
     this.$el.appendChild(this.sidebar.render())
   }

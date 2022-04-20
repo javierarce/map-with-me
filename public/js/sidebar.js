@@ -1,7 +1,5 @@
 class Sidebar {
   constructor () {
-    this.locations = []
-
     this.bindEvents()
   }
 
@@ -16,8 +14,7 @@ class Sidebar {
 
   onAddLocation (data) {
     let location = new Location(data)
-    this.locations.push(location)
-    this.$content.appendChild(location.render().$el)
+    this.$content.prepend(location.render().$el)
   }
 
   onSelectMarker () {

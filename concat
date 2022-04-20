@@ -8,6 +8,7 @@ cat public/js/config.js \
     public/js/map.js \
     public/js/header.js \
     public/js/sidebar.js \
+    public/js/about.js \
     public/js/app.js \
     > public/js/dist/all.js
 
@@ -19,5 +20,6 @@ cat public/css/reset.css \
     public/css/sidebar.css \
     public/css/locations.css \
     public/css/header.css \
+    public/css/about.css \
     public/css/map.css \
     > public/css/dist/style.css

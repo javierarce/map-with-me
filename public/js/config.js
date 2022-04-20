@@ -10,9 +10,9 @@ const config = {
   ADMIN: {
     TITLE: 'Map with me your favorite places',
     ADMIN_USERNAME: 'javier',
-    MODERATED: false,
+    MODERATED: true,
     PROTECTED: false,
-    ANONYMOUS: false
+    ANONYMOUS: true
   },
 
   TEXTS: {

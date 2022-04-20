@@ -2,14 +2,15 @@ class App {
   constructor () {
     this.$el = getElement('.App')
 
+    this.about = new About()
     this.header = new Header()
     this.sidebar = new Sidebar()
 
     this.map = new Map()
     this.locations = new Locations()
 
-    this.bindEvents()
     this.getStatus()
+    this.bindEvents()
     this.render()
   }
 
@@ -25,7 +26,19 @@ class App {
     window.bus.on(config.ACTIONS.TOGGLE_ALERT, this.onToggleAlert.bind(this))
     window.bus.on(config.ACTIONS.TOGGLE_MAP_SIZE, this.onToggleMapSize.bind(this))
 
-    document.onkeyup = this.onKeyUp
+    document.onkeyup = this.onKeyUp.bind(this)
+  }
+
+  onKeyUp (e) {
+    killEvent(e)
+
+    if (e.keyCode === 27) {
+      this.about.hide()
+      //this.showAlert = false
+      //this.showAbout = false
+      //this.showDestroy = false
+      //this.showConfig = false
+    }
   }
 
   onLoad () {
@@ -77,7 +90,7 @@ class App {
   }
 
   onToggleAbout () {
-    this.showAbout = !this.showAbout
+    this.about.toggle()
   }
 
   onToggleAlert (title, description, footer) {
@@ -103,6 +116,7 @@ class App {
   }
 
   render () {
+    this.$el.prepend(this.about.render())
     this.$el.appendChild(this.header.render())
     this.$el.appendChild(this.sidebar.render())
   }

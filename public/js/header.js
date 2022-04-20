@@ -33,6 +33,10 @@ class Header {
     window.bus.emit(config.ACTIONS.SHOW_DEFAULT_POINT)
   }
 
+  onClickAbout () {
+    window.bus.emit(config.ACTIONS.TOGGLE_ABOUT)
+  }
+
   onClickConfig () {
     window.bus.emit(config.ACTIONS.TOGGLE_CONFIG)
   }
@@ -68,6 +72,9 @@ class Header {
 
     this.$title = this.$el.querySelector('.js-button')
     this.$title.onclick = this.onClickTitle.bind(this)
+
+    this.$about = this.$el.querySelector('.js-about')
+    this.$about.onclick = this.onClickAbout.bind(this)
 
     this.$login = createElement({ elementType: 'button', className: 'Button Header__linksItem', text: 'Log in' })
     this.$login.onclick = this.onClickLogin.bind(this)
