@@ -61,12 +61,10 @@ class App {
   }
 
   onStartLoading () {
-    console.log(1)
     document.body.classList.add('is-loading')
   }
 
   onStopLoading () {
-    console.log(0)
     document.body.classList.remove('is-loading')
   }
 

@@ -817,10 +817,6 @@ class Map {
 
     marker.openPopup()
     this.popup.showSuccess()
-
-    //setTimeout(() => {
-      //this.popup.focus()
-    //}, 500)
   }
 
   addMarker (location) {
@@ -942,8 +938,7 @@ class Map {
       return
     }
 
-    this.coordinates = e.latlng
-    this.openPopup()
+    this.openPopup(e.latlng)
   }
 
   closePopup () {
@@ -964,15 +959,15 @@ class Map {
     this.map.invalidateSize(true)
   }
 
-  openPopup (name, description, options = {}) {
-    let zoom = this.map.getZoom()
-    let latlng = this.flattenCoordinates(this.coordinates)
-    this.popup = new Popup(this.coordinates, {...options, geocode: true, name, description, zoom })
+  openPopup (coordinates) {
+    let latlng = this.flattenCoordinates(coordinates)
+    this.popup = new Popup(coordinates, { geocode: true })
 
     let icon = this.getIcon({})
-    this.marker = L.marker(latlng, { icon }).bindPopup(this.popup.el, { maxWidth: 'auto' }).addTo(this.map)
+    this.marker = L.marker(latlng, { icon })
+    this.marker.bindPopup(this.popup.el, { maxWidth: 'auto' })
+    this.marker.addTo(this.map)
     this.marker.openPopup()
-    this.map.setView(latlng)
   }
 
   addControls () {
@@ -1052,7 +1047,9 @@ class Map {
     })
 
     if (index !== -1) {
-      this.map.removeLayer(window.bus.markers[index])
+      let marker = window.bus.markers[index]
+      this.map.removeLayer(marker)
+      this.cluster.removeLayer(marker)
       window.bus.markers.splice(index, 1)
     } else {
       console.error('Marker not found', window.bus.markers)
@@ -1273,12 +1270,10 @@ class App {
   }
 
   onStartLoading () {
-    console.log(1)
     document.body.classList.add('is-loading')
   }
 
   onStopLoading () {
-    console.log(0)
     document.body.classList.remove('is-loading')
   }
 
