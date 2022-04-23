@@ -1,6 +1,7 @@
 cat public/js/config.js \
     public/js/emojis.js \
     public/js/bus.js \
+    public/js/modal.js \
     public/js/locations.js \
     public/js/location.js \
     public/js/base.js \
@@ -8,16 +9,20 @@ cat public/js/config.js \
     public/js/map.js \
     public/js/header.js \
     public/js/sidebar.js \
+    public/js/settings.js \
     public/js/about.js \
     public/js/app.js \
     > public/js/dist/all.js
 
 cat public/css/reset.css \
     public/css/transitions.css \
+    public/css/modal.css \
+    public/css/input.css \
     public/css/tooltip.css \
     public/css/popup.css \
     public/css/style.css \
     public/css/sidebar.css \
+    public/css/settings.css \
     public/css/locations.css \
     public/css/header.css \
     public/css/about.css \

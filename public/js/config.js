@@ -40,9 +40,11 @@ const config = {
     SHOW_SAVED_LOCATION: 'show-saved-location',
     START_LOADING: 'start-loading',
     STOP_LOADING: 'stop-loading',
+    SHOW_SETTINGS: 'show-settings',
+    HIDE_SETTINGS: 'hide-settings',
+    SHOW_ABOUT: 'show-about',
+    HIDE_ABOUT: 'hide-about',
     TOGGLE_DESTROY: 'toggle-destroy',
-    TOGGLE_ABOUT: 'toggle-about',
-    TOGGLE_CONFIG: 'toggle-config',
     TOGGLE_ALERT: 'toggle-alert',
     TOGGLE_MAP_SIZE: 'toggle-map-size',
     VISIT_MARKER: 'visit-marker'

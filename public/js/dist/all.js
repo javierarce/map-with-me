@@ -40,9 +40,11 @@ const config = {
     SHOW_SAVED_LOCATION: 'show-saved-location',
     START_LOADING: 'start-loading',
     STOP_LOADING: 'stop-loading',
+    SHOW_SETTINGS: 'show-settings',
+    HIDE_SETTINGS: 'hide-settings',
+    SHOW_ABOUT: 'show-about',
+    HIDE_ABOUT: 'hide-about',
     TOGGLE_DESTROY: 'toggle-destroy',
-    TOGGLE_ABOUT: 'toggle-about',
-    TOGGLE_CONFIG: 'toggle-config',
     TOGGLE_ALERT: 'toggle-alert',
     TOGGLE_MAP_SIZE: 'toggle-map-size',
     VISIT_MARKER: 'visit-marker'
@@ -137,6 +139,56 @@ class Bus {
   }
 }
 
+class Modal {
+  constructor () {
+    this.className = this.constructor.name
+  }
+
+  template () {
+    return `
+    <div class="Modal__backdrop"></div>
+    <div class="Modal__inner has-transition js-inner"></div>
+    `
+  }
+
+  hide () {
+    this.$el.classList.remove('is-visible')
+
+    setTimeout(() => {
+      this.$el.remove()
+    }, 300)
+  }
+
+  onClickOutside () {
+    console.log(this.constructor.name)
+    window.bus.emit(`hide-${this.className.toLowerCase()}`)
+  }
+
+  onClickInside (e) {
+    if (e.target && e.target.tagName !== 'A') {
+      killEvent(e)
+    }
+  }
+
+  render () {
+    let className = this.className
+
+    this.$el = createElement({ className })
+    let html = ejs.render(this.template())
+
+    this.$el.insertAdjacentHTML('beforeend', html)
+    this.$el.onclick = this.onClickOutside.bind(this)
+
+    this.$inner = this.$el.querySelector('.js-inner')
+    this.$inner.onclick = this.onClickInside.bind(this)
+
+    setTimeout(() => {
+      this.$el.classList.add('is-visible')
+    }, 10)
+
+    return this.$el
+  }
+}
 class Locations {
   constructor () {
   }
@@ -1106,7 +1158,7 @@ class Header {
     </div>
     <div class="Header__links js-links">
       <button class="Button Header__linksItem js-about">About</button>
-      <button class="Button Header__linksItem js-config">Config</button>
+      <button class="Button Header__linksItem js-settings">Config</button>
     </div>
     `
   }
@@ -1120,15 +1172,11 @@ class Header {
   }
 
   onClickAbout () {
-    window.bus.emit(config.ACTIONS.TOGGLE_ABOUT)
+    window.bus.emit(config.ACTIONS.SHOW_ABOUT)
   }
 
-  onClickConfig () {
-    window.bus.emit(config.ACTIONS.TOGGLE_CONFIG)
-  }
-
-  onClickAbout () {
-    window.bus.emit(config.ACTIONS.TOGGLE_ABOUT)
+  onClickSettings () {
+    window.bus.emit(config.ACTIONS.SHOW_SETTINGS)
   }
 
   onClickLogin () {
@@ -1161,6 +1209,9 @@ class Header {
 
     this.$about = this.$el.querySelector('.js-about')
     this.$about.onclick = this.onClickAbout.bind(this)
+
+    this.$settings = this.$el.querySelector('.js-settings')
+    this.$settings.onclick = this.onClickSettings.bind(this)
 
     this.$login = createElement({ elementType: 'button', className: 'Button Header__linksItem', text: 'Log in' })
     this.$login.onclick = this.onClickLogin.bind(this)
@@ -1200,14 +1251,137 @@ class Sidebar {
     return this.$el
   }
 }
-class About {
+class Settings extends Modal {
   constructor () {
-    this.isVisible = false
+    super()
   }
 
   template () {
     return `
-    <div class="About__backdrop"></div>
+    <div class="Modal__backdrop"></div>
+    <div class="Settings__inner has-transition js-inner">
+      <div class="Settings__content no-bottom-padding">
+        <div class="Settings__spinner Spinner is-small" v-if="isSaving"></div>
+
+        <div class="Settings__form">
+          <h3 class="Settings__sectionTitle">Configure your map</h3>
+
+          <label for="title">
+            <strong class="Input__label">Title</strong>
+            <div class="Input__field Settings__field">
+              <input id="title" type="text" class="Input" placeholder="Title">
+            </div>
+          </label>
+          <div class="Settings__section">
+            <div class="Settings__sectionContent">
+
+              <label for="default_search_location">
+                <strong class="Input__label">Search location</strong>
+                <div class="Input__field Settings__field">
+                  <input id="default_search_location" type="text" class="Input" placeholder="Default location">
+                </div>
+              </label>
+
+              <label for="lon">
+                <strong class="Input__label">Longitude</strong>
+                <div class="Input__field Settings__field is-small">
+                  <input id="lon" type="text" class="Input" placeholder="Longitude">
+                </div>
+              </label>
+
+              <label for="lat">
+                <strong class="Input__label">Latitude</strong>
+                <div class="Input__field Settings__field is-small">
+                  <input id="lat" type="text" class="Input" placeholder="Latitude">
+                </div>
+              </label>
+
+              <label for="zoom">
+                <strong class="Input__label">Zoom level</strong>
+                <div class="Input__field Settings__field is-small is-small">
+                  <input id="zoom" type="text" class="Input" placeholder="Zoom">
+                </div>
+              </label>
+
+            </div>
+          </div>
+
+          <label for="admin">
+            <strong class="Input__label">Admin username</strong>
+            <div class="Input__field Settings__field is-medium">
+              <input id="admin" type="text" class="Input" placeholder="Admin">
+            </div>
+          </label>
+
+          <div class="Settings__section">
+            <strong class="Input__label">Publication settings</strong>
+
+            <div class="Settings__sectionContent">
+              <label for="anonymous">
+
+                <div class="Input__field Input__checkbox Settings__field">
+                  <input id="anonymous" type="checkbox"> 
+                  <p>
+                    <strong class="Input__title">Anonymous</strong> 
+                    <div class="Tooltip">?<span class="Tooltip__text">Login is not required</span></div>
+                  </p>
+                </div>
+              </label>
+
+              <label for="moderated">
+                <div class="Input__field Input__checkbox Settings__field">
+                  <input id="moderated" type="checkbox"> <p>
+                      <strong class="Input__title">Moderated</strong> 
+                    <div class="Tooltip">?  <span class="Tooltip__text">Submissions require approval</span></div>
+                  </p>
+                </div>
+              </label>
+
+              <label for="protected">
+                <div class="Input__field Input__checkbox Settings__field">
+                  <input id="protected" type="checkbox"> 
+                  <p><strong class="Input__title">Protected</strong> 
+                    <div class="Tooltip">?<span class="Tooltip__text"> Map is read-only</span></div>
+                  </p>
+                </div>
+              </label>
+            </div>
+            <transition name="fade">
+            <div class="Settings__hint" v-if="showModerationHint">Visit {{currentURL}}admin/SECRET to manage the submissions.</div>
+            </transition>
+          </div>
+
+          <div class="Settings__buttons">
+            <div class="Settings__sectionContent">
+              <div class="Input__field Settings__field">
+                <input type="text" class="Input" placeholder="Secret">
+              </div>
+              <button class="Button is-bold" @click="onClickSaveConfig" :class="saveButtonClass">Save configuration</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="Settings__footer">
+          <div>After changing this configuration, please restart the server.</div> 
+        </div>
+      </div>
+      <div class="Settings__dangerZone">
+        <div class="Settings__dangerZoneContent">
+          Do you want to start again? <button class="Button is-link" @click="onClickDestroy">Destroy the database</button>
+        </div>
+      </div>
+    </div>
+`
+  }
+}
+class About extends Modal {
+  constructor () {
+    super()
+  }
+
+  template () {
+    return `
+    <div class="Modal__backdrop"></div>
     <div class="About__inner has-transition js-inner">
       <div class="About__title">About</div>
       <div class="About__content">
@@ -1250,46 +1424,11 @@ class About {
     </div>
     `
   }
-
-  hide () {
-    this.isVisible = false
-    this.$el.classList.remove('is-visible')
-  }
-
-  toggle () {
-    this.isVisible != this.isVisible
-    this.$el.classList.toggle(this.isVisible ? undefined : 'is-visible')
-  }
-
-  onClickOutside () {
-    window.bus.emit(config.ACTIONS.TOGGLE_ABOUT)
-  }
-
-  onClickInside (e) {
-    if (e.target && e.target.tagName !== 'A') {
-      killEvent(e)
-    }
-  }
-
-  render () {
-    this.$el = createElement({ className: 'About'})
-    let html = ejs.render(this.template())
-
-    this.$el.insertAdjacentHTML('beforeend', html)
-    this.$el.onclick = this.onClickOutside.bind(this)
-
-    this.$inner = this.$el.querySelector('.js-inner')
-    this.$inner.onclick = this.onClickInside.bind(this)
-
-    return this.$el
-  }
 }
-
 class App {
   constructor () {
     this.$el = getElement('.App')
 
-    this.about = new About()
     this.header = new Header()
     this.sidebar = new Sidebar()
 
@@ -1307,9 +1446,14 @@ class App {
     window.bus.on(config.ACTIONS.ON_LOAD, this.onLoad.bind(this))
     window.bus.on(config.ACTIONS.START_LOADING, this.onStartLoading.bind(this))
     window.bus.on(config.ACTIONS.STOP_LOADING, this.onStopLoading.bind(this))
+
+    window.bus.on(config.ACTIONS.SHOW_SETTINGS, this.onShowSettings.bind(this))
+    window.bus.on(config.ACTIONS.HIDE_SETTINGS, this.onHideSettings.bind(this))
+
+    window.bus.on(config.ACTIONS.SHOW_ABOUT, this.onShowAbout.bind(this))
+    window.bus.on(config.ACTIONS.HIDE_ABOUT, this.onHideAbout.bind(this))
+
     window.bus.on(config.ACTIONS.TOGGLE_DESTROY, this.onToggleDestroy.bind(this))
-    window.bus.on(config.ACTIONS.TOGGLE_ABOUT, this.onToggleAbout.bind(this))
-    window.bus.on(config.ACTIONS.TOGGLE_CONFIG, this.onToggleConfig.bind(this))
     window.bus.on(config.ACTIONS.TOGGLE_ALERT, this.onToggleAlert.bind(this))
     window.bus.on(config.ACTIONS.TOGGLE_MAP_SIZE, this.onToggleMapSize.bind(this))
 
@@ -1320,11 +1464,11 @@ class App {
     killEvent(e)
 
     if (e.keyCode === 27) {
-      this.about.hide()
+      window.bus.emit(config.ACTIONS.HIDE_ABOUT)
+      window.bus.emit(config.ACTIONS.HIDE_SETTINGS)
+
       //this.showAlert = false
-      //this.showAbout = false
       //this.showDestroy = false
-      //this.showConfig = false
     }
   }
 
@@ -1368,16 +1512,40 @@ class App {
     document.body.classList.remove('is-loading')
   }
 
-  onToggleConfig () {
-    this.showConfig = !this.showConfig
+  onShowSettings () {
+    if (this.settings) {
+      return
+    }
+
+    this.settings = new Settings()
+    this.$el.prepend(this.settings.render())
+  }
+
+  onHideSettings () {
+    if (this.settings) {
+      this.settings.hide()
+      delete this.settings
+    }
   }
 
   onToggleDestroy () {
     this.showDestroy = !this.showDestroy
   }
 
-  onToggleAbout () {
-    this.about.toggle()
+  onShowAbout () {
+    if (this.about) {
+      return
+    }
+
+    this.about = new About()
+    this.$el.prepend(this.about.render())
+  }
+
+  onHideAbout () {
+    if (this.about) {
+      this.about.hide()
+      delete this.about
+    }
   }
 
   onToggleAlert (title, description, footer) {
@@ -1403,7 +1571,6 @@ class App {
   }
 
   render () {
-    this.$el.prepend(this.about.render())
     this.$el.appendChild(this.header.render())
     this.$el.appendChild(this.sidebar.render())
   }

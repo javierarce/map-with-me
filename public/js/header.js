@@ -20,7 +20,7 @@ class Header {
     </div>
     <div class="Header__links js-links">
       <button class="Button Header__linksItem js-about">About</button>
-      <button class="Button Header__linksItem js-config">Config</button>
+      <button class="Button Header__linksItem js-settings">Config</button>
     </div>
     `
   }
@@ -34,15 +34,11 @@ class Header {
   }
 
   onClickAbout () {
-    window.bus.emit(config.ACTIONS.TOGGLE_ABOUT)
+    window.bus.emit(config.ACTIONS.SHOW_ABOUT)
   }
 
-  onClickConfig () {
-    window.bus.emit(config.ACTIONS.TOGGLE_CONFIG)
-  }
-
-  onClickAbout () {
-    window.bus.emit(config.ACTIONS.TOGGLE_ABOUT)
+  onClickSettings () {
+    window.bus.emit(config.ACTIONS.SHOW_SETTINGS)
   }
 
   onClickLogin () {
@@ -75,6 +71,9 @@ class Header {
 
     this.$about = this.$el.querySelector('.js-about')
     this.$about.onclick = this.onClickAbout.bind(this)
+
+    this.$settings = this.$el.querySelector('.js-settings')
+    this.$settings.onclick = this.onClickSettings.bind(this)
 
     this.$login = createElement({ elementType: 'button', className: 'Button Header__linksItem', text: 'Log in' })
     this.$login.onclick = this.onClickLogin.bind(this)

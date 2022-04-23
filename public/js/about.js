@@ -1,11 +1,11 @@
-class About {
+class About extends Modal {
   constructor () {
-    this.isVisible = false
+    super()
   }
 
   template () {
     return `
-    <div class="About__backdrop"></div>
+    <div class="Modal__backdrop"></div>
     <div class="About__inner has-transition js-inner">
       <div class="About__title">About</div>
       <div class="About__content">
@@ -48,38 +48,4 @@ class About {
     </div>
     `
   }
-
-  hide () {
-    this.isVisible = false
-    this.$el.classList.remove('is-visible')
-  }
-
-  toggle () {
-    this.isVisible != this.isVisible
-    this.$el.classList.toggle(this.isVisible ? undefined : 'is-visible')
-  }
-
-  onClickOutside () {
-    window.bus.emit(config.ACTIONS.TOGGLE_ABOUT)
-  }
-
-  onClickInside (e) {
-    if (e.target && e.target.tagName !== 'A') {
-      killEvent(e)
-    }
-  }
-
-  render () {
-    this.$el = createElement({ className: 'About'})
-    let html = ejs.render(this.template())
-
-    this.$el.insertAdjacentHTML('beforeend', html)
-    this.$el.onclick = this.onClickOutside.bind(this)
-
-    this.$inner = this.$el.querySelector('.js-inner')
-    this.$inner.onclick = this.onClickInside.bind(this)
-
-    return this.$el
-  }
 }
-

@@ -1,0 +1,180 @@
+.Settings.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.Settings {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 250ms ease-in-out;
+}
+
+.Settings__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: all 250ms ease-in-out;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  background: #fff;
+  max-width: 850px;
+  position: relative;
+}
+
+.Settings__content {
+  width: 100%;
+  position: relative;
+  padding: 32px;
+}
+
+.Settings__content.no-bottom-padding {
+  padding-bottom: 0;
+}
+
+.Settings__description a {
+  color: #000;
+  text-decoration: underline;
+}
+
+.Settings__field {
+  margin: 0 0 16px;
+}
+
+.Settings__content p {
+  margin: 0 0 16px;
+}
+
+.Settings__title {
+  font-weight: bold;
+  margin: 0 0 16px 0;
+}
+.Settings__description strong {
+  font-weight: bold;
+}
+
+.Settings__footer {
+  margin: 8px 0 0;
+  font-size: 0.7em;
+  line-height: 125%;
+  opacity: 0.5;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.Settings__dangerZone {
+  margin: 16px 0 0;
+  font-size: 0.7em;
+  line-height: 125%;
+  width: 100%;
+  background: #ffe2e2;
+  padding: 16px 32px;
+  border-radius: 0 0 4px 4px;
+}
+
+.Settings__dangerZoneContent {
+  opacity: 0.4;
+}
+
+.Settings__button {
+  display: inline-block;
+  border-radius: 4px;
+  width: 100%;
+  margin: auto;
+  font-size: 1.2em;
+  padding: 16px 0;
+  border: none;
+  outline: none;
+  background: #2A84D2;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: none;
+  transition: background 250ms ease-in-out;
+}
+
+.Settings__button:hover {
+  background: #1c598e;
+  cursor: pointer;
+}
+
+.Settings__sectionContent:last-child {
+  margin: 0;
+}
+
+.Settings__section {
+  margin: 0 0 24px;
+  width: 100%;
+}
+
+.Settings__sectionContent .Settings__field {
+  margin-bottom: 0;
+}
+
+.Settings__sectionContent {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.Settings__sectionContent > * {
+  margin: 0 8px 0 0;
+}
+.Settings__sectionContent > *:last-child {
+  margin-right: 0;
+}
+
+.Settings__buttons .Button {
+  flex: 2;
+}
+
+.Settings__buttons .Input__field {
+  flex: 3;
+}
+
+.Settings__sectionTitle {
+  margin: 0 0 24px; 
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.Settings__sectionDescription {
+  font-size: 0.9em;
+  margin: 0 0 16px; 
+}
+
+.Settings__backdrop {
+	background: linear-gradient(-45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB);
+	opacity: 0.5;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transition: opacity 250ms ease-in-out;
+	animation: Gradient 3s ease-in-out infinite;
+  cursor: pointer;
+}
+
+
+.Settings__spinner {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+}
+
+.Settings__hint {
+  font-size: .7em;
+  opacity: 0.5;
+  margin-top: 8px; 
+}
