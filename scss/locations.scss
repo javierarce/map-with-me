@@ -4,7 +4,8 @@
   overflow: hidden;
   overflow-y: scroll;
 }
-.Locations__none {
+
+.Card__none {
   display: flex;
   width: 100%;
   border: none;
@@ -18,24 +19,18 @@
   text-align: center;
   height: 100%;
 }
-.Locations__item:hover {
-  box-shadow: 2px 1px 4px rgba(0, 0, 0, 0.1);
-}
 
-.Location.is-active .Locations__item {
+.Card.is-active {
   background: rgba(255, 255, 255, 0.2);
   box-shadow: 2px 1px 4px rgba(0, 0, 0, 0.1);
 }
 
-.Location.is-rejected .Locations__item .Locations__itemName,
-.Location.is-rejected .Locations__item .Locations__itemDescription,
-.Location.is-rejected .Locations__item .Locations__itemAddress {
+.Card.is-rejected .Card__name,
+.Card.is-rejected .Card__description,
+.Card.is-rejected .Card__address {
   opacity: 0.4;
 }
-.Locations__item:hover {
-  cursor: pointer;
-}
-.Locations__item {
+.Card {
   width: 100%;
   border: none;
   padding: 16px;
@@ -52,30 +47,35 @@
   box-shadow: none;
   -webkit-appearance: none;
 }
-.Locations__item.is-hidden {
+.Card:hover {
+  cursor: pointer;
+  box-shadow: 2px 1px 4px rgba(0, 0, 0, 0.1);
+}
+.Card.is-hidden {
   opacity: 0;
   visibility: hidden;
 }
-.Locations__itemName {
+.Card__name {
   margin: 0 0 8px 0;
   font-weight: bold;
 }
-.Locations__itemDescription {
+.Card__description {
   margin: 0 0 8px 0;
 }
-.Locations__itemAddress {
-  font-size: 0.7em;
+.Card__address {
+  font-size: 0.8em;
   color: rgba(0,0,0, 0.3);
+  line-height: 135%;
 }
-.Locations__itemFooterOptions > * {
+.Card__footerOptions > * {
   margin: 0 0 0 8px;
 }
-.Locations__itemFooterOptions {
+.Card__footerOptions {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.Locations__itemFooter {
+.Card__footer {
   display: flex;
   width: 100%;
   align-items: center;

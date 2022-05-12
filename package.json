@@ -9,6 +9,9 @@
     "email": "javierarce@gmail.com",
     "url": "https://twitter.com/javier"
   },
+  "scripts": {
+    "scss": "node-sass --watch scss -o public/css"
+  },
   "bugs": {
     "url": "https://github.com/javierarce/map-with-me/issues"
   },
@@ -24,10 +27,9 @@
     "express-session": "^1.17.1",
     "fs": "^0.0.1-security",
     "helmet": "^5.0.2",
-    "passport": "^0.4.1",
-    "passport-twitter": "^1.0.4",
     "leaflet": "^1.6.0",
     "leaflet.markercluster": "^1.4.1",
+    "node-sass": "^7.0.1",
     "passport": "^0.5.2",
     "passport-twitter": "^1.0.4",
     "rss": "^1.2.2",
