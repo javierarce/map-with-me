@@ -5,7 +5,7 @@ class About extends Modal {
 
   template () {
     return `
-    <div class="Modal__backdrop"></div>
+    <div class="Modal__backdrop js-backdrop"></div>
     <div class="About__inner has-transition js-inner">
       <div class="About__title">About</div>
       <div class="About__content">
@@ -15,12 +15,6 @@ class About extends Modal {
 
 
           <div class="About__columns">
-            <div>
-              <div class="About__columnTitle">Create your own map</div>
-              <p>Remix this project in Glitch and follow the instructions you'll find in the README.md file.</p>
-          <a href="https://glitch.com/edit/#!/remix/mapwithme" class="Button About__button is-bold" title="Remix this project in Glitch" target="_blank">Remix the project</a>
-            </div>
-
             <div>
               <div class="About__columnTitle">Improve the tool</div>
           <p>Follow the development of the tool, suggest improvements, and
@@ -40,9 +34,9 @@ class About extends Modal {
         </div>
         <div class="About__footer">
           <div class="About__export">
-              <p>This website uses data from <a href="https://www.openstreetmap.org/copyright">Nominatim</a>. If you remix it, please read its <a href="https://operations.osmfoundation.org/policies/nominatim/">usage policy</a>.</p>
+              <p>This website uses data from <a href="https://www.openstreetmap.org/copyright">Nominatim</a></p>
           </div>
-          <div class="About__copyright">Made by <a href="https://twitter.com/javier">Javier Arce</a></div>
+          <div class="About__copyright">Made by <a href="https://twitter.com/javier">Javier Arce</a> from a mysterious location</div>
         </div>
       </div>
     </div>

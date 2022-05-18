@@ -1,9 +1,10 @@
-class Location {
+class Card {
   constructor (data) {
-    console.log(data)
     this.location = data.location
     this.user = data.location.user
     this.marker = data.marker
+
+    this.bindEvents()
 
     this.isActive = false
     this.username = this.user && this.user.username ? `@${this.user.username}` : 'Anonymous'
@@ -11,21 +12,23 @@ class Location {
 
   template () {
     return `
-      <div :data-id="${this.location.id}" class="Locations__item">
-        <div class="Locations__itemName">${this.location.name}</div>
-        <div class="Locations__itemDescription">${this.location.description}</div>
-        <div class="Locations__itemAddress">${this.location.address}</div>
+        <div class="Card__name">${this.location.name}</div>
+        <div class="Card__description">${this.location.description}</div>
+        <div class="Card__address">${this.location.address}</div>
           <% if (showFooter) { %>
-        <div class="Locations__itemFooter">
-          <div class="Locations__itemUser"><%= username %></div>
-          <div class="Locations__itemFooterOptions">
-          <% if (showApproveItem) { %><button class="Locations__itemApprove js-approve"><%= approveLabel %></button><% } %>
-          <% if (showRemoveItem) { %><button class="Locations__itemRemove js-remove">delete</button><% } %>
+        <div class="Card__footer">
+          <div class="Card__user"><%= username %></div>
+          <div class="Card__footerOptions">
+          <% if (showApproveItem) { %><button class="Card__approve js-approve"><%= approveLabel %></button><% } %>
+          <% if (showRemoveItem) { %><button class="Card__remove js-remove">delete</button><% } %>
           </div>
          <% } %>
         </div>
-      </div>
     `
+  }
+
+  bindEvents () {
+    window.bus.on(`select-${this.location.id}`, this.select.bind(this))
   }
 
   showFooter () {
@@ -54,8 +57,6 @@ class Location {
 
   onClickRemove (e) {
     killEvent(e)
-
-    //window.bus.emit(config.ACTIONS.REMOVE_LOCATION, this.marker)
 
     let confirmation = confirm('Are you sure you want to delete this location?')
 
@@ -97,14 +98,26 @@ class Location {
       }
     })
   }
-    onClick () {
-      //if (this.isActive) {
-      //return
-      //}
 
+  select () {
+    this.isActive = true
+    this.$el.classList.add('is-active')
+    window.bus.emit(config.ACTIONS.SELECT_LOCATION, this)
+  }
+
+  unselect () {
+    this.isActive = false
+    this.$el.classList.remove('is-active')
+  }
+
+  onClick () {
+    if (!this.isActive) {
       this.activateMarker()
-      window.bus.emit(config.ACTIONS.VISIT_MARKER, this.marker)
+      window.bus.emit(config.ACTIONS.SELECT_LOCATION, this)
     }
+
+    window.bus.emit(config.ACTIONS.VISIT_MARKER, this.marker)
+  }
 
   activateMarker () {
     this.isActive = true
@@ -146,7 +159,10 @@ class Location {
   }
 
   render () {
-    this.$el = createElement({ className: 'Location'})
+
+    this.$el = createElement({ className: 'Card'})
+    this.$el.dataset['id'] = this.location.id
+
     let html = ejs.render(this.template(), { username: this.username, showFooter: this.showFooter(), showApproveItem: this.showApproveItem(), showRemoveItem: this.showRemoveItem(), approveLabel: this.getApproveLabel() })
     this.$el.insertAdjacentHTML('beforeend', html)
 

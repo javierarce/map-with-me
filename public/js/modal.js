@@ -5,7 +5,7 @@ class Modal {
 
   template () {
     return `
-    <div class="Modal__backdrop"></div>
+    <div class="Modal__backdrop js-backdrop"></div>
     <div class="Modal__inner has-transition js-inner"></div>
     `
   }
@@ -18,14 +18,9 @@ class Modal {
     }, 300)
   }
 
-  onClickOutside () {
-    console.log(this.constructor.name)
-    window.bus.emit(`hide-${this.className.toLowerCase()}`)
-  }
-
-  onClickInside (e) {
-    if (e.target && e.target.tagName !== 'A') {
-      killEvent(e)
+  onClickOutside (e) {
+    if (e.target.className.includes('js-backdrop')) {
+      window.bus.emit(`hide-${this.className.toLowerCase()}`)
     }
   }
 
@@ -36,10 +31,9 @@ class Modal {
     let html = ejs.render(this.template())
 
     this.$el.insertAdjacentHTML('beforeend', html)
-    this.$el.onclick = this.onClickOutside.bind(this)
 
-    this.$inner = this.$el.querySelector('.js-inner')
-    this.$inner.onclick = this.onClickInside.bind(this)
+    this.$backdrop = this.$el.querySelector('.js-backdrop')
+    this.$backdrop.onclick = this.onClickOutside.bind(this)
 
     setTimeout(() => {
       this.$el.classList.add('is-visible')

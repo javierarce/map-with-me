@@ -1,12 +1,10 @@
-map:
-  DEFAULT_SEARCH_LOCATION: ""
-  LAT: "39"
-  LNG: "-37"
-  ZOOM: "4"
-  FIT_BOUNDS: false
-admin:
-  TITLE: Map with me your favorite places
-  ADMIN_USERNAME: javier
-  MODERATED: false
-  PROTECTED: false
-  ANONYMOUS: false
+DEFAULT_SEARCH_LOCATION: Porto
+LAT: "41.150223"
+LNG: "-8.621"
+ZOOM: "16"
+FIT_BOUNDS: false
+TITLE: Porto
+ADMIN_USERNAME: ""
+MODERATED: false
+PROTECTED: false
+ANONYMOUS: false

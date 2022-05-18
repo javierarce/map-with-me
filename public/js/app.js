@@ -6,7 +6,6 @@ class App {
     this.sidebar = new Sidebar()
 
     this.map = new Map()
-    this.locations = new Locations()
 
     this.getStatus()
     this.bindEvents()
@@ -14,7 +13,6 @@ class App {
   }
 
   bindEvents () {
-    window.bus.on(config.ACTIONS.ADD_LOCATION, this.onAddLocation.bind(this))
     window.bus.on(config.ACTIONS.LOGIN, this.onLogin.bind(this))
     window.bus.on(config.ACTIONS.ON_LOAD, this.onLoad.bind(this))
     window.bus.on(config.ACTIONS.START_LOADING, this.onStartLoading.bind(this))
@@ -39,9 +37,6 @@ class App {
     if (e.keyCode === 27) {
       window.bus.emit(config.ACTIONS.HIDE_ABOUT)
       window.bus.emit(config.ACTIONS.HIDE_SETTINGS)
-
-      //this.showAlert = false
-      //this.showDestroy = false
     }
   }
 
@@ -69,8 +64,6 @@ class App {
       if (result.coordinates) {
         window.bus.emit(config.ACTIONS.SHOW_SAVED_LOCATION, result.coordinates)
       }
-
-    this.locations.get()
 
     }).catch((error) => {
       console.error(error)
@@ -130,11 +123,6 @@ class App {
 
   onToggleMapSize (value) {
     document.body.classList[value ? 'add' : 'remove']('is-expanded')
-  }
-
-  onAddLocation ({ coordinates, name, description, address }) {
-    window.bus.emit(config.ACTIONS.START_LOADING)
-    this.locations.add({ coordinates, name, description, address })
   }
 
   onLogin ({ coordinates, zoom, name, description, address }) {

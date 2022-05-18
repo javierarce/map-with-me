@@ -4,10 +4,7 @@ const config = {
     LAT: "39",
     LNG: "-37",
     ZOOM: "4",
-    FIT_BOUNDS: false
-  },
-
-  ADMIN: {
+    FIT_BOUNDS: false,
     TITLE: 'Map with me your favorite places',
     ADMIN_USERNAME: 'javier',
     MODERATED: true,
@@ -34,6 +31,7 @@ const config = {
     LOGIN: 'login',
     ON_LOAD: 'on-load',
     SELECT_MARKER: 'select-marker',
+    SELECT_LOCATION: 'select-location',
     SET_VIEW: 'set-view',
     SHOW_ADDED_LOCATION: 'show-added-location',
     SHOW_DEFAULT_POINT: 'show-default-point',

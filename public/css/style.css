@@ -337,6 +337,7 @@ table {
 
 .Input {
   width: 100%;
+  height: 100%;
   border-radius: 4px;
   border: 1px solid #ccc;
   outline: none;
@@ -360,7 +361,19 @@ table {
 
 .Input__checkbox {
   display: flex;
-  align-items: flex-start; }
+  align-items: flex-start;
+  flex-direction: column; }
+
+.Input__checkboxTitle {
+  display: flex; }
+
+.Input__title {
+  margin: 0 0 0 0.4em; }
+
+.Input__hint {
+  font-size: .8em;
+  color: #666;
+  margin: 0 0 0 2em; }
 
 .is-medium {
   width: 200px; }
@@ -1020,6 +1033,9 @@ table {
   color: #000;
   text-decoration: underline; }
 
+.Settings__footer.is-hidden {
+  display: none; }
+
 .Settings__field {
   margin: 0 0 16px; }
 
@@ -1033,7 +1049,7 @@ table {
 .Settings__description strong {
   font-weight: bold; }
 
-.Settings__footer {
+.Settings__hint {
   margin: 8px 0 0;
   font-size: 0.7em;
   line-height: 125%;
@@ -1078,6 +1094,10 @@ table {
 .Settings__sectionContent:last-child {
   margin: 0; }
 
+.Settings__section.is-horizontal {
+  display: flex;
+  flex-direction: row; }
+
 .Settings__section {
   margin: 0 0 24px;
   width: 100%; }
@@ -1096,10 +1116,18 @@ table {
 .Settings__sectionContent > *:last-child {
   margin-right: 0; }
 
-.Settings__buttons .Button {
+.Settings__buttons {
+  border-top: 1px solid #ccc; }
+
+.Settings__footer {
+  width: 100%;
+  border-top: 1px solid #ddd;
+  padding: 24px 32px 0 32px; }
+
+.Settings__footer .Button {
   flex: 2; }
 
-.Settings__buttons .Input__field {
+.Settings__footer .Input__field {
   flex: 3; }
 
 .Settings__sectionTitle {
@@ -1212,6 +1240,7 @@ table {
   font-size: 0.8em;
   margin: 0 0 0 4px;
   display: inline-flex;
+  font-weight: normal;
   text-align: center;
   vertical-align: baseline;
   top: -2px;
@@ -1243,10 +1272,11 @@ table {
   z-index: 1;
   bottom: 125%;
   left: 50%;
+  font-weight: normal;
   opacity: 0;
   transition: opacity 250ms ease-in-out;
-  margin-left: -56px;
-  width: 120px;
+  margin-left: -110px;
+  width: 220px;
   background: #fff;
   color: #000;
   border: 1px solid #ccc;
@@ -1255,6 +1285,26 @@ table {
 .Tooltip:hover .Tooltip__text {
   visibility: visible;
   opacity: 1; }
+
+.Spinner {
+  border-top: 2px solid #ddd;
+  border-right: 2px solid #ddd;
+  border-bottom: 2px solid #ddd;
+  border-left: 2px solid #0090d7;
+  animation: load8 0.8s infinite linear;
+  display: none; }
+
+.Spinner.is-visible {
+  display: block; }
+
+.Spinner, .Spinner:after {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%; }
+
+.Spinner.is-small {
+  width: 20px;
+  height: 20px; }
 
 html, body {
   width: 100%;

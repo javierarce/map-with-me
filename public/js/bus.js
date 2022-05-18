@@ -11,27 +11,27 @@ class Bus {
   }
 
   isAdmin () {
-    return !!(this.user && this.user.username && config.ADMIN.ADMIN_USERNAME === this.user.username)
+    return !!(this.user && this.user.username && config_USERNAME === this.user.username)
   }
 
   getTitle () {
-    return config.ADMIN.TITLE
+    return config.TITLE
   }
 
   getAdminUsername () {
-    return config.ADMIN.ADMIN_USERNAME
+    return config.ADMIN_USERNAME
   }
 
   isModerated () {
-    return config.ADMIN.MODERATED
+    return config.MODERATED
   }
 
   isAnonymous () {
-    return config.ADMIN.ANONYMOUS
+    return config.ANONYMOUS
   }
 
   isProtected () {
-    return config.ADMIN.PROTECTED
+    return config.PROTECTED
   }
 
   findMarkerById (id) {

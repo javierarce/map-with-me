@@ -15,6 +15,7 @@ class Map {
     window.bus.on('close-popup', this.closePopup.bind(this))
     window.bus.on(config.ACTIONS.ADD_LOCATIONS, this.onAddLocations.bind(this))
 
+    window.bus.on(config.ACTIONS.RELOAD_MAP, this.onReloadMap.bind(this))
     window.bus.on(config.ACTIONS.REMOVE_MARKER, this.onRemoveMarker.bind(this))
     window.bus.on(config.ACTIONS.INVALIDATE_MAP_SIZE, this.invalidateSize.bind(this))
     window.bus.on(config.ACTIONS.SET_VIEW, this.onSetView.bind(this))
@@ -26,7 +27,15 @@ class Map {
 
   bindMapEvents () {
     this.map.on('zoomend', this.onZoomEnd.bind(this))
+    this.map.on('moveend', this.onMoveEnd.bind(this))
     this.map.on('click', this.onMapClick.bind(this))
+  }
+
+  onMoveEnd () {
+    if (this.map.event) {
+      this.map.event()
+      this.map.event = undefined
+    } 
   }
 
   onZoomEnd () {
@@ -155,10 +164,25 @@ class Map {
     let location = marker.getLatLng()
     let latlng = [ location.lat, location.lng ]
 
-    this.map.setView(latlng, 20, { animate: true, easeLinearity: .5, duration: 0.250 })
-    setTimeout(() => {
+    this.map.closePopup()
+
+    this.map.event = () => {
+      setTimeout(() => {
         marker.fire('click')
-    }, 500)
+      }, 300)
+    }
+
+    if (this.isMarkerInCluster(marker)) {
+      this.cluster.zoomToShowLayer(marker)
+    } else {
+      this.map.setView(latlng, this.map.getZoom(), { animate: true, easeLinearity: .5, duration: 0.250 })
+    }
+
+  }
+
+  isMarkerInCluster (marker) {
+    let m = this.cluster.getVisibleParent(marker)
+    return m && m.getAllChildMarkers
   }
 
   onSetView (result) {
@@ -272,7 +296,6 @@ class Map {
     })
   }
 
-
   showSavedLocation (data) {
     this.coordinates = { lat: data.lat, lng: data.lng }
     let latlng = this.flattenCoordinates(this.coordinates)
@@ -288,6 +311,14 @@ class Map {
     this.marker = L.marker(latlng, { icon }).bindPopup(this.popup.el, { maxWidth: 'auto' }).addTo(this.map)
     this.marker.openPopup()
     this.map.setView(latlng, data.zoom)
+  }
+
+  onReloadMap (data) {
+    console.log(data)
+
+    let coordinates = { lat: data.lat, lng: data.lng }
+    let latlng = this.flattenCoordinates(coordinates) 
+    this.map.setView(latlng, data.zoom, { animate: true, easeLinearity: .5, duration: 0.250 })
   }
 
   onRemoveMarker (id) {
@@ -317,7 +348,7 @@ class Map {
       maxBoundsViscosity: 1.0
     }
 
-    this.map = L.map('map', options).setView([config.MAP.LAT, config.MAP.LNG], config.MAP.ZOOM)
+    this.map = L.map('map', options).setView([coordinates.LAT, coordinates.LNG], coordinates.ZOOM)
 
     this.cluster = L.markerClusterGroup({
       spiderfyOnMaxZoom: false,

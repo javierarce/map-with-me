@@ -28,7 +28,6 @@ const Storage = require('./lib/db')
 const DB = new Storage()
 const Map = new Mapper(DB)
 
-
 app.use(express.static('public'))
 app.use(bodyParser.json())
 //app.use(helmet())
@@ -89,10 +88,10 @@ app.post('/api/reject', (request, response) => { Map.onRejectLocation(request, r
 app.post('/api/save', (request, response) => { Map.onSave(request, response)})
 
 app.post('/api/config', (request, response) => { Map.onSaveConfig(request, response)})
-app.get('/api/config', (request, response) => { Map.onGetConfig(request, response)})
+app.get('/api/config', (request, response) => { Map.getConfig(request, response)})
 
 app.get('/api/locations', (request, response) => { Map.onGetLocations(request, response)})
-app.get('/api/status', (request, response) => { Map.onGetStatus(request, response)})
+app.get('/api/status', (request, response) => { Map.getStatus(request, response)})
 app.get('/api/reset', (request, response) => { Map.onRemoveSession(request, response)})
 
 app.get('/rss', (request, response) => { Map.onGetRSS(request, response)})
@@ -104,8 +103,8 @@ app.get('/auth/twitter/callback', passport.authenticate('twitter', { successRedi
 
 app.get('/', (request, response) => {
   const isDevelopment = process.env.MODE === 'DEVELOPMENT' ? true : false
-
-  response.render('index', { isDevelopment })
+  let config = Map.config
+  response.render('index', { isDevelopment, config })
 })
 
 app.get('/favico.ico', (request, response) => {

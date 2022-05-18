@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>NLP</title>
+    <title><%= config.TITLE  %></title>
     <meta name="viewport" content="width=device-width, initial-scale=1"> 
     <meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
 
@@ -14,6 +14,14 @@
     <script src="/ejs/ejs.min.js"></script>
 
     <link rel="stylesheet" href="/css/style.css" />
+
+    <script>
+      const coordinates = {
+      LNG: <%= config.LNG %>,
+      LAT: <%= config.LAT %>,
+      ZOOM: <%= config.ZOOM %>
+      }
+    </script>
 
     <% if (isDevelopment) { -%>
     <script src="/js/config.js"></script>

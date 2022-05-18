@@ -17,7 +17,7 @@ const ACTIONS = {
   LOGGED_IN: 'logged-in',
   LOGIN: 'login',
   ON_LOAD: 'on-load',
-  SELECT_MARKER: 'select-marker',
+  RELOAD_MAP: 'reload-map',
   SET_VIEW: 'set-view',
   SHOW_ADDED_LOCATION: 'show-added-location',
   SHOW_DEFAULT_POINT: 'show-default-point',

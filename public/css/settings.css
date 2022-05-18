@@ -1,7 +1,6 @@
 .Settings.is-visible {
   opacity: 1;
-  visibility: visible;
-}
+  visibility: visible; }
 
 .Settings {
   position: absolute;
@@ -13,8 +12,7 @@
   justify-content: center;
   opacity: 0;
   visibility: hidden;
-  transition: all 250ms ease-in-out;
-}
+  transition: all 250ms ease-in-out; }
 
 .Settings__inner {
   display: flex;
@@ -27,43 +25,35 @@
   z-index: 1000;
   background: #fff;
   max-width: 850px;
-  position: relative;
-}
+  position: relative; }
 
 .Settings__content {
   width: 100%;
   position: relative;
-  padding: 32px;
-}
+  padding: 32px; }
 
 .Settings__content.no-bottom-padding {
-  padding-bottom: 0;
-}
+  padding-bottom: 0; }
 
 .Settings__description a {
   color: #000;
-  text-decoration: underline;
-}
+  text-decoration: underline; }
 
 .Settings__footer.is-hidden {
-  display: none;
-}
+  display: none; }
 
 .Settings__field {
-  margin: 0 0 16px;
-}
+  margin: 0 0 16px; }
 
 .Settings__content p {
-  margin: 0 0 16px;
-}
+  margin: 0 0 16px; }
 
 .Settings__title {
   font-weight: bold;
-  margin: 0 0 16px 0;
-}
+  margin: 0 0 16px 0; }
+
 .Settings__description strong {
-  font-weight: bold;
-}
+  font-weight: bold; }
 
 .Settings__hint {
   margin: 8px 0 0;
@@ -72,8 +62,7 @@
   opacity: 0.5;
   display: flex;
   justify-content: space-between;
-  width: 100%;
-}
+  width: 100%; }
 
 .Settings__dangerZone {
   margin: 16px 0 0;
@@ -82,12 +71,10 @@
   width: 100%;
   background: #ffe2e2;
   padding: 16px 32px;
-  border-radius: 0 0 4px 4px;
-}
+  border-radius: 0 0 4px 4px; }
 
 .Settings__dangerZoneContent {
-  opacity: 0.4;
-}
+  opacity: 0.4; }
 
 .Settings__button {
   display: inline-block;
@@ -104,95 +91,78 @@
   text-align: center;
   text-decoration: none;
   box-shadow: none;
-  transition: background 250ms ease-in-out;
-}
+  transition: background 250ms ease-in-out; }
 
 .Settings__button:hover {
   background: #1c598e;
-  cursor: pointer;
-}
+  cursor: pointer; }
 
 .Settings__sectionContent:last-child {
-  margin: 0;
-}
+  margin: 0; }
 
 .Settings__section.is-horizontal {
   display: flex;
-  flex-direction: row;
-}
+  flex-direction: row; }
 
 .Settings__section {
   margin: 0 0 24px;
-  width: 100%;
-}
+  width: 100%; }
 
 .Settings__sectionContent .Settings__field {
-  margin-bottom: 0;
-}
+  margin-bottom: 0; }
 
 .Settings__sectionContent {
   display: flex;
   justify-content: space-between;
-  flex-direction: row;
-}
+  flex-direction: row; }
 
 .Settings__sectionContent > * {
-  margin: 0 8px 0 0;
-}
+  margin: 0 8px 0 0; }
+
 .Settings__sectionContent > *:last-child {
-  margin-right: 0;
-}
+  margin-right: 0; }
 
 .Settings__buttons {
-  border-top: 1px solid #ccc;
-}
+  border-top: 1px solid #ccc; }
 
 .Settings__footer {
   width: 100%;
   border-top: 1px solid #ddd;
-  padding: 24px 32px 0 32px;
-}
+  padding: 24px 32px 0 32px; }
+
 .Settings__footer .Button {
-  flex: 2;
-}
+  flex: 2; }
 
 .Settings__footer .Input__field {
-  flex: 3;
-}
+  flex: 3; }
 
 .Settings__sectionTitle {
-  margin: 0 0 24px; 
+  margin: 0 0 24px;
   font-weight: bold;
-  font-size: 1.1em;
-}
+  font-size: 1.1em; }
 
 .Settings__sectionDescription {
   font-size: 0.9em;
-  margin: 0 0 16px; 
-}
+  margin: 0 0 16px; }
 
 .Settings__backdrop {
-	background: linear-gradient(-45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB);
-	opacity: 0.5;
+  background: linear-gradient(-45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB);
+  opacity: 0.5;
   top: 0;
   right: 0;
   width: 100%;
   height: 100%;
   position: absolute;
   transition: opacity 250ms ease-in-out;
-	animation: Gradient 3s ease-in-out infinite;
-  cursor: pointer;
-}
-
+  animation: Gradient 3s ease-in-out infinite;
+  cursor: pointer; }
 
 .Settings__spinner {
   position: absolute;
   right: 16px;
-  top: 16px;
-}
+  top: 16px; }
 
 .Settings__hint {
   font-size: .7em;
   opacity: 0.5;
-  margin-top: 8px; 
-}
+  margin-top: 8px; }
