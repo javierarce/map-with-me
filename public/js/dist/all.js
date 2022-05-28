@@ -1,17 +1,4 @@
 const config = {
-  MAP: {
-    DEFAULT_SEARCH_LOCATION: "",
-    LAT: "39",
-    LNG: "-37",
-    ZOOM: "4",
-    FIT_BOUNDS: false,
-    TITLE: 'Map with me your favorite places',
-    ADMIN_USERNAME: 'javier',
-    MODERATED: true,
-    PROTECTED: false,
-    ANONYMOUS: true
-  },
-
   TEXTS: {
     PLACEHOLDER: 'What\'s cool about this place?',
     SEARCH_PLACEHOLDER: 'Search for a place or an address',
@@ -79,7 +66,7 @@ class Bus {
   }
 
   isAdmin () {
-    return !!(this.user && this.user.username && config_USERNAME === this.user.username)
+    return !!(ADMIN_USERNAME && this.user && this.user.username && ADMIN_USERNAME === this.user.username)
   }
 
   getTitle () {
@@ -87,7 +74,7 @@ class Bus {
   }
 
   getAdminUsername () {
-    return config.ADMIN_USERNAME
+    return ADMIN_USERNAME
   }
 
   isModerated () {
@@ -183,6 +170,12 @@ class Modal {
 }
 class Locations {
   constructor () {
+    this.bindEvents()
+  }
+
+
+  bindEvents () {
+    window.bus.on(config.ACTIONS.GET_LOCATIONS, this.get.bind(this))
   }
 
   get () {
@@ -433,6 +426,10 @@ const parseAddress = (address) => {
 }
 
 const extractNumber = (text) => {
+  if (!text) {
+    return
+  }
+
   let matches = text.match(/^(\d+|[a-z])\./)
   return matches && matches[1]
 }
@@ -544,7 +541,6 @@ window.mobileCheck = function() {
 const MAX_TITLE_LENGTH = 80
 const GEOCODING_EXTRA_PARAMS = '&addressdetails=1&namedetails=1&extratags=1&zoom=18&format=json'
 
-
 class Popup {
   constructor (coordinates, options) {
     this.enableSend = false
@@ -555,8 +551,7 @@ class Popup {
     this.user = options.user
     this.address = options.address
     this.zoom = options.zoom
-    this.readonly = options.readonly
-
+    this.readonly = window.bus.isAdmin() ? false : options.readonly
     this.bindEvents()
     this.render()
 
@@ -1122,7 +1117,9 @@ class Map {
   }
 
   onReloadMap (data) {
-    console.log(data)
+    if (!data) {
+      return
+    }
 
     let coordinates = { lat: data.lat, lng: data.lng }
     let latlng = this.flattenCoordinates(coordinates) 
@@ -1263,9 +1260,6 @@ class Header {
 
 class Sidebar {
   constructor () {
-    this.locations = new Locations()
-    this.locations.get()
-
     this.bindEvents()
   }
 
@@ -1313,26 +1307,52 @@ class Settings extends Modal {
   constructor () {
     super()
 
-    this.secret= undefined
+    this.secret = 'monoloco'
+
     this.sendButtonIsEnabled = false
+    this.menuSelected = 0
   }
 
   template () {
     return `
     <div class="Modal__backdrop js-backdrop"></div>
-    <div class="Settings__inner has-transition js-inner">
+    <div data-action="close" class="Settings__modal has-transition js-inner">
+    <div class="Settings__title">
+    Título
+    </div>
+    <div class="Settings__inner">
+      <div class="Settings__menuList">
+        <button data-action="select-menu" data-id="0" class="Settings__menuItem is-selected">Settings</button>
+        <button data-action="select-menu" data-id="1" class="Settings__menuItem">Data</button>
+        <button data-action="select-menu" data-id="2" class="Settings__menuItem">Information</button>
+      </div>
+
+      <div class="Settings__menuContent">
+        <div class="Settings__menu js-menu is-visible" data-id="0">
+
       <div class="Settings__content no-bottom-padding">
         <div class="Settings__spinner Spinner is-small js-spinner"></div>
 
         <div class="Settings__form">
-          <h3 class="Settings__sectionTitle">Configure your map</h3>
 
+        <div class="Settings__section">
           <label for="title">
             <strong class="Input__label">Title</strong>
             <div class="Input__field Settings__field">
               <input id="title" name="title" type="text" class="Input" placeholder="Title">
             </div>
           </label>
+          </div>
+
+        <div class="Settings__section">
+          <label for="description">
+            <strong class="Input__label">Description</strong>
+            <div class="Input__field Settings__field">
+              <input id="description" name="description" type="text" class="Input" placeholder="Description">
+            </div>
+          </label>
+          </div>
+
           <div class="Settings__section">
             <div class="Settings__sectionContent">
 
@@ -1367,12 +1387,14 @@ class Settings extends Modal {
             </div>
           </div>
 
+        <div class="Settings__section">
           <label for="admin">
             <strong class="Input__label">Admin username</strong>
             <div class="Input__field Settings__field is-medium">
               <input id="admin" type="text" name="admin_username" class="Input" placeholder="Admin">
             </div>
           </label>
+          </div>
 
           <div class="Settings__section">
             <strong class="Input__label">Publication settings</strong>
@@ -1419,31 +1441,78 @@ class Settings extends Modal {
 
           <div class="Settings__footer js-save-section">
             <div class="Settings__sectionContent">
-              <button class="Button is-bold js-show-secret">Save</button>
+              <button data-action="save" class="Button is-bold">Save</button>
             </div>
           </div>
 
           <div class="Settings__footer js-secret-section is-hidden">
 
-          <label for="title">
-            <strong class="Input__label">Enter the secret to save the configuration</strong>
-          </label>
-
             <div class="Settings__sectionContent">
               <div class="Input__field Settings__field">
-                <input type="text" class="Input js-secret" placeholder="Secret">
+                <input data-field="secret" data-action="secret" type="text" class="Input" placeholder="Secret">
               </div>
-              <button class="Button is-bold is-disabled js-save">Save</button>
+              <button data-action="save" class="Button is-bold is-disabled">Save</button>
             </div>
               <div class="Settings__hint">After changing this configuration, please restart the server.</div>
           </div>
 
 
-      <div class="Settings__dangerZone">
-        <div class="Settings__dangerZoneContent">
-          Do you want to start again? <button class="Button is-link js-destroy" >Destroy the database</button>
+
+
+
+        </div>
+        <div class="Settings__menu js-menu" data-id="1">
+
+<div class="Settings__section">
+              <div class="Settings__menuTitle">Export data</div>
+
+                <p>Get the map data in a GeoJSON or a CSV format. You can also subscribe to this map via <a href="/rss" title="RSS" target="_blank">RSS</a>.</p>
+
+
+  <details class="Dropdown">
+    <summary data-action="open" class="Dropdown__title">Download the data
+
+<div class="Dropdown__caret"></div>
+    </summary>
+    <ul class="Dropdown__menu">
+      <li class="Dropdown__menuItem"><a href="/geojson" title="Export locations in GeoJSON format" target="_blank">GEOJson</a></li>
+      <li class="Dropdown__menuItem"><a href="/csv" title="Export locations in CSV format" target="_blank">CSV</a></li>
+    </ul>
+  </details>
+
+
+
+
+
+</div>
+
+
+        <div class="Settings__section">
+              <div class="Settings__menuTitle">Import data</div>
+              <div class="Input__field Settings__field">
+              <input data-action="upload" id='file' type="file">
+</div>
+</div>
+
+
+
+
+        </div>
+        <div class="Settings__menu js-menu" data-id="2">
+
+              <div class="Settings__menuTitle">Improve the tool</div>
+          <p>Follow the development of the tool, suggest improvements, and
+            report bugs <a href="https://github.com/javierarce/map-with-me" target="_blank" title="Visit the repo in GitHub">in GitHub</a>.</p>
+
+
+              <p>This website uses data from <a href="https://www.openstreetmap.org/copyright">Nominatim</a></p>
+          <p>Made by <a href="https://twitter.com/javier">Javier Arce</a> from a mysterious location</p>
+
+
         </div>
       </div>
+
+  </div>
     </div>
 `
   }
@@ -1458,9 +1527,9 @@ class Settings extends Modal {
 
   onGetConfig (response) {
     response.json().then((result) => {
-
       this.$inputs.forEach(($input) => {
         let name = $input.name
+
         let $field = this.$el.querySelector(`[name="${name}"]`)
         if ($field && $field.type === 'checkbox') {
           $field.checked = result[name.toUpperCase()]
@@ -1478,10 +1547,11 @@ class Settings extends Modal {
   onClickShowSecret () {
     this.$saveSection.classList.add('is-hidden')
     this.$secretSection.classList.remove('is-hidden')
-    this.$secret.focus()
+    this.$fields.secret.focus()
   }
 
   onClickSave () {
+    console.log('saving')
     if (!this.secret) {
       return
     }
@@ -1505,6 +1575,7 @@ class Settings extends Modal {
 
     let admin = {
       title: this.fields['title'],
+      description: this.fields['description'],
       moderated: this.fields['moderated'],
       anonymous: this.fields['anonymous'],
       protected: this.fields['protected'],
@@ -1525,25 +1596,80 @@ class Settings extends Modal {
     response.json().then((result) => {
       this.$spinner.classList.remove('is-visible')
 
-    let map = {
-      lat: this.fields['lat'],
-      lng: this.fields['lng'],
-      zoom: this.fields['zoom'],
-      default_search_location: this.fields['default_search_location']
-    }
+      let data = {
+        lat: this.fields['lat'],
+        lng: this.fields['lng'],
+        zoom: this.fields['zoom'],
+        default_search_location: this.fields['default_search_location']
+      }
 
-      window.bus.emit(config.ACTIONS.RELOAD_MAP, map)
+      window.bus.emit(config.ACTIONS.RELOAD_MAP, data)
       window.bus.emit(config.ACTIONS.STOP_LOADING)
     })
   }
 
   onEnterSecret (e) {
-    this.secret = this.$secret.value
+    this.secret = this.$fields.secret.value
+
     if (this.secret) {
-      this.$save.classList.remove('is-disabled')
+      this.$buttons.save.classList.remove('is-disabled')
     } else {
-      this.$save.classList.add('is-disabled')
+      this.$buttons.save.classList.add('is-disabled')
     }
+  }
+
+  upload (event) {
+    killEvent(event)
+
+    let formData = new FormData()
+    let file = event.target.files[0]
+
+    formData.append('file', file)
+
+    fetch('/api/upload', {
+      method: 'POST',
+      body: formData
+    }).then((response) => {
+      if (response.status === 200) {
+        console.log(response)
+        window.bus.emit(config.ACTIONS.GET_LOCATIONS)
+      }
+
+      response.json().then(data => {
+        console.log(data)
+      })
+        .catch(() => { })
+    })
+
+    return false
+  }
+
+  selectMenu (e) {
+    this.menuSelected = e.target.dataset.id
+
+    if (this.$selectedButton) {
+      this.$selectedButton.classList.remove('is-selected')
+    }
+
+    this.showMenu()
+
+    this.$selectedButton = e.target
+    this.$selectedButton.classList.add('is-selected')
+  }
+
+  showMenu () {
+    this.$menus.forEach(($menu) => {
+      $menu.classList.remove('is-visible')
+    })
+
+    this.$menus[this.menuSelected].classList.add('is-visible')
+  }
+
+  setDimensions () {
+    let $inner = this.$el.querySelector('.js-inner')
+    let dimensions = $inner.getBoundingClientRect()
+    $inner.style.width = `${dimensions.width}px`
+    $inner.style.height = `${dimensions.height}px`
   }
 
   render () {
@@ -1563,6 +1689,8 @@ class Settings extends Modal {
 
     this.$spinner = this.$el.querySelector('.js-spinner')
 
+
+    /*
     this.$secret = this.$el.querySelector('.js-secret')
     this.$secret.onkeyup = this.onEnterSecret.bind(this)
 
@@ -1572,12 +1700,62 @@ class Settings extends Modal {
     this.$showSecret = this.$el.querySelector('.js-show-secret')
     this.$showSecret.onclick = this.onClickShowSecret.bind(this)
 
-    this.$save = this.$el.querySelector('.js-save')
-    this.$save.onclick = this.onClickSave.bind(this)
+    */
+
+    this.$menus = this.$el.querySelectorAll('.js-menu')
+
+    let $buttons = this.$el.querySelectorAll('[data-action]')
+    let $fields = this.$el.querySelectorAll('[data-field]')
+
+    this.$buttons = {}
+    this.$fields = {}
+
+    $fields.forEach(($field) => {
+      let name = $field.dataset.field
+      this.$fields[name] = $field
+    })
+
+    $buttons.forEach(($button, index) => {
+      let action = $button.dataset.action
+
+      if (action === 'select-menu') {
+        if (index === 1) {
+          this.$selectedButton = $button
+        }
+        $button.onclick = this.selectMenu.bind(this)
+      } else if (action === 'upload') {
+        $button.onchange = this.upload.bind(this)
+      } else if (action === 'open') {
+        $button.onclick = (e) => {
+          killEvent(e)
+          this.$open = $button.parentElement
+          this.$open.open = !this.$open.open
+        }
+
+      } else if (action === 'close') {
+        $button.onclick = () => {
+          if (this.$open) {
+          this.$open.open = false
+          }
+        }
+
+
+      } else if (action === 'show-secret') {
+        $button.onclick = this.onClickShowSecret.bind(this)
+      } else if (action === 'save') {
+        $button.onclick = this.onClickSave.bind(this)
+      } else if (action === 'secret') {
+        $button.onkeyup = this.onEnterSecret.bind(this)
+      }
+
+      this.$buttons[action] = $button
+    })
 
     setTimeout(() => {
       this.$el.classList.add('is-visible')
+      this.setDimensions()
     }, 10)
+
 
     this.$inputs = this.$el.querySelectorAll('input')
     this.getConfig()
@@ -1585,6 +1763,8 @@ class Settings extends Modal {
     return this.$el
   }
 }
+
+
 class About extends Modal {
   constructor () {
     super()
@@ -1638,6 +1818,9 @@ class App {
     this.sidebar = new Sidebar()
 
     this.map = new Map()
+
+    this.locations = new Locations()
+    this.locations.get()
 
     this.getStatus()
     this.bindEvents()

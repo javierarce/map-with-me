@@ -26,6 +26,10 @@ const parseAddress = (address) => {
 }
 
 const extractNumber = (text) => {
+  if (!text) {
+    return
+  }
+
   let matches = text.match(/^(\d+|[a-z])\./)
   return matches && matches[1]
 }

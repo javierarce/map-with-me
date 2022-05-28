@@ -1,17 +1,4 @@
 const config = {
-  MAP: {
-    DEFAULT_SEARCH_LOCATION: "",
-    LAT: "39",
-    LNG: "-37",
-    ZOOM: "4",
-    FIT_BOUNDS: false,
-    TITLE: 'Map with me your favorite places',
-    ADMIN_USERNAME: 'javier',
-    MODERATED: true,
-    PROTECTED: false,
-    ANONYMOUS: true
-  },
-
   TEXTS: {
     PLACEHOLDER: 'What\'s cool about this place?',
     SEARCH_PLACEHOLDER: 'Search for a place or an address',

@@ -14,6 +14,7 @@ const ACTIONS = {
   ADD_MARKER: 'add-marker',
   ADD_MARKERS: 'add-markers',
   INVALIDATE_MAP_SIZE: 'invalidate-size',
+  GET_LOCATIONS: 'get-locations',
   LOGGED_IN: 'logged-in',
   LOGIN: 'login',
   ON_LOAD: 'on-load',

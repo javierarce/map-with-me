@@ -1,8 +1,5 @@
 class Sidebar {
   constructor () {
-    this.locations = new Locations()
-    this.locations.get()
-
     this.bindEvents()
   }
 

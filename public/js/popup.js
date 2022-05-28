@@ -1,7 +1,6 @@
 const MAX_TITLE_LENGTH = 80
 const GEOCODING_EXTRA_PARAMS = '&addressdetails=1&namedetails=1&extratags=1&zoom=18&format=json'
 
-
 class Popup {
   constructor (coordinates, options) {
     this.enableSend = false
@@ -12,8 +11,7 @@ class Popup {
     this.user = options.user
     this.address = options.address
     this.zoom = options.zoom
-    this.readonly = options.readonly
-
+    this.readonly = window.bus.isAdmin() ? false : options.readonly
     this.bindEvents()
     this.render()
 

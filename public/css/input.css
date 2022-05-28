@@ -23,7 +23,7 @@
 .Input__label {
   display: block;
   font-weight: bold;
-  margin: 0 0 12px;
+  margin: 0 0 0.8em;
   opacity: 0.4; }
 
 .Input__checkbox {

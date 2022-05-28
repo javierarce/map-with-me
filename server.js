@@ -8,6 +8,10 @@ const fs = require('fs')
 const path = require('path')
 const bodyParser = require('body-parser')
 
+const tj = require('@mapbox/togeojson')
+
+const DOMParser = require('xmldom').DOMParser;
+
 const session = require('express-session')
 const passport = require('passport')
 const TwitterStrategy = require('passport-twitter').Strategy
@@ -21,6 +25,9 @@ const expressLayouts = require('express-ejs-layouts')
 
 const app = express()
 const http = require('http').createServer(app)
+
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' })
 
 const Mapper = require('./lib/map')
 const Storage = require('./lib/db')
@@ -100,6 +107,28 @@ app.get('/geojson', (request, response) => { Map.onGetGeoJSON(request, response)
 
 app.get('/auth/twitter', passport.authenticate('twitter'))
 app.get('/auth/twitter/callback', passport.authenticate('twitter', { successRedirect: '/', failureRedirect: '/login' }))
+
+app.post('/api/upload', upload.single('file'), async (request, response) => {
+
+  let data = fs.readFileSync(request.file.path, 'utf8')
+  let KML = new DOMParser().parseFromString(data)
+
+  let locationCount = 0
+
+  tj.kml(KML).features.forEach((feature) => {
+    let coordinates = feature.geometry.coordinates
+    let lng = coordinates[0]
+    let lat = coordinates[1]
+    let name = feature.properties.name
+    let address = feature.properties.name
+    let description = feature.properties.name
+
+    Map.addLocation({ lng, lat, name, description, address, approved: true })
+    locationCount++
+  })
+
+  response.json({ locationCount })
+})
 
 app.get('/', (request, response) => {
   const isDevelopment = process.env.MODE === 'DEVELOPMENT' ? true : false

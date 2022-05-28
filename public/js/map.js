@@ -314,7 +314,9 @@ class Map {
   }
 
   onReloadMap (data) {
-    console.log(data)
+    if (!data) {
+      return
+    }
 
     let coordinates = { lat: data.lat, lng: data.lng }
     let latlng = this.flattenCoordinates(coordinates) 

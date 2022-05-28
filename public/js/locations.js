@@ -1,5 +1,11 @@
 class Locations {
   constructor () {
+    this.bindEvents()
+  }
+
+
+  bindEvents () {
+    window.bus.on(config.ACTIONS.GET_LOCATIONS, this.get.bind(this))
   }
 
   get () {

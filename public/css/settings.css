@@ -14,23 +14,48 @@
   visibility: hidden;
   transition: all 250ms ease-in-out; }
 
-.Settings__inner {
+.Settings__modal {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: start;
+  justify-content: start;
   flex-direction: column;
+  align-items: stretch;
   transition: all 250ms ease-in-out;
   border-radius: 4px;
+  overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   z-index: 1000;
-  background: #fff;
   max-width: 850px;
-  position: relative; }
+  position: relative;
+  background: #fff; }
+
+.Settings__inner {
+  height: 100%;
+  display: flex;
+  align-items: start;
+  justify-content: start;
+  flex-direction: row;
+  align-items: stretch;
+  transition: all 250ms ease-in-out; }
+
+.Settings__menuTitle {
+  display: block;
+  font-weight: bold;
+  margin: 0 0 0.8em; }
+
+.Settings__title {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  font-weight: bold;
+  background: linear-gradient(-45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB);
+  background-size: 400% 400%;
+  color: #fff; }
 
 .Settings__content {
   width: 100%;
-  position: relative;
-  padding: 32px; }
+  position: relative; }
 
 .Settings__content.no-bottom-padding {
   padding-bottom: 0; }
@@ -48,10 +73,6 @@
 .Settings__content p {
   margin: 0 0 16px; }
 
-.Settings__title {
-  font-weight: bold;
-  margin: 0 0 16px 0; }
-
 .Settings__description strong {
   font-weight: bold; }
 
@@ -65,20 +86,21 @@
   width: 100%; }
 
 .Settings__dangerZone {
-  margin: 16px 0 0;
   font-size: 0.7em;
   line-height: 125%;
   width: 100%;
   background: #ffe2e2;
   padding: 16px 32px;
-  border-radius: 0 0 4px 4px; }
+  position: absolute;
+  left: 0;
+  bottom: 0; }
 
 .Settings__dangerZoneContent {
   opacity: 0.4; }
 
 .Settings__button {
   display: inline-block;
-  border-radius: 4px;
+  border-radius: 0;
   width: 100%;
   margin: auto;
   font-size: 1.2em;
@@ -105,8 +127,7 @@
   flex-direction: row; }
 
 .Settings__section {
-  margin: 0 0 24px;
-  width: 100%; }
+  margin: 0 0 1em; }
 
 .Settings__sectionContent .Settings__field {
   margin-bottom: 0; }
@@ -122,16 +143,9 @@
 .Settings__sectionContent > *:last-child {
   margin-right: 0; }
 
-.Settings__buttons {
-  border-top: 1px solid #ccc; }
-
-.Settings__footer {
-  width: 100%;
-  border-top: 1px solid #ddd;
-  padding: 24px 32px 0 32px; }
-
 .Settings__footer .Button {
-  flex: 2; }
+  width: auto;
+  padding: 16px 48px; }
 
 .Settings__footer .Input__field {
   flex: 3; }
@@ -166,3 +180,51 @@
   font-size: .7em;
   opacity: 0.5;
   margin-top: 8px; }
+
+.Settings__menuList {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 200px;
+  background: #f0f0f0;
+  border-right: 1px solid #ddd; }
+
+.Settings__menuItem {
+  color: #000;
+  display: inline-block;
+  width: 100%;
+  padding: 16px;
+  font-weight: bold;
+  outline: none;
+  text-align: left;
+  text-decoration: none;
+  box-shadow: none;
+  transition: all 250ms ease-in-out;
+  border-bottom: 1px solid #ddd; }
+
+.Settings__menuItem.is-selected,
+.Settings__menuItem.is-selected:hover {
+  background: #fff; }
+
+.Settings__menuItem:hover {
+  background: #e0e0e0; }
+
+.Settings__menuContent {
+  position: relative;
+  padding: 32px;
+  flex: 1; }
+
+.Settings__menuContent p {
+  margin: 0 0 1em; }
+
+.Settings__menu {
+  display: none; }
+
+.Settings__menu.is-visible {
+  display: block; }
+
+.Settings__menuListFooter {
+  position: absolute;
+  font-size: 0.8em;
+  bottom: 0;
+  padding: 0.8em; }

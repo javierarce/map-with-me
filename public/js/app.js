@@ -7,6 +7,9 @@ class App {
 
     this.map = new Map()
 
+    this.locations = new Locations()
+    this.locations.get()
+
     this.getStatus()
     this.bindEvents()
     this.render()

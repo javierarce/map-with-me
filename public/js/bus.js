@@ -11,7 +11,7 @@ class Bus {
   }
 
   isAdmin () {
-    return !!(this.user && this.user.username && config_USERNAME === this.user.username)
+    return !!(ADMIN_USERNAME && this.user && this.user.username && ADMIN_USERNAME === this.user.username)
   }
 
   getTitle () {
@@ -19,7 +19,7 @@ class Bus {
   }
 
   getAdminUsername () {
-    return config.ADMIN_USERNAME
+    return ADMIN_USERNAME
   }
 
   isModerated () {
