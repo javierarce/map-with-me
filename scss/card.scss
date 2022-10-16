@@ -1,0 +1,83 @@
+.Card.is-active {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 2px 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.Card.is-rejected .Card__name,
+.Card.is-rejected .Card__description,
+.Card.is-rejected .Card__address {
+  opacity: 0.4;
+}
+
+.Card {
+  width: 100%;
+  border: none;
+  padding: 16px;
+  margin: 0 0 16px 0;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255,255, 0.2);
+  transition: box-shadow 150ms ease-in-out, background 150ms ease-in-out, visibility 250ms ease-in-out, opacity 250ms ease-in-out;
+  text-align: left;
+  font-size: 1em;
+  outline: none;
+  background: transparent;
+  color: #fff;
+  text-decoration: none;
+  box-shadow: none;
+  -webkit-appearance: none;
+}
+
+.Card.is-placeholder {
+  flex: 1;
+  display: flex;
+  width: 100%;
+  border: none;
+  padding: 16px 32px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255,255, 0.2);
+  transition: background 150ms ease-in-out, visibility 250ms ease-in-out, opacity 250ms ease-in-out;
+  text-align: center;
+}
+
+.Card:hover {
+  cursor: pointer;
+  box-shadow: 2px 1px 4px rgba(0, 0, 0, 0.1);
+}
+.Card.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+.Card__name {
+  margin: 0 0 8px 0;
+  font-weight: bold;
+}
+.Card__description {
+  margin: 0 0 8px 0;
+}
+.Card__address {
+  font-size: 0.8em;
+  color: rgba(0,0,0, 0.3);
+  line-height: 135%;
+}
+.Card__footerOptions > * {
+  margin: 0 0 0 8px;
+}
+.Card__footerOptions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.Card__footer {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  font-size: .8em;
+  opacity: 0.8;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  margin: 8px 0 0 0;
+  padding: 8px 0 0 0;
+}

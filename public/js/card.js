@@ -76,6 +76,7 @@ class Card {
       if (result && !result.error) {
         this.$el.classList.add('is-hidden')
         this.removeMarker()
+        this.removeLocation()
 
         setTimeout(() => {
           this.$el.remove()
@@ -134,6 +135,10 @@ class Card {
 
     let $item = this.getItemById(marker.options.location.id) 
     $item.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  removeLocation () {
+    window.bus.emit(config.ACTIONS.REMOVE_LOCATION, this.location.id)
   }
 
   removeMarker () {

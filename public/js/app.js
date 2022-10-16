@@ -2,17 +2,18 @@ class App {
   constructor () {
     this.$el = getElement('.App')
 
+    this.locations = new Locations()
+
     this.header = new Header()
-    this.sidebar = new Sidebar()
+    this.sidebar = new Sidebar(this.locations)
 
     this.map = new Map()
-
-    this.locations = new Locations()
-    this.locations.get()
 
     this.getStatus()
     this.bindEvents()
     this.render()
+
+    this.locations.get()
   }
 
   bindEvents () {

@@ -170,12 +170,13 @@ class Modal {
 }
 class Locations {
   constructor () {
+    this.locations = []
     this.bindEvents()
   }
 
-
   bindEvents () {
     window.bus.on(config.ACTIONS.GET_LOCATIONS, this.get.bind(this))
+    window.bus.on(config.ACTIONS.REMOVE_LOCATION, this.onRemoveLocation.bind(this))
   }
 
   get () {
@@ -199,6 +200,10 @@ class Locations {
       .catch((error) => {
         console.error(error)
       })
+  }
+
+  onRemoveLocation (id) {
+    console.log(id)
   }
 
   onGetAddedLocation (response) {
@@ -285,6 +290,7 @@ class Card {
       if (result && !result.error) {
         this.$el.classList.add('is-hidden')
         this.removeMarker()
+        this.removeLocation()
 
         setTimeout(() => {
           this.$el.remove()
@@ -343,6 +349,10 @@ class Card {
 
     let $item = this.getItemById(marker.options.location.id) 
     $item.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  removeLocation () {
+    window.bus.emit(config.ACTIONS.REMOVE_LOCATION, this.location.id)
   }
 
   removeMarker () {
@@ -551,7 +561,8 @@ class Popup {
     this.user = options.user
     this.address = options.address
     this.zoom = options.zoom
-    this.readonly = window.bus.isAdmin() ? false : options.readonly
+    this.readonly = options.readonly
+
     this.bindEvents()
     this.render()
 
@@ -582,7 +593,7 @@ class Popup {
   }
 
   canSend () {
-    return this.getDescription().length > 0
+    return this.enableSend && this.getDescription().length > 0
   }
 
   enableSendButton () {
@@ -612,6 +623,15 @@ class Popup {
     let address = this.getAddress()
 
     window.bus.emit(config.ACTIONS.ADD_LOCATION, { coordinates, name, description, address })
+    this.reset()
+  }
+
+  reset () {
+    this.coordinates = undefined
+    this.description = undefined
+    this.address = undefined
+
+    this.disableSendButton()
   }
 
   showSuccess () {
@@ -913,8 +933,8 @@ class Map {
 
     let marker = this.addMarker(location)
 
-    marker.openPopup()
-    this.popup.showSuccess()
+    //marker.openPopup()
+    //this.popup.showSuccess()
   }
 
   addMarker (location) {
@@ -1193,8 +1213,7 @@ class Header {
       <Search />
     </div>
     <div class="Header__links js-links">
-      <button class="Button Header__linksItem js-about">About</button>
-      <button class="Button Header__linksItem js-settings">Config</button>
+      <button class="Button Header__linksItem js-settings">Map</button>
     </div>
     `
   }
@@ -1205,10 +1224,6 @@ class Header {
 
   onClickTitle () {
     window.bus.emit(config.ACTIONS.SHOW_DEFAULT_POINT)
-  }
-
-  onClickAbout () {
-    window.bus.emit(config.ACTIONS.SHOW_ABOUT)
   }
 
   onClickSettings () {
@@ -1243,9 +1258,6 @@ class Header {
     this.$title = this.$el.querySelector('.js-button')
     this.$title.onclick = this.onClickTitle.bind(this)
 
-    this.$about = this.$el.querySelector('.js-about')
-    this.$about.onclick = this.onClickAbout.bind(this)
-
     this.$settings = this.$el.querySelector('.js-settings')
     this.$settings.onclick = this.onClickSettings.bind(this)
 
@@ -1259,11 +1271,13 @@ class Header {
 }
 
 class Sidebar {
-  constructor () {
+  constructor (locations) {
     this.bindEvents()
+    this.locations = locations
   }
 
   bindEvents () {
+    window.bus.on(config.ACTIONS.REMOVE_LOCATION, this.onRemoveLocation.bind(this))
     window.bus.on(config.ACTIONS.ADD_LOCATION, this.onAddLocation.bind(this))
     window.bus.on(config.ACTIONS.SELECT_LOCATION, this.onSelectLocation.bind(this))
     window.bus.on(config.ACTIONS.ADD_MARKER, this.onAddMarker.bind(this))
@@ -1271,17 +1285,27 @@ class Sidebar {
   }
 
   template () {
-    return `<div class="Sidebar__content js-content"></div>`
+    return `<div class="Sidebar__content js-content">
+              <div class="Card is-placeholder js-placeholder">Click on the map to add the first location.</div>
+            </div>`
   }
 
   onAddMarker (locationAndMarkerData) {
-    let location = new Card(locationAndMarkerData)
-    this.$content.prepend(location.render().$el)
+    let card = new Card(locationAndMarkerData)
+    this.$placeholder.classList.add('is-hidden')
+    this.$content.prepend(card.render().$el)
+  }
+
+  onRemoveLocation (location) {
+    //console.log(location, this.locations)
+    //if (!this.locations.locations.length) {
+      //this.$placeholder.classList.remove('is-hidden')
+    //}
   }
 
   onAddLocation ({ coordinates, name, description, address }) {
-    window.bus.emit(config.ACTIONS.START_LOADING)
     this.locations.add({ coordinates, name, description, address })
+    window.bus.emit(config.ACTIONS.START_LOADING)
   }
 
   onSelectLocation (location) {
@@ -1300,6 +1324,9 @@ class Sidebar {
     this.$el = createElement({ className: 'Sidebar'})
     this.$el.insertAdjacentHTML('beforeend', this.template())
     this.$content = this.$el.querySelector('.js-content')
+
+    this.$placeholder = this.$el.querySelector('.js-placeholder')
+
     return this.$el
   }
 }
@@ -1814,17 +1841,18 @@ class App {
   constructor () {
     this.$el = getElement('.App')
 
+    this.locations = new Locations()
+
     this.header = new Header()
-    this.sidebar = new Sidebar()
+    this.sidebar = new Sidebar(this.locations)
 
     this.map = new Map()
-
-    this.locations = new Locations()
-    this.locations.get()
 
     this.getStatus()
     this.bindEvents()
     this.render()
+
+    this.locations.get()
   }
 
   bindEvents () {

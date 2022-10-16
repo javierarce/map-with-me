@@ -9,6 +9,7 @@ const TEXTS = {
 
 const ACTIONS = {
   ADD_LOCATION: 'add-location',
+  REMOVE_LOCATION: 'remove-location',
   ADD_LOCATIONS: 'add-locations',
   REMOVE_MARKER: 'remove-marker',
   ADD_MARKER: 'add-marker',

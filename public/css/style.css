@@ -466,19 +466,9 @@ table {
   overflow: hidden;
   overflow-y: scroll; }
 
-.Card__none {
-  display: flex;
-  width: 100%;
-  border: none;
-  padding: 16px 32px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  color: rgba(255, 255, 255, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: background 150ms ease-in-out, visibility 250ms ease-in-out, opacity 250ms ease-in-out;
-  text-align: center;
-  height: 100%; }
+@media only screen and (max-width: 800px) {
+  .Locations {
+    display: none; } }
 
 .Card.is-active {
   background: rgba(255, 255, 255, 0.2);
@@ -505,6 +495,20 @@ table {
   text-decoration: none;
   box-shadow: none;
   -webkit-appearance: none; }
+
+.Card.is-placeholder {
+  flex: 1;
+  display: flex;
+  width: 100%;
+  border: none;
+  padding: 16px 32px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: background 150ms ease-in-out, visibility 250ms ease-in-out, opacity 250ms ease-in-out;
+  text-align: center; }
 
 .Card:hover {
   cursor: pointer;
@@ -544,10 +548,6 @@ table {
   border-top: 1px solid rgba(255, 255, 255, 0.2);
   margin: 8px 0 0 0;
   padding: 8px 0 0 0; }
-
-@media only screen and (max-width: 800px) {
-  .Locations {
-    display: none; } }
 
 .is-expanded .Map__container {
   width: 100%; }
@@ -1222,14 +1222,6 @@ table {
   bottom: 0;
   padding: 0.8em; }
 
-.is-loaded .Sidebar {
-  opacity: 1;
-  visibility: visible; }
-
-.is-expanded .Sidebar {
-  opacity: 0;
-  pointer-events: none; }
-
 .Sidebar {
   position: absolute;
   right: 0;
@@ -1245,7 +1237,17 @@ table {
   opacity: 0;
   z-index: 10; }
 
+.is-loaded .Sidebar {
+  opacity: 1;
+  visibility: visible; }
+
+.is-expanded .Sidebar {
+  opacity: 0;
+  pointer-events: none; }
+
 .Sidebar__content {
+  display: flex;
+  flex-direction: column;
   height: 100%; }
 
 .Sidebar__descriptionText {

@@ -11,7 +11,8 @@ class Popup {
     this.user = options.user
     this.address = options.address
     this.zoom = options.zoom
-    this.readonly = window.bus.isAdmin() ? false : options.readonly
+    this.readonly = options.readonly
+
     this.bindEvents()
     this.render()
 
@@ -42,7 +43,7 @@ class Popup {
   }
 
   canSend () {
-    return this.getDescription().length > 0
+    return this.enableSend && this.getDescription().length > 0
   }
 
   enableSendButton () {
@@ -72,6 +73,15 @@ class Popup {
     let address = this.getAddress()
 
     window.bus.emit(config.ACTIONS.ADD_LOCATION, { coordinates, name, description, address })
+    this.reset()
+  }
+
+  reset () {
+    this.coordinates = undefined
+    this.description = undefined
+    this.address = undefined
+
+    this.disableSendButton()
   }
 
   showSuccess () {

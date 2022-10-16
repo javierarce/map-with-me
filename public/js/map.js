@@ -110,8 +110,8 @@ class Map {
 
     let marker = this.addMarker(location)
 
-    marker.openPopup()
-    this.popup.showSuccess()
+    //marker.openPopup()
+    //this.popup.showSuccess()
   }
 
   addMarker (location) {

@@ -1,11 +1,12 @@
 class Locations {
   constructor () {
+    this.locations = []
     this.bindEvents()
   }
 
-
   bindEvents () {
     window.bus.on(config.ACTIONS.GET_LOCATIONS, this.get.bind(this))
+    window.bus.on(config.ACTIONS.REMOVE_LOCATION, this.onRemoveLocation.bind(this))
   }
 
   get () {
@@ -29,6 +30,10 @@ class Locations {
       .catch((error) => {
         console.error(error)
       })
+  }
+
+  onRemoveLocation (id) {
+    console.log(id)
   }
 
   onGetAddedLocation (response) {

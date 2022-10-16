@@ -19,8 +19,7 @@ class Header {
       <Search />
     </div>
     <div class="Header__links js-links">
-      <button class="Button Header__linksItem js-about">About</button>
-      <button class="Button Header__linksItem js-settings">Config</button>
+      <button class="Button Header__linksItem js-settings">Map</button>
     </div>
     `
   }
@@ -31,10 +30,6 @@ class Header {
 
   onClickTitle () {
     window.bus.emit(config.ACTIONS.SHOW_DEFAULT_POINT)
-  }
-
-  onClickAbout () {
-    window.bus.emit(config.ACTIONS.SHOW_ABOUT)
   }
 
   onClickSettings () {
@@ -68,9 +63,6 @@ class Header {
 
     this.$title = this.$el.querySelector('.js-button')
     this.$title.onclick = this.onClickTitle.bind(this)
-
-    this.$about = this.$el.querySelector('.js-about')
-    this.$about.onclick = this.onClickAbout.bind(this)
 
     this.$settings = this.$el.querySelector('.js-settings')
     this.$settings.onclick = this.onClickSettings.bind(this)
