@@ -2,6 +2,9 @@
 
 🌍 Create collaborative maps with your friends (and enemies).
 
+![alt text](https://javier.work/images/mapwithme/home.jpg)
+
+
 ### Here's how to create a collaborative map of your own
 
 1. Open the `.env` file out the variables:
