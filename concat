@@ -1,0 +1,15 @@
+cat public/js/config.js \
+    public/js/emojis.js \
+    public/js/bus.js \
+    public/js/modal.js \
+    public/js/locations.js \
+    public/js/card.js \
+    public/js/base.js \
+    public/js/popup.js \
+    public/js/map.js \
+    public/js/header.js \
+    public/js/sidebar.js \
+    public/js/settings.js \
+    public/js/about.js \
+    public/js/app.js \
+    > public/js/dist/all.js

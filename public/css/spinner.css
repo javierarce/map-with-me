@@ -1,0 +1,19 @@
+.Spinner {
+  border-top: 2px solid #ddd;
+  border-right: 2px solid #ddd;
+  border-bottom: 2px solid #ddd;
+  border-left: 2px solid #0090d7;
+  animation: load8 0.8s infinite linear;
+  display: none; }
+
+.Spinner.is-visible {
+  display: block; }
+
+.Spinner, .Spinner:after {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%; }
+
+.Spinner.is-small {
+  width: 20px;
+  height: 20px; }

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title><%= config.TITLE  %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
+
+    <link rel="stylesheet" href="/leaflet/leaflet.css">
+    <link rel="stylesheet" media="all"  href="/css/style.css" type="text/css">
+
+    <script src="/leaflet/leaflet.js"></script>
+    <script src="/leaflet.markercluster/leaflet.markercluster-src.js"></script>
+    <script src="/ejs/ejs.min.js"></script>
+
+    <link rel="stylesheet" href="/css/style.css" />
+
+    <script>
+      const ADMIN_USERNAME = '<%= config.ADMIN_USERNAME %>'
+      const TITLE = '<%= config.TITLE %>'
+
+      const coordinates = {
+      LNG: <%= config.LNG %>,
+      LAT: <%= config.LAT %>,
+      ZOOM: <%= config.ZOOM %>
+      }
+    </script>
+
+    <% if (isDevelopment) { -%>
+    <script src="/js/config.js"></script>
+    <script src="/js/emojis.js"></script>
+    <script src="/js/bus.js"></script>
+    <script src="/js/modal.js"></script>
+    <script src="/js/locations.js"></script>
+    <script src="/js/card.js"></script>
+    <script src="/js/base.js"></script>
+    <script src="/js/popup.js"></script>
+    <script src="/js/map.js"></script>
+    <script src="/js/sidebar.js"></script>
+    <script src="/js/settings.js"></script>
+    <script src="/js/header.js"></script>
+    <script src="/js/about.js"></script>
+    <script src="/js/app.js"></script>
+    <% } else { -%>
+    <script src="/js/dist/all.js"></script>
+    <% } -%>
+  </head>
+  <body>
+    <div id="app" class="App"><%- body %></div>
+  </body>
+</html>

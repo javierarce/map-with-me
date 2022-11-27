@@ -4,63 +4,40 @@
   "description": "Create collaborative maps with your friends (and enemies)",
   "main": "server.js",
   "license": "MIT",
-  "scripts": {
-    "start:client": "webpack-dev-server --config webpack.config.js",
-    "start": "babel-watch ./server.js"
-  },
   "author": {
     "name": "Javier Arce",
     "email": "javierarce@gmail.com",
     "url": "https://twitter.com/javier"
   },
+  "scripts": {
+    "scss": "node-sass --watch scss -o public/css"
+  },
   "bugs": {
     "url": "https://github.com/javierarce/map-with-me/issues"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.2",
-    "@babel/preset-env": "^7.10.2",
-    "babel-loader": "^8.1.0",
-    "babel-watch": "^7.0.0",
-    "core-js": "^3.6.5",
-    "express": "^4.17.1",
-    "multer": "^1.4.2",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11",
-    "webpack-dev-middleware": "^3.7.2",
-    "webpack-dev-server": "^3.11.0",
-    "webpack-hot-middleware": "^2.25.0"
+    "express": "^4.17.1"
   },
   "dependencies": {
+    "@mapbox/togeojson": "^0.16.0",
     "body-parser": "^1.19.0",
-    "css-loader": "^3.5.3",
-    "dotenv": "^8.2.0",
+    "dotenv": "^16.0.0",
+    "ejs": "^3.1.6",
+    "emoji-regex": "^10.1.0",
+    "express-ejs-layouts": "^2.5.1",
     "express-session": "^1.17.1",
-    "extract-loader": "^5.1.0",
-    "file-loader": "^6.0.0",
     "fs": "^0.0.1-security",
-    "helmet": "^3.22.0",
-    "html-webpack-plugin": "^4.3.0",
+    "helmet": "^5.0.2",
     "leaflet": "^1.6.0",
     "leaflet.markercluster": "^1.4.1",
-    "node-cmd": "^3.0.0",
-    "node-sass-middleware": "^0.11.0",
-    "passport": "^0.4.1",
+    "multer": "^1.4.4",
+    "node-sass": "^7.0.1",
+    "passport": "^0.5.2",
     "passport-twitter": "^1.0.4",
-    "path": "^0.12.7",
-    "postcss-loader": "^3.0.0",
     "rss": "^1.2.2",
-    "sanitize-html": "^1.26.0",
-    "sass": "^1.26.8",
-    "sass-loader": "^8.0.2",
-    "schema-utils": "^2.7.0",
-    "sequelize": "^5.21.12",
-    "sqlite3": "^4.2.0",
-    "style-loader": "^1.2.1",
-    "vue": "^2.6.11",
-    "vue-loader": "^15.9.2",
-    "vue-router": "^3.3.2",
-    "vue-template-compiler": "^2.6.11",
-    "yaml": "^1.10.0",
-    "yaml-loader": "^0.6.0"
+    "sanitize-html": "^2.7.0",
+    "sequelize": "^6.19.0",
+    "sqlite3": "^5.0.3",
+    "yaml": "^2.0.1"
   }
 }

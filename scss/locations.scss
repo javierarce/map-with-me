@@ -1,0 +1,13 @@
+.Locations {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+@media only screen and (max-width: 800px) {
+  .Locations {
+    display: none;
+  }
+}
+
