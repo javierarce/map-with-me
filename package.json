@@ -32,7 +32,7 @@
     "leaflet.markercluster": "^1.4.1",
     "multer": "^1.4.4",
     "node-sass": "^7.0.1",
-    "passport": "^0.5.2",
+    "passport": "^0.6.0",
     "passport-twitter": "^1.0.4",
     "rss": "^1.2.2",
     "sanitize-html": "^2.7.0",
