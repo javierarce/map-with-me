@@ -22,7 +22,7 @@
     "@mapbox/togeojson": "^0.16.0",
     "body-parser": "^1.19.0",
     "dotenv": "^16.0.0",
-    "ejs": "^3.1.6",
+    "ejs": "^3.1.7",
     "emoji-regex": "^10.1.0",
     "express-ejs-layouts": "^2.5.1",
     "express-session": "^1.17.1",
