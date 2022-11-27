@@ -48,24 +48,13 @@
 	margin: 0 0 0.8em;
 }
 
-.Settings__title {
-  padding: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: start;
-  font-weight: bold;
-  background: linear-gradient(-45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB);
-  background-size: 400% 400%;
-  color: #fff;
+.Settings__form {
+  margin: 0 0 4em;
 }
 
 .Settings__content {
   width: 100%;
   position: relative;
-}
-
-.Settings__content.no-bottom-padding {
-  padding-bottom: 0;
 }
 
 .Settings__description a {
@@ -78,7 +67,7 @@
 }
 
 .Settings__field {
-  margin: 0 0 16px;
+  margin: 0 0 24px;
 }
 
 .Settings__content p {

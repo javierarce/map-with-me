@@ -2,7 +2,7 @@ class Settings extends Modal {
   constructor () {
     super()
 
-    this.secret = 'monoloco'
+    this.secret = 'x'
 
     this.sendButtonIsEnabled = false
     this.menuSelected = 0
@@ -12,7 +12,6 @@ class Settings extends Modal {
     return `
     <div class="Modal__backdrop js-backdrop"></div>
     <div data-action="close" class="Settings__modal has-transition js-inner">
-    <div class="Settings__title">Configuration</div>
     <div class="Settings__inner">
       <div class="Settings__menuList">
         <button data-action="select-menu" data-id="0" class="Settings__menuItem is-selected">Settings</button>
@@ -22,7 +21,7 @@ class Settings extends Modal {
       <div class="Settings__menuContent">
         <div class="Settings__menu js-menu is-visible" data-id="0">
 
-      <div class="Settings__content no-bottom-padding">
+      <div class="Settings__content">
 
         <div class="Settings__form">
 
@@ -111,28 +110,25 @@ class Settings extends Modal {
         </div>
 
           <div class="Settings__footer js-save-section">
+            <strong class="Input__label">Save settings</strong>
             <div class="Settings__sectionContent">
-              <button data-action="save" class="Button is-bold">
+
+              <div class="Input__field Settings__field">
+                <input data-field="secret" data-action="secret" type="text" class="Input js-secret" placeholder="Enter your secret">
+              </div>
+              <button data-action="save" class="Button is-bold is-disabled">
               <div class="Settings__spinner Spinner is-small js-spinner"></div>
               Save</button>
             </div>
           </div>
 
-          <div class="Settings__footer js-secret-section is-hidden">
+          <div class="Settings__footer">
             <div class="Settings__sectionContent">
-              <div class="Input__field Settings__field">
-                <input data-field="secret" data-action="secret" type="text" class="Input" placeholder="Secret">
-              </div>
-              <button data-action="save" class="Button is-bold is-disabled">Save</button>
             </div>
               <div class="Settings__hint">After changing this configuration, please restart the server.</div>
           </div>
-
-
-
-
-
         </div>
+
         <div class="Settings__menu js-menu" data-id="1">
 
 <div class="Settings__section">
@@ -199,7 +195,6 @@ class Settings extends Modal {
 
   onClickShowSecret () {
     this.$saveSection.classList.add('is-hidden')
-    this.$secretSection.classList.remove('is-hidden')
     this.$fields.secret.focus()
   }
 
@@ -254,9 +249,9 @@ class Settings extends Modal {
         default_search_location: this.fields['default_search_location']
       }
 
-      console.log(result)
-      window.bus.emit(config.ACTIONS.UPDATE_TITLE, result.TITLE)
-      window.bus.emit(config.ACTIONS.RELOAD_MAP, data)
+      if (!result.error) {
+        window.bus.emit(config.ACTIONS.RELOAD_MAP, data)
+      }
       window.bus.emit(config.ACTIONS.STOP_LOADING)
     })
   }
@@ -338,23 +333,13 @@ class Settings extends Modal {
     this.$backdrop = this.$el.querySelector('.js-backdrop')
     this.$backdrop.onclick = this.onClickOutside.bind(this)
 
-    this.$secretSection = this.$el.querySelector('.js-secret-section')
     this.$saveSection = this.$el.querySelector('.js-save-section')
 
     this.$spinner = this.$el.querySelector('.js-spinner')
 
-
-    /*
     this.$secret = this.$el.querySelector('.js-secret')
     this.$secret.onkeyup = this.onEnterSecret.bind(this)
 
-    this.$destroy = this.$el.querySelector('.js-destroy')
-    this.$destroy.onclick = this.onClickDestroy.bind(this)
-
-    this.$showSecret = this.$el.querySelector('.js-show-secret')
-    this.$showSecret.onclick = this.onClickShowSecret.bind(this)
-
-    */
 
     this.$menus = this.$el.querySelectorAll('.js-menu')
 
@@ -392,10 +377,6 @@ class Settings extends Modal {
           this.$open.open = false
           }
         }
-
-
-      } else if (action === 'show-secret') {
-        $button.onclick = this.onClickShowSecret.bind(this)
       } else if (action === 'save') {
         $button.onclick = this.onClickSave.bind(this)
       } else if (action === 'secret') {

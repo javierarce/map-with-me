@@ -13,7 +13,6 @@ const config = {
     REMOVE_MARKER: 'remove-marker',
     REMOVE_LOCATION: 'remove-location',
     RELOAD_MAP: 'reload-map',
-    UPDATE_TITLE: 'update-title',
     ADD_MARKER: 'add-marker',
     ADD_MARKERS: 'add-markers',
     INVALIDATE_MAP_SIZE: 'invalidate-size',
@@ -50,6 +49,7 @@ const config = {
     RECREATE_DB: '/api/recreate',
     NOMINATIM: 'https://nominatim.openstreetmap.org',
     LOGIN_PATH: '/auth/twitter',
+    LOGOUT_PATH: '/auth/logout',
     GEOCODE_URL: '/reverse.php',
     SEARCH_URL: '/search.php',
     SEARCH_DETAILS_URL: '/details.php'

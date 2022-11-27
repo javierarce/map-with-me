@@ -1,13 +1,8 @@
 class Header {
   constructor () {
-    this.canLogin = false
     this.title = window.bus.getTitle()
     this.loggedIn = false
     this.username = undefined
-    this.avatarURL = undefined
-    this.canLogin = !window.bus.isAnonymous()
-    this.unlogged = this.canLogin && this.loggedIn
-    this.allowToLog = this.canLogin && !this.loggedIn
 
     this.bindEvents()
   }
@@ -27,11 +22,6 @@ class Header {
 
   bindEvents () {
     window.bus.on(config.ACTIONS.LOGGED_IN, this.onLoggedIn.bind(this))
-    window.bus.on(config.ACTIONS.UPDATE_TITLE, this.onUpdateTitle.bind(this))
-  }
-
-  onUpdateTitle (title) {
-    this.$title.innerHTML = title
   }
 
   onClickTitle () {
@@ -47,10 +37,10 @@ class Header {
   }
 
   onClickLogin () {
-    if (window.bus.isLoggedIn()) {
-      console.log('logout') // TODO
-    } else {
+    if (!window.bus.isLoggedIn()) {
       window.location.href = config.ENDPOINTS.LOGIN_PATH
+    } else {
+      window.location.href = config.ENDPOINTS.LOGOUT_PATH
     }
   }
 
@@ -58,9 +48,8 @@ class Header {
     this.loggedIn = window.bus.isLoggedIn()
 
     if (this.loggedIn) {
-      this.avatarURL = window.bus.user.profileImage
       this.username = `@${window.bus.user.username}`
-      this.$login.innerHTML = this.username
+      this.$login.innerHTML = `${this.username} (logout)`
 
       if (window.bus.isAdmin()) {
         this.$settings.classList.remove('is-hidden')

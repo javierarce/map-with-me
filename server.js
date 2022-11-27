@@ -108,6 +108,18 @@ app.get('/geojson', (request, response) => { Map.onGetGeoJSON(request, response)
 app.get('/auth/twitter', passport.authenticate('twitter'))
 app.get('/auth/twitter/callback', passport.authenticate('twitter', { successRedirect: '/', failureRedirect: '/login' }))
 
+
+app.get('/auth/logout', (request, response) => {
+  request.logout();
+  request.session.destroy((error) => {
+    if (error) {
+      console.error(error)
+      return
+    }
+    response.redirect('/')
+  });
+})
+
 app.post('/api/upload', upload.single('file'), async (request, response) => {
 
   let data = fs.readFileSync(request.file.path, 'utf8')
@@ -137,6 +149,19 @@ app.get('/', (request, response) => {
 })
 
 app.get('/favico.ico', (request, response) => {
+})
+
+app.get('/admin/:secret', function(request, response) {
+  let secret = request.params.secret
+
+  if (secret === process.env.SECRET) {
+    request.session.passport = {
+      user: {
+        username: Map.config.ADMIN_USERNAME
+      }
+    }
+  }
+  response.redirect('/')
 })
 
 if (process.env.MODE == 'DEVELOPMENT') {
