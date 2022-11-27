@@ -619,6 +619,7 @@ class Popup {
   }
 
   canSend () {
+    this.enableSendButton()
     return this.enableSend && this.getDescription().length > 0
   }
 
@@ -1050,13 +1051,17 @@ class Map {
     this.map.setView(latlng, result.zoom)
   }
 
-  getIcon ({ location, emojis, number }) {
+  getIcon ({ location, emojis, number, className }) {
     let html = ''
 
     let classNames = [ 'icon' ]
 
     if (location && !location.approved && window.bus.isModerated()) {
       classNames.push('is-disabled')
+    }
+
+    if (className) {
+      classNames.push(className)
     }
 
     if (number) {
@@ -1067,10 +1072,8 @@ class Map {
       classNames.push('has-emoji')
     }
 
-    let className = classNames.join(' ')
-
     return new L.divIcon({
-      className,
+      className: classNames.join(' '),
       html,
       iconSize: [32, 32],
       iconAnchor: new L.Point(16, 0)
@@ -1099,7 +1102,7 @@ class Map {
     let latlng = this.flattenCoordinates(coordinates)
     this.popup = new Popup(coordinates, { geocode: true })
 
-    let icon = this.getIcon({})
+    let icon = this.getIcon({ className: 'is-temporary'})
     this.marker = L.marker(latlng, { icon })
     this.marker.bindPopup(this.popup.el, { maxWidth: 'auto' })
     this.marker.addTo(this.map)
@@ -1154,7 +1157,7 @@ class Map {
 
     this.popup = new Popup(this.coordinates, { name, description, address })
 
-    let icon = this.getIcon({})
+    let icon = this.getIcon({ className: 'is-temporary'})
 
     this.marker = L.marker(latlng, { icon }).bindPopup(this.popup.el, { maxWidth: 'auto' }).addTo(this.map)
     this.marker.openPopup()

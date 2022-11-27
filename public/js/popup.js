@@ -43,6 +43,7 @@ class Popup {
   }
 
   canSend () {
+    this.enableSendButton()
     return this.enableSend && this.getDescription().length > 0
   }
 
