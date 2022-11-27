@@ -13,8 +13,24 @@
 DB_USER= // Username for your database
 DB_PASS= // Password for your database
 
-SECRET= // You'll need this to update your  map configuration or recreate the database
+SECRET= // You'll need this to access the map settings
 ```
+
+2. Install the dependencies with `yarn install`
+3. Run the project with `yarn start`
+
+Your map will be visible at `http://localhost:3000`
+
+
+### How to update the map settings
+
+There are two ways:
+
+1. Editing the file `map.yaml`
+2. Visiting `http://localhost:3000/admin/SECRET` (where `SECRET` is the password you defined in the first step of the installation)
+
+
+### Using Twitter 
 
 If you want to use Twitter as an authentication mechanism you'll need to create an app and add the credentials:
 
@@ -24,7 +40,6 @@ CONSUMER_SECRET=
 CALLBACK_URL=https://APP_NAME.glitch.me/auth/twitter/callback 
 ```
 
-2. Visit your website and click 'Config'. A configuration form will appear so you can change the default map and publishing settings.
 
 ### Everyone has issues
 
