@@ -44,6 +44,5 @@ jobs:
         PORT: ${{ secrets.PORT }}
         KEY: ${{ secrets.SSHKEY }}
         script: |
-          nvm use 15.8.0
           yarn --cwd /home/javier/mapwithme
           pm2 restart map
