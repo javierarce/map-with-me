@@ -1,4 +1,5 @@
 .Button {
+  position: relative;
   margin: auto; }
 
 .Map__buttons {

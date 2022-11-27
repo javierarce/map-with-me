@@ -97,10 +97,10 @@ table {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10000;
   opacity: 0;
   visibility: hidden;
-  transition: all 250ms ease-in-out; }
+  transition: all 250ms ease-in-out;
+  z-index: 10000; }
 
 .About__inner p:last-child {
   margin: 0; }
@@ -120,7 +120,7 @@ table {
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   padding: 32px 32px 18px 32px;
-  width: 800px;
+  width: 700px;
   z-index: 1000; }
 
 .About__title {
@@ -201,6 +201,7 @@ table {
     margin: 8px 0 0 0; } }
 
 .Button {
+  position: relative;
   margin: auto; }
 
 .Map__buttons {
@@ -1126,8 +1127,9 @@ table {
   margin-bottom: 0; }
 
 .Settings__sectionContent {
+  position: relative;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   flex-direction: row; }
 
 .Settings__sectionContent > * {

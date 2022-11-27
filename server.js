@@ -94,8 +94,8 @@ app.post('/api/approve', (request, response) => { Map.onApproveLocation(request,
 app.post('/api/reject', (request, response) => { Map.onRejectLocation(request, response)})
 app.post('/api/save', (request, response) => { Map.onSave(request, response)})
 
-app.post('/api/config', (request, response) => { Map.onSaveConfig(request, response)})
 app.get('/api/config', (request, response) => { Map.getConfig(request, response)})
+app.post('/api/config', (request, response) => { Map.onSaveConfig(request, response)})
 
 app.get('/api/locations', (request, response) => { Map.onGetLocations(request, response)})
 app.get('/api/status', (request, response) => { Map.getStatus(request, response)})

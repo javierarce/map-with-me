@@ -10,12 +10,13 @@ class Sidebar {
     window.bus.on(config.ACTIONS.SELECT_LOCATION, this.onSelectLocation.bind(this))
     window.bus.on(config.ACTIONS.ADD_MARKER, this.onAddMarker.bind(this))
     window.bus.on(config.ACTIONS.SELECT_MARKER, this.onSelectMarker.bind(this))
+    window.bus.on(config.ACTIONS.LOGGED_IN, this.onLoggedIn.bind(this))
   }
 
   template () {
     return `<div class="Sidebar__content js-content">
-              <div class="Card is-placeholder js-placeholder">Click on the map to add the first location.</div>
-            </div>`
+    <div class="Card is-placeholder js-placeholder">Click on the map to add the first location.</div>
+    </div>`
   }
 
   onAddMarker (locationAndMarkerData) {
@@ -31,13 +32,17 @@ class Sidebar {
     //}
   }
 
+  onLoggedIn () {
+    this.locations.get()
+  }
+
   onAddLocation ({ coordinates, name, description, address }) {
     this.locations.add({ coordinates, name, description, address })
     window.bus.emit(config.ACTIONS.START_LOADING)
   }
 
   onSelectLocation (location) {
-    if (this.savedLocation) {
+    if (this.savedLocation && location != this.savedLocation) {
       this.savedLocation.unselect()
     } 
     this.savedLocation = location

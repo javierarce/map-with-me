@@ -12,13 +12,10 @@ class App {
     this.getStatus()
     this.bindEvents()
     this.render()
-
-    this.locations.get()
   }
 
   bindEvents () {
     window.bus.on(config.ACTIONS.LOGIN, this.onLogin.bind(this))
-    window.bus.on(config.ACTIONS.ON_LOAD, this.onLoad.bind(this))
     window.bus.on(config.ACTIONS.START_LOADING, this.onStartLoading.bind(this))
     window.bus.on(config.ACTIONS.STOP_LOADING, this.onStopLoading.bind(this))
 
@@ -44,10 +41,6 @@ class App {
     }
   }
 
-  onLoad () {
-    document.body.classList.add('is-loaded')
-  }
-
   getStatus () {
     get(config.ENDPOINTS.STATUS)
       .then(this.onGetStatus.bind(this))
@@ -59,10 +52,14 @@ class App {
   onGetStatus (response) {
     response.json().then((result) => {
       if (!result && !result.user) {
+        console.error('Error: empty status or status with no user', result)
         return
       }
 
+      document.body.classList.add('is-loaded')
+
       window.bus.user = result.user
+      window.bus.config = result.config
       window.bus.emit(config.ACTIONS.LOGGED_IN)
 
       if (result.coordinates) {

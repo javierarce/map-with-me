@@ -133,8 +133,9 @@
   margin-bottom: 0; }
 
 .Settings__sectionContent {
+  position: relative;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   flex-direction: row; }
 
 .Settings__sectionContent > * {

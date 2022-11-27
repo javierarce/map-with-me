@@ -15,17 +15,23 @@ class Header {
   template () {
     return `
     <div class="Header__info">
-      <button class="Button Header__title js-button">${this.title}</button>
+      <button class="Button Header__title js-title">${this.title}</button>
       <Search />
     </div>
     <div class="Header__links js-links">
-      <button class="Button Header__linksItem js-settings">Map</button>
+      <button class="Button Header__linksItem js-about">About</button>
+      <button class="Button Header__linksItem is-hidden js-settings">Settings</button>
     </div>
     `
   }
 
   bindEvents () {
     window.bus.on(config.ACTIONS.LOGGED_IN, this.onLoggedIn.bind(this))
+    window.bus.on(config.ACTIONS.UPDATE_TITLE, this.onUpdateTitle.bind(this))
+  }
+
+  onUpdateTitle (title) {
+    this.$title.innerHTML = title
   }
 
   onClickTitle () {
@@ -34,6 +40,10 @@ class Header {
 
   onClickSettings () {
     window.bus.emit(config.ACTIONS.SHOW_SETTINGS)
+  }
+
+  onClickAbout () {
+    window.bus.emit(config.ACTIONS.SHOW_ABOUT)
   }
 
   onClickLogin () {
@@ -52,6 +62,9 @@ class Header {
       this.username = `@${window.bus.user.username}`
       this.$login.innerHTML = this.username
 
+      if (window.bus.isAdmin()) {
+        this.$settings.classList.remove('is-hidden')
+      }
     }
   }
 
@@ -61,8 +74,11 @@ class Header {
 
     this.$links = this.$el.querySelector('.js-links')
 
-    this.$title = this.$el.querySelector('.js-button')
+    this.$title = this.$el.querySelector('.js-title')
     this.$title.onclick = this.onClickTitle.bind(this)
+
+    this.$about = this.$el.querySelector('.js-about')
+    this.$about.onclick = this.onClickAbout.bind(this)
 
     this.$settings = this.$el.querySelector('.js-settings')
     this.$settings.onclick = this.onClickSettings.bind(this)

@@ -12,21 +12,17 @@ class Settings extends Modal {
     return `
     <div class="Modal__backdrop js-backdrop"></div>
     <div data-action="close" class="Settings__modal has-transition js-inner">
-    <div class="Settings__title">
-    Título
-    </div>
+    <div class="Settings__title">Configuration</div>
     <div class="Settings__inner">
       <div class="Settings__menuList">
         <button data-action="select-menu" data-id="0" class="Settings__menuItem is-selected">Settings</button>
         <button data-action="select-menu" data-id="1" class="Settings__menuItem">Data</button>
-        <button data-action="select-menu" data-id="2" class="Settings__menuItem">Information</button>
       </div>
 
       <div class="Settings__menuContent">
         <div class="Settings__menu js-menu is-visible" data-id="0">
 
       <div class="Settings__content no-bottom-padding">
-        <div class="Settings__spinner Spinner is-small js-spinner"></div>
 
         <div class="Settings__form">
 
@@ -35,15 +31,6 @@ class Settings extends Modal {
             <strong class="Input__label">Title</strong>
             <div class="Input__field Settings__field">
               <input id="title" name="title" type="text" class="Input" placeholder="Title">
-            </div>
-          </label>
-          </div>
-
-        <div class="Settings__section">
-          <label for="description">
-            <strong class="Input__label">Description</strong>
-            <div class="Input__field Settings__field">
-              <input id="description" name="description" type="text" class="Input" placeholder="Description">
             </div>
           </label>
           </div>
@@ -96,7 +83,6 @@ class Settings extends Modal {
 
             <div class="Settings__sectionContent">
               <label for="anonymous">
-
                 <div class="Input__field Input__checkbox Settings__field">
                   <div class="Input__checkboxTitle">
                     <input id="anonymous" type="checkbox" name="anonymous"> 
@@ -118,16 +104,6 @@ class Settings extends Modal {
                   </div>
                 </div>
               </label>
-
-              <label for="protected">
-                <div class="Input__field Input__checkbox Settings__field">
-                  <div class="Input__checkboxTitle">
-                    <input id="protected" type="checkbox" name="protected"> 
-                    <strong class="Input__title">Protected</strong> 
-                  </div>
-                  <div class="Input__hint"> Map is read-only</div>
-                </div>
-              </label>
             </div>
           </div>
 
@@ -136,12 +112,13 @@ class Settings extends Modal {
 
           <div class="Settings__footer js-save-section">
             <div class="Settings__sectionContent">
-              <button data-action="save" class="Button is-bold">Save</button>
+              <button data-action="save" class="Button is-bold">
+              <div class="Settings__spinner Spinner is-small js-spinner"></div>
+              Save</button>
             </div>
           </div>
 
           <div class="Settings__footer js-secret-section is-hidden">
-
             <div class="Settings__sectionContent">
               <div class="Input__field Settings__field">
                 <input data-field="secret" data-action="secret" type="text" class="Input" placeholder="Secret">
@@ -182,29 +159,10 @@ class Settings extends Modal {
 </div>
 
 
-        <div class="Settings__section">
-              <div class="Settings__menuTitle">Import data</div>
-              <div class="Input__field Settings__field">
-              <input data-action="upload" id='file' type="file">
-</div>
-</div>
-
-
 
 
         </div>
-        <div class="Settings__menu js-menu" data-id="2">
-
-              <div class="Settings__menuTitle">Improve the tool</div>
-          <p>Follow the development of the tool, suggest improvements, and
-            report bugs <a href="https://github.com/javierarce/map-with-me" target="_blank" title="Visit the repo in GitHub">in GitHub</a>.</p>
-
-
-              <p>This website uses data from <a href="https://www.openstreetmap.org/copyright">Nominatim</a></p>
-          <p>Made by <a href="https://twitter.com/javier">Javier Arce</a> from a mysterious location</p>
-
-
-        </div>
+        
       </div>
 
   </div>
@@ -246,13 +204,11 @@ class Settings extends Modal {
   }
 
   onClickSave () {
-    console.log('saving')
     if (!this.secret) {
       return
     }
 
     this.$spinner.classList.remove('is-visible')
-
     window.bus.emit(config.ACTIONS.START_LOADING)
 
     this.fields = {}
@@ -261,14 +217,9 @@ class Settings extends Modal {
       this.fields[$input.name] = $input.type === 'checkbox' ? $input.checked : $input.value
     })
 
-    let map = {
-      lat: this.fields['lat'],
-      lng: this.fields['lng'],
-      zoom: this.fields['zoom'],
-      default_search_location: this.fields['default_search_location']
-    }
+    const secret = this.secret
 
-    let admin = {
+    const admin = {
       title: this.fields['title'],
       description: this.fields['description'],
       moderated: this.fields['moderated'],
@@ -277,9 +228,14 @@ class Settings extends Modal {
       admin_username: this.fields['admin_username']
     }
 
-    let configuration = { secret: this.secret, admin, map }
+    const map = {
+      lat: this.fields['lat'],
+      lng: this.fields['lng'],
+      zoom: this.fields['zoom'],
+      default_search_location: this.fields['default_search_location']
+    }
 
-    post(config.ENDPOINTS.CONFIG, configuration )
+    post(config.ENDPOINTS.CONFIG, { secret, admin, map } )
       .then(this.onSaveConfig.bind(this))
       .catch((error) => {
         this.$spinner.classList.add('is-visible')
@@ -291,13 +247,15 @@ class Settings extends Modal {
     response.json().then((result) => {
       this.$spinner.classList.remove('is-visible')
 
-      let data = {
+      const data = {
         lat: this.fields['lat'],
         lng: this.fields['lng'],
         zoom: this.fields['zoom'],
         default_search_location: this.fields['default_search_location']
       }
 
+      console.log(result)
+      window.bus.emit(config.ACTIONS.UPDATE_TITLE, result.TITLE)
       window.bus.emit(config.ACTIONS.RELOAD_MAP, data)
       window.bus.emit(config.ACTIONS.STOP_LOADING)
     })
@@ -305,11 +263,12 @@ class Settings extends Modal {
 
   onEnterSecret (e) {
     this.secret = this.$fields.secret.value
+    const $save = this.$buttons.save
 
     if (this.secret) {
-      this.$buttons.save.classList.remove('is-disabled')
+      $save.classList.remove('is-disabled')
     } else {
-      this.$buttons.save.classList.add('is-disabled')
+      $save.classList.add('is-disabled')
     }
   }
 

@@ -55,7 +55,6 @@ class Map {
 
   onMapClick (e) {
     this.removeMarker()
-
     this.openPopup(e.latlng)
   }
 
@@ -96,7 +95,6 @@ class Map {
 
   onAddLocations (locations) {
     locations.reverse().forEach(this.addMarker.bind(this)) 
-    window.bus.emit(config.ACTIONS.ON_LOAD)
     this.map.addLayer(this.cluster)
   }
 
@@ -110,8 +108,9 @@ class Map {
 
     let marker = this.addMarker(location)
 
-    //marker.openPopup()
-    //this.popup.showSuccess()
+    marker.openPopup()
+    this.popup.showSuccess()
+    window.bus.emit(config.ACTIONS.SELECT_MARKER, marker)
   }
 
   addMarker (location) {
@@ -290,7 +289,7 @@ class Map {
   }
 
   showDefaultPoint () {
-    this.map.flyTo([config.MAP.LAT, config.MAP.LNG], config.MAP.ZOOM, {
+    this.map.flyTo(window.bus.getCoordinates(), window.bus.getZoom(), {
       animate: true,
       duration: 1
     })
@@ -319,8 +318,11 @@ class Map {
     }
 
     let coordinates = { lat: data.lat, lng: data.lng }
-    let latlng = this.flattenCoordinates(coordinates) 
-    this.map.setView(latlng, data.zoom, { animate: true, easeLinearity: .5, duration: 0.250 })
+
+    if (coordinates.lat && coordinates.lng) {
+      let latlng = this.flattenCoordinates(coordinates) 
+      this.map.setView(latlng, data.zoom, { animate: true, easeLinearity: .5, duration: 0.250 })
+    }
   }
 
   onRemoveMarker (id) {

@@ -33,7 +33,7 @@ class Locations {
   }
 
   onRemoveLocation (id) {
-    console.log(id)
+    console.log('TODO', id)
   }
 
   onGetAddedLocation (response) {

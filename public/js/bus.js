@@ -4,6 +4,7 @@ class Bus {
     this.events = []
     this.markers = []
     this.user = undefined
+    this.config = {}
   }
 
   isLoggedIn () {
@@ -14,8 +15,16 @@ class Bus {
     return !!(ADMIN_USERNAME && this.user && this.user.username && ADMIN_USERNAME === this.user.username)
   }
 
+  getCoordinates () {
+    return [this.config.LAT, this.config.LNG]
+  }
+
+  getZoom () {
+    return this.config.ZOOM
+  }
+
   getTitle () {
-    return config.TITLE
+    return TITLE
   }
 
   getAdminUsername () {
@@ -23,15 +32,15 @@ class Bus {
   }
 
   isModerated () {
-    return config.MODERATED
+    return this.config.MODERATED
   }
 
   isAnonymous () {
-    return config.ANONYMOUS
+    return this.config.ANONYMOUS
   }
 
   isProtected () {
-    return config.PROTECTED
+    return this.config.PROTECTED
   }
 
   findMarkerById (id) {
@@ -56,6 +65,11 @@ class Bus {
   }
 
   emit (name, data) {
+    if (!name) {
+      console.error('Error: empty name event')
+      return
+    }
+
     let event = undefined
 
     if (data) {

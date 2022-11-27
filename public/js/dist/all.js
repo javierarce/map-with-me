@@ -11,6 +11,9 @@ const config = {
     ADD_LOCATION: 'add-location',
     ADD_LOCATIONS: 'add-locations',
     REMOVE_MARKER: 'remove-marker',
+    REMOVE_LOCATION: 'remove-location',
+    RELOAD_MAP: 'reload-map',
+    UPDATE_TITLE: 'update-title',
     ADD_MARKER: 'add-marker',
     ADD_MARKERS: 'add-markers',
     INVALIDATE_MAP_SIZE: 'invalidate-size',
@@ -59,6 +62,7 @@ class Bus {
     this.events = []
     this.markers = []
     this.user = undefined
+    this.config = {}
   }
 
   isLoggedIn () {
@@ -69,8 +73,16 @@ class Bus {
     return !!(ADMIN_USERNAME && this.user && this.user.username && ADMIN_USERNAME === this.user.username)
   }
 
+  getCoordinates () {
+    return [this.config.LAT, this.config.LNG]
+  }
+
+  getZoom () {
+    return this.config.ZOOM
+  }
+
   getTitle () {
-    return config.TITLE
+    return TITLE
   }
 
   getAdminUsername () {
@@ -78,15 +90,15 @@ class Bus {
   }
 
   isModerated () {
-    return config.MODERATED
+    return this.config.MODERATED
   }
 
   isAnonymous () {
-    return config.ANONYMOUS
+    return this.config.ANONYMOUS
   }
 
   isProtected () {
-    return config.PROTECTED
+    return this.config.PROTECTED
   }
 
   findMarkerById (id) {
@@ -111,6 +123,11 @@ class Bus {
   }
 
   emit (name, data) {
+    if (!name) {
+      console.error('Error: empty name event')
+      return
+    }
+
     let event = undefined
 
     if (data) {
@@ -203,7 +220,7 @@ class Locations {
   }
 
   onRemoveLocation (id) {
-    console.log(id)
+    console.log('TODO', id)
   }
 
   onGetAddedLocation (response) {
@@ -233,7 +250,7 @@ class Card {
         <div class="Card__footer">
           <div class="Card__user"><%= username %></div>
           <div class="Card__footerOptions">
-          <% if (showApproveItem) { %><button class="Card__approve js-approve"><%= approveLabel %></button><% } %>
+          <% if (showApproveItem) { %><button class="Card__approve js-moderate"><%= approveLabel %></button><% } %>
           <% if (showRemoveItem) { %><button class="Card__remove js-remove">delete</button><% } %>
           </div>
          <% } %>
@@ -265,8 +282,18 @@ class Card {
     return this.user ? (this.user.username === window.bus.user.username) : false
   }
 
-  onClickApprove (e) {
+  onClickModerate (e) {
     killEvent(e)
+
+    window.bus.emit(config.ACTIONS.VISIT_MARKER, this.marker)
+
+    const id = this.location.id
+
+    post(this.location.approved ? config.ENDPOINTS.REJECT : config.ENDPOINTS.APPROVE, { id })
+      .then(this.onModerated.bind(this))
+      .catch((error) => {
+        console.error(error)
+      })
   }
 
   onClickRemove (e) {
@@ -280,7 +307,7 @@ class Card {
       post(config.ENDPOINTS.REMOVE, { location })
         .then(this.onRemoveLocation.bind(this))
         .catch((error) => {
-          console.log(error)
+          console.error(error)
         })
     }
   }
@@ -289,8 +316,8 @@ class Card {
     response.json().then((result) => {
       if (result && !result.error) {
         this.$el.classList.add('is-hidden')
-        this.removeMarker()
         this.removeLocation()
+        this.removeMarker()
 
         setTimeout(() => {
           this.$el.remove()
@@ -299,24 +326,39 @@ class Card {
     })
   }
 
-  onToggleApprove (response) {
+  onModerated (response) {
     response.json().then((result) => {
-      if (result) {
-        let marker = this.markers.find(marker => marker.options.location.id === result.id)
-        marker.options.location.approved = result.approved
-
-        if (result.approved) {
-          marker.getElement().classList.remove('is-disabled')
-        } else {
-          marker.getElement().classList.add('is-disabled')
-        }
+      if (!result) {
+        return
       }
+
+      this.location.approved = result.approved
+
+      let marker = window.bus.markers.find(marker => marker.options.location.id === result.id)
+
+      if (marker && marker.getElement()) {
+        marker.options.location.approved = this.location.approved
+        marker.getElement().classList.toggle('is-disabled', !this.location.approved)
+      }
+
+      if (this.location.approved) {
+        this.$el.classList.remove('is-rejected')
+      } else {
+        this.$el.classList.add('is-rejected')
+      }
+
+      console.log(this.location.approved, this.$moderate)
+      this.$moderate.innerHTML = this.location.approved ? 'reject' : 'approve'
     })
   }
 
   select () {
-    this.isActive = true
-    this.$el.classList.add('is-active')
+    if (!this.isActive) {
+      console.log(this.isActive)
+      this.$el.scrollIntoView({ behavior: 'smooth' })
+      this.isActive = true
+      this.$el.classList.add('is-active')
+    }
     window.bus.emit(config.ACTIONS.SELECT_LOCATION, this)
   }
 
@@ -326,29 +368,10 @@ class Card {
   }
 
   onClick () {
-    if (!this.isActive) {
-      this.activateMarker()
-      window.bus.emit(config.ACTIONS.SELECT_LOCATION, this)
-    }
-
-    window.bus.emit(config.ACTIONS.VISIT_MARKER, this.marker)
-  }
-
-  activateMarker () {
     this.isActive = true
-
-    let classes = this.itemClass()
-
-    if (classes) {
-      this.$el.classList.add(classes)
-    }
-  }
-
-  onSelectMarker (marker) {
-    this.activateMarker()
-
-    let $item = this.getItemById(marker.options.location.id) 
-    $item.scrollIntoView({ behavior: 'smooth' })
+    this.$el.classList.add('is-active')
+    window.bus.emit(config.ACTIONS.VISIT_MARKER, this.marker)
+    window.bus.emit(config.ACTIONS.SELECT_LOCATION, this)
   }
 
   removeLocation () {
@@ -374,22 +397,25 @@ class Card {
       classes.push('is-rejected')
     }
 
-    return classes.join(' ')
+    return classes
   }
 
   render () {
-
     this.$el = createElement({ className: 'Card'})
     this.$el.dataset['id'] = this.location.id
 
-    let html = ejs.render(this.template(), { username: this.username, showFooter: this.showFooter(), showApproveItem: this.showApproveItem(), showRemoveItem: this.showRemoveItem(), approveLabel: this.getApproveLabel() })
+    const username = this.username
+    const showFooter = this.showFooter()
+    const showApproveItem = this.showApproveItem()
+    const showRemoveItem = this.showRemoveItem()
+    const approveLabel = this.getApproveLabel()
+
+    let html = ejs.render(this.template(), { username, showFooter, showApproveItem, showRemoveItem, approveLabel })
     this.$el.insertAdjacentHTML('beforeend', html)
 
-    let classes = this.itemClass()
-
-    if (classes) {
-      this.$el.classList.add(classes)
-    }
+    this.itemClass().forEach(className => {
+      this.$el.classList.add(className)
+    })
 
     this.$el.onclick = this.onClick.bind(this)
 
@@ -399,10 +425,10 @@ class Card {
       this.$remove.onclick = this.onClickRemove.bind(this)
     }
 
-    this.$approve = this.$el.querySelector('.js-approve')
+    this.$moderate = this.$el.querySelector('.js-moderate')
 
-    if (this.$approve) {
-      this.$approve.onclick = this.onClickApprove.bind(this)
+    if (this.$moderate) {
+      this.$moderate.onclick = this.onClickModerate.bind(this)
     }
 
     return this
@@ -878,7 +904,6 @@ class Map {
 
   onMapClick (e) {
     this.removeMarker()
-
     this.openPopup(e.latlng)
   }
 
@@ -919,7 +944,6 @@ class Map {
 
   onAddLocations (locations) {
     locations.reverse().forEach(this.addMarker.bind(this)) 
-    window.bus.emit(config.ACTIONS.ON_LOAD)
     this.map.addLayer(this.cluster)
   }
 
@@ -933,8 +957,9 @@ class Map {
 
     let marker = this.addMarker(location)
 
-    //marker.openPopup()
-    //this.popup.showSuccess()
+    marker.openPopup()
+    this.popup.showSuccess()
+    window.bus.emit(config.ACTIONS.SELECT_MARKER, marker)
   }
 
   addMarker (location) {
@@ -1113,7 +1138,7 @@ class Map {
   }
 
   showDefaultPoint () {
-    this.map.flyTo([config.MAP.LAT, config.MAP.LNG], config.MAP.ZOOM, {
+    this.map.flyTo(window.bus.getCoordinates(), window.bus.getZoom(), {
       animate: true,
       duration: 1
     })
@@ -1142,8 +1167,11 @@ class Map {
     }
 
     let coordinates = { lat: data.lat, lng: data.lng }
-    let latlng = this.flattenCoordinates(coordinates) 
-    this.map.setView(latlng, data.zoom, { animate: true, easeLinearity: .5, duration: 0.250 })
+
+    if (coordinates.lat && coordinates.lng) {
+      let latlng = this.flattenCoordinates(coordinates) 
+      this.map.setView(latlng, data.zoom, { animate: true, easeLinearity: .5, duration: 0.250 })
+    }
   }
 
   onRemoveMarker (id) {
@@ -1209,17 +1237,23 @@ class Header {
   template () {
     return `
     <div class="Header__info">
-      <button class="Button Header__title js-button">${this.title}</button>
+      <button class="Button Header__title js-title">${this.title}</button>
       <Search />
     </div>
     <div class="Header__links js-links">
-      <button class="Button Header__linksItem js-settings">Map</button>
+      <button class="Button Header__linksItem js-about">About</button>
+      <button class="Button Header__linksItem is-hidden js-settings">Settings</button>
     </div>
     `
   }
 
   bindEvents () {
     window.bus.on(config.ACTIONS.LOGGED_IN, this.onLoggedIn.bind(this))
+    window.bus.on(config.ACTIONS.UPDATE_TITLE, this.onUpdateTitle.bind(this))
+  }
+
+  onUpdateTitle (title) {
+    this.$title.innerHTML = title
   }
 
   onClickTitle () {
@@ -1228,6 +1262,10 @@ class Header {
 
   onClickSettings () {
     window.bus.emit(config.ACTIONS.SHOW_SETTINGS)
+  }
+
+  onClickAbout () {
+    window.bus.emit(config.ACTIONS.SHOW_ABOUT)
   }
 
   onClickLogin () {
@@ -1246,6 +1284,9 @@ class Header {
       this.username = `@${window.bus.user.username}`
       this.$login.innerHTML = this.username
 
+      if (window.bus.isAdmin()) {
+        this.$settings.classList.remove('is-hidden')
+      }
     }
   }
 
@@ -1255,8 +1296,11 @@ class Header {
 
     this.$links = this.$el.querySelector('.js-links')
 
-    this.$title = this.$el.querySelector('.js-button')
+    this.$title = this.$el.querySelector('.js-title')
     this.$title.onclick = this.onClickTitle.bind(this)
+
+    this.$about = this.$el.querySelector('.js-about')
+    this.$about.onclick = this.onClickAbout.bind(this)
 
     this.$settings = this.$el.querySelector('.js-settings')
     this.$settings.onclick = this.onClickSettings.bind(this)
@@ -1282,12 +1326,13 @@ class Sidebar {
     window.bus.on(config.ACTIONS.SELECT_LOCATION, this.onSelectLocation.bind(this))
     window.bus.on(config.ACTIONS.ADD_MARKER, this.onAddMarker.bind(this))
     window.bus.on(config.ACTIONS.SELECT_MARKER, this.onSelectMarker.bind(this))
+    window.bus.on(config.ACTIONS.LOGGED_IN, this.onLoggedIn.bind(this))
   }
 
   template () {
     return `<div class="Sidebar__content js-content">
-              <div class="Card is-placeholder js-placeholder">Click on the map to add the first location.</div>
-            </div>`
+    <div class="Card is-placeholder js-placeholder">Click on the map to add the first location.</div>
+    </div>`
   }
 
   onAddMarker (locationAndMarkerData) {
@@ -1303,13 +1348,17 @@ class Sidebar {
     //}
   }
 
+  onLoggedIn () {
+    this.locations.get()
+  }
+
   onAddLocation ({ coordinates, name, description, address }) {
     this.locations.add({ coordinates, name, description, address })
     window.bus.emit(config.ACTIONS.START_LOADING)
   }
 
   onSelectLocation (location) {
-    if (this.savedLocation) {
+    if (this.savedLocation && location != this.savedLocation) {
       this.savedLocation.unselect()
     } 
     this.savedLocation = location
@@ -1344,21 +1393,17 @@ class Settings extends Modal {
     return `
     <div class="Modal__backdrop js-backdrop"></div>
     <div data-action="close" class="Settings__modal has-transition js-inner">
-    <div class="Settings__title">
-    Título
-    </div>
+    <div class="Settings__title">Configuration</div>
     <div class="Settings__inner">
       <div class="Settings__menuList">
         <button data-action="select-menu" data-id="0" class="Settings__menuItem is-selected">Settings</button>
         <button data-action="select-menu" data-id="1" class="Settings__menuItem">Data</button>
-        <button data-action="select-menu" data-id="2" class="Settings__menuItem">Information</button>
       </div>
 
       <div class="Settings__menuContent">
         <div class="Settings__menu js-menu is-visible" data-id="0">
 
       <div class="Settings__content no-bottom-padding">
-        <div class="Settings__spinner Spinner is-small js-spinner"></div>
 
         <div class="Settings__form">
 
@@ -1367,15 +1412,6 @@ class Settings extends Modal {
             <strong class="Input__label">Title</strong>
             <div class="Input__field Settings__field">
               <input id="title" name="title" type="text" class="Input" placeholder="Title">
-            </div>
-          </label>
-          </div>
-
-        <div class="Settings__section">
-          <label for="description">
-            <strong class="Input__label">Description</strong>
-            <div class="Input__field Settings__field">
-              <input id="description" name="description" type="text" class="Input" placeholder="Description">
             </div>
           </label>
           </div>
@@ -1428,7 +1464,6 @@ class Settings extends Modal {
 
             <div class="Settings__sectionContent">
               <label for="anonymous">
-
                 <div class="Input__field Input__checkbox Settings__field">
                   <div class="Input__checkboxTitle">
                     <input id="anonymous" type="checkbox" name="anonymous"> 
@@ -1450,16 +1485,6 @@ class Settings extends Modal {
                   </div>
                 </div>
               </label>
-
-              <label for="protected">
-                <div class="Input__field Input__checkbox Settings__field">
-                  <div class="Input__checkboxTitle">
-                    <input id="protected" type="checkbox" name="protected"> 
-                    <strong class="Input__title">Protected</strong> 
-                  </div>
-                  <div class="Input__hint"> Map is read-only</div>
-                </div>
-              </label>
             </div>
           </div>
 
@@ -1468,12 +1493,13 @@ class Settings extends Modal {
 
           <div class="Settings__footer js-save-section">
             <div class="Settings__sectionContent">
-              <button data-action="save" class="Button is-bold">Save</button>
+              <button data-action="save" class="Button is-bold">
+              <div class="Settings__spinner Spinner is-small js-spinner"></div>
+              Save</button>
             </div>
           </div>
 
           <div class="Settings__footer js-secret-section is-hidden">
-
             <div class="Settings__sectionContent">
               <div class="Input__field Settings__field">
                 <input data-field="secret" data-action="secret" type="text" class="Input" placeholder="Secret">
@@ -1514,29 +1540,10 @@ class Settings extends Modal {
 </div>
 
 
-        <div class="Settings__section">
-              <div class="Settings__menuTitle">Import data</div>
-              <div class="Input__field Settings__field">
-              <input data-action="upload" id='file' type="file">
-</div>
-</div>
-
-
 
 
         </div>
-        <div class="Settings__menu js-menu" data-id="2">
-
-              <div class="Settings__menuTitle">Improve the tool</div>
-          <p>Follow the development of the tool, suggest improvements, and
-            report bugs <a href="https://github.com/javierarce/map-with-me" target="_blank" title="Visit the repo in GitHub">in GitHub</a>.</p>
-
-
-              <p>This website uses data from <a href="https://www.openstreetmap.org/copyright">Nominatim</a></p>
-          <p>Made by <a href="https://twitter.com/javier">Javier Arce</a> from a mysterious location</p>
-
-
-        </div>
+        
       </div>
 
   </div>
@@ -1578,13 +1585,11 @@ class Settings extends Modal {
   }
 
   onClickSave () {
-    console.log('saving')
     if (!this.secret) {
       return
     }
 
     this.$spinner.classList.remove('is-visible')
-
     window.bus.emit(config.ACTIONS.START_LOADING)
 
     this.fields = {}
@@ -1593,14 +1598,9 @@ class Settings extends Modal {
       this.fields[$input.name] = $input.type === 'checkbox' ? $input.checked : $input.value
     })
 
-    let map = {
-      lat: this.fields['lat'],
-      lng: this.fields['lng'],
-      zoom: this.fields['zoom'],
-      default_search_location: this.fields['default_search_location']
-    }
+    const secret = this.secret
 
-    let admin = {
+    const admin = {
       title: this.fields['title'],
       description: this.fields['description'],
       moderated: this.fields['moderated'],
@@ -1609,9 +1609,14 @@ class Settings extends Modal {
       admin_username: this.fields['admin_username']
     }
 
-    let configuration = { secret: this.secret, admin, map }
+    const map = {
+      lat: this.fields['lat'],
+      lng: this.fields['lng'],
+      zoom: this.fields['zoom'],
+      default_search_location: this.fields['default_search_location']
+    }
 
-    post(config.ENDPOINTS.CONFIG, configuration )
+    post(config.ENDPOINTS.CONFIG, { secret, admin, map } )
       .then(this.onSaveConfig.bind(this))
       .catch((error) => {
         this.$spinner.classList.add('is-visible')
@@ -1623,13 +1628,15 @@ class Settings extends Modal {
     response.json().then((result) => {
       this.$spinner.classList.remove('is-visible')
 
-      let data = {
+      const data = {
         lat: this.fields['lat'],
         lng: this.fields['lng'],
         zoom: this.fields['zoom'],
         default_search_location: this.fields['default_search_location']
       }
 
+      console.log(result)
+      window.bus.emit(config.ACTIONS.UPDATE_TITLE, result.TITLE)
       window.bus.emit(config.ACTIONS.RELOAD_MAP, data)
       window.bus.emit(config.ACTIONS.STOP_LOADING)
     })
@@ -1637,11 +1644,12 @@ class Settings extends Modal {
 
   onEnterSecret (e) {
     this.secret = this.$fields.secret.value
+    const $save = this.$buttons.save
 
     if (this.secret) {
-      this.$buttons.save.classList.remove('is-disabled')
+      $save.classList.remove('is-disabled')
     } else {
-      this.$buttons.save.classList.add('is-disabled')
+      $save.classList.add('is-disabled')
     }
   }
 
@@ -1804,27 +1812,9 @@ class About extends Modal {
       <div class="About__title">About</div>
       <div class="About__content">
         <div class="About__description">
-
-          <p><strong>Map with Me</strong> is a collaborative mapping tool for you and your friends.</p>
-
-
-          <div class="About__columns">
-            <div>
-              <div class="About__columnTitle">Improve the tool</div>
-          <p>Follow the development of the tool, suggest improvements, and
-            report bugs in GitHub.</p>
-          <a href="https://github.com/javierarce/map-with-me" class="Button About__button is-bold" title="Visit the repo in GitHub" target="_blank">Visit the repo</a>
-            </div>
-            <div>
-              <div class="About__columnTitle">Export the data</div>
-              <p>
-                Get the data in a GeoJSON or a <a href="/csv" target="_blank">CSV file</a>. You can also subscribe to this map via <a href="/rss" title="RSS" target="_blank">RSS</a>.
-              </p>
-              <a href="/geojson" title="Export locations in GeoJSON format" target="_blank"class="Button About__button is-bold">Get the data</a>
-
-            </div>
-          </div>
-
+          <p><strong>Map with Me</strong> is a collaborative mapping tool for
+          you and your friends. Follow the development of the tool, suggest
+          improvements, and report bugs in <a href="https://github.com/javierarce/map-with-me" target="_blank" title="Visit the repo in GitHub">in GitHub</a>.</p>
         </div>
         <div class="About__footer">
           <div class="About__export">
@@ -1851,13 +1841,10 @@ class App {
     this.getStatus()
     this.bindEvents()
     this.render()
-
-    this.locations.get()
   }
 
   bindEvents () {
     window.bus.on(config.ACTIONS.LOGIN, this.onLogin.bind(this))
-    window.bus.on(config.ACTIONS.ON_LOAD, this.onLoad.bind(this))
     window.bus.on(config.ACTIONS.START_LOADING, this.onStartLoading.bind(this))
     window.bus.on(config.ACTIONS.STOP_LOADING, this.onStopLoading.bind(this))
 
@@ -1883,10 +1870,6 @@ class App {
     }
   }
 
-  onLoad () {
-    document.body.classList.add('is-loaded')
-  }
-
   getStatus () {
     get(config.ENDPOINTS.STATUS)
       .then(this.onGetStatus.bind(this))
@@ -1898,10 +1881,14 @@ class App {
   onGetStatus (response) {
     response.json().then((result) => {
       if (!result && !result.user) {
+        console.error('Error: empty status or status with no user', result)
         return
       }
 
+      document.body.classList.add('is-loaded')
+
       window.bus.user = result.user
+      window.bus.config = result.config
       window.bus.emit(config.ACTIONS.LOGGED_IN)
 
       if (result.coordinates) {

@@ -19,7 +19,7 @@ class Card {
         <div class="Card__footer">
           <div class="Card__user"><%= username %></div>
           <div class="Card__footerOptions">
-          <% if (showApproveItem) { %><button class="Card__approve js-approve"><%= approveLabel %></button><% } %>
+          <% if (showApproveItem) { %><button class="Card__approve js-moderate"><%= approveLabel %></button><% } %>
           <% if (showRemoveItem) { %><button class="Card__remove js-remove">delete</button><% } %>
           </div>
          <% } %>
@@ -51,8 +51,18 @@ class Card {
     return this.user ? (this.user.username === window.bus.user.username) : false
   }
 
-  onClickApprove (e) {
+  onClickModerate (e) {
     killEvent(e)
+
+    window.bus.emit(config.ACTIONS.VISIT_MARKER, this.marker)
+
+    const id = this.location.id
+
+    post(this.location.approved ? config.ENDPOINTS.REJECT : config.ENDPOINTS.APPROVE, { id })
+      .then(this.onModerated.bind(this))
+      .catch((error) => {
+        console.error(error)
+      })
   }
 
   onClickRemove (e) {
@@ -66,7 +76,7 @@ class Card {
       post(config.ENDPOINTS.REMOVE, { location })
         .then(this.onRemoveLocation.bind(this))
         .catch((error) => {
-          console.log(error)
+          console.error(error)
         })
     }
   }
@@ -75,8 +85,8 @@ class Card {
     response.json().then((result) => {
       if (result && !result.error) {
         this.$el.classList.add('is-hidden')
-        this.removeMarker()
         this.removeLocation()
+        this.removeMarker()
 
         setTimeout(() => {
           this.$el.remove()
@@ -85,24 +95,39 @@ class Card {
     })
   }
 
-  onToggleApprove (response) {
+  onModerated (response) {
     response.json().then((result) => {
-      if (result) {
-        let marker = this.markers.find(marker => marker.options.location.id === result.id)
-        marker.options.location.approved = result.approved
-
-        if (result.approved) {
-          marker.getElement().classList.remove('is-disabled')
-        } else {
-          marker.getElement().classList.add('is-disabled')
-        }
+      if (!result) {
+        return
       }
+
+      this.location.approved = result.approved
+
+      let marker = window.bus.markers.find(marker => marker.options.location.id === result.id)
+
+      if (marker && marker.getElement()) {
+        marker.options.location.approved = this.location.approved
+        marker.getElement().classList.toggle('is-disabled', !this.location.approved)
+      }
+
+      if (this.location.approved) {
+        this.$el.classList.remove('is-rejected')
+      } else {
+        this.$el.classList.add('is-rejected')
+      }
+
+      console.log(this.location.approved, this.$moderate)
+      this.$moderate.innerHTML = this.location.approved ? 'reject' : 'approve'
     })
   }
 
   select () {
-    this.isActive = true
-    this.$el.classList.add('is-active')
+    if (!this.isActive) {
+      console.log(this.isActive)
+      this.$el.scrollIntoView({ behavior: 'smooth' })
+      this.isActive = true
+      this.$el.classList.add('is-active')
+    }
     window.bus.emit(config.ACTIONS.SELECT_LOCATION, this)
   }
 
@@ -112,29 +137,10 @@ class Card {
   }
 
   onClick () {
-    if (!this.isActive) {
-      this.activateMarker()
-      window.bus.emit(config.ACTIONS.SELECT_LOCATION, this)
-    }
-
-    window.bus.emit(config.ACTIONS.VISIT_MARKER, this.marker)
-  }
-
-  activateMarker () {
     this.isActive = true
-
-    let classes = this.itemClass()
-
-    if (classes) {
-      this.$el.classList.add(classes)
-    }
-  }
-
-  onSelectMarker (marker) {
-    this.activateMarker()
-
-    let $item = this.getItemById(marker.options.location.id) 
-    $item.scrollIntoView({ behavior: 'smooth' })
+    this.$el.classList.add('is-active')
+    window.bus.emit(config.ACTIONS.VISIT_MARKER, this.marker)
+    window.bus.emit(config.ACTIONS.SELECT_LOCATION, this)
   }
 
   removeLocation () {
@@ -160,22 +166,25 @@ class Card {
       classes.push('is-rejected')
     }
 
-    return classes.join(' ')
+    return classes
   }
 
   render () {
-
     this.$el = createElement({ className: 'Card'})
     this.$el.dataset['id'] = this.location.id
 
-    let html = ejs.render(this.template(), { username: this.username, showFooter: this.showFooter(), showApproveItem: this.showApproveItem(), showRemoveItem: this.showRemoveItem(), approveLabel: this.getApproveLabel() })
+    const username = this.username
+    const showFooter = this.showFooter()
+    const showApproveItem = this.showApproveItem()
+    const showRemoveItem = this.showRemoveItem()
+    const approveLabel = this.getApproveLabel()
+
+    let html = ejs.render(this.template(), { username, showFooter, showApproveItem, showRemoveItem, approveLabel })
     this.$el.insertAdjacentHTML('beforeend', html)
 
-    let classes = this.itemClass()
-
-    if (classes) {
-      this.$el.classList.add(classes)
-    }
+    this.itemClass().forEach(className => {
+      this.$el.classList.add(className)
+    })
 
     this.$el.onclick = this.onClick.bind(this)
 
@@ -185,10 +194,10 @@ class Card {
       this.$remove.onclick = this.onClickRemove.bind(this)
     }
 
-    this.$approve = this.$el.querySelector('.js-approve')
+    this.$moderate = this.$el.querySelector('.js-moderate')
 
-    if (this.$approve) {
-      this.$approve.onclick = this.onClickApprove.bind(this)
+    if (this.$moderate) {
+      this.$moderate.onclick = this.onClickModerate.bind(this)
     }
 
     return this
