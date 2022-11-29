@@ -2,6 +2,7 @@
 class Map {
   constructor () {
     this.bindEvents()
+    this.bindKeys()
     this.render()
 
     this.expanded = false
@@ -12,7 +13,7 @@ class Map {
   }
 
   bindEvents () {
-    window.bus.on('close-popup', this.closePopup.bind(this))
+    window.bus.on(config.ACTIONS.CLOSE_POPUP, this.closePopup.bind(this))
     window.bus.on(config.ACTIONS.ADD_LOCATIONS, this.onAddLocations.bind(this))
 
     window.bus.on(config.ACTIONS.RELOAD_MAP, this.onReloadMap.bind(this))
@@ -136,6 +137,8 @@ class Map {
     let marker = L.marker(latlng, { icon, location })
 
     marker.on('click', () => {
+
+      this.removeMarker()
       window.bus.emit(config.ACTIONS.SELECT_MARKER, marker)
     })
 

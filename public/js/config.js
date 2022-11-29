@@ -10,6 +10,7 @@ const config = {
   ACTIONS: {
     ADD_LOCATION: 'add-location',
     ADD_LOCATIONS: 'add-locations',
+    CLOSE_POPUP: 'close-popup',
     REMOVE_MARKER: 'remove-marker',
     REMOVE_LOCATION: 'remove-location',
     RELOAD_MAP: 'reload-map',
