@@ -36,7 +36,7 @@
     "passport-twitter": "^1.0.4",
     "rss": "^1.2.2",
     "sanitize-html": "^2.7.0",
-    "sequelize": "^6.19.0",
+    "sequelize": "^6.28.2",
     "sqlite3": "^5.0.3",
     "yaml": "^2.0.1"
   }
